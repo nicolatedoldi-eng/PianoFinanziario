@@ -88,10 +88,8 @@ export default function Onboarding() {
         goal: answers.goal,
         experience: answers.experience,
         risk_tolerance: answers.risk,
-        created_at: new Date().toISOString(),
-        last_rebalance_at: null,
         onboarding_completed: true,
-      })
+      }, { onConflict: 'user_id' })
       if (error) throw error
 
       supabase.functions.invoke('send-welcome-email', {
