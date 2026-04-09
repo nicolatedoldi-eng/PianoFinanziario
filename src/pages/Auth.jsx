@@ -31,13 +31,13 @@ export default function Auth({ mode = 'login' }) {
         }
         const { error } = await signUp(email, password)
         if (error) throw error
-        setSuccess("Account creato! Controlla la tua email per confermare l'iscrizione, poi accedi.")
+        setSuccess('Account creato! Controlla la tua email per confermare l\'iscrizione, poi accedi.')
       }
     } catch (err) {
       const messages = {
         'Invalid login credentials': 'Email o password non corretti',
         'Email not confirmed': 'Devi confermare la tua email prima di accedere',
-        'User already registered': 'Esiste gi\u00e0 un account con questa email',
+        'User already registered': 'Esiste già un account con questa email',
       }
       setError(messages[err.message] || err.message)
     } finally {
@@ -79,7 +79,9 @@ export default function Auth({ mode = 'login' }) {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Email
+              </label>
               <input
                 type="email"
                 value={email}
@@ -87,16 +89,19 @@ export default function Auth({ mode = 'login' }) {
                 placeholder="tu@esempio.com"
                 required
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent text-sm"
+                style={{ '--tw-ring-color': '#534AB7' }}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Password
+              </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder={isLogin ? '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022' : 'Almeno 8 caratteri'}
+                placeholder={isLogin ? '••••••••' : 'Almeno 8 caratteri'}
                 required
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent text-sm"
               />
@@ -117,18 +122,22 @@ export default function Auth({ mode = 'login' }) {
           <p className="text-center text-sm text-gray-500 mt-6">
             {isLogin ? (
               <>Non hai un account?{' '}
-                <Link to="/registrazione" className="font-medium" style={{ color: '#534AB7' }}>Registrati gratis</Link>
+                <Link to="/registrazione" className="font-medium" style={{ color: '#534AB7' }}>
+                  Registrati gratis
+                </Link>
               </>
             ) : (
-              <>Hai gi\u00e0 un account?{' '}
-                <Link to="/login" className="font-medium" style={{ color: '#534AB7' }}>Accedi</Link>
+              <>Hai già un account?{' '}
+                <Link to="/login" className="font-medium" style={{ color: '#534AB7' }}>
+                  Accedi
+                </Link>
               </>
             )}
           </p>
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-6">
-          Strumento educativo. Non \u00e8 consulenza finanziaria.
+          Strumento educativo. Non è consulenza finanziaria.
         </p>
       </div>
     </div>

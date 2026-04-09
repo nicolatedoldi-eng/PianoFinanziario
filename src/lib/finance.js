@@ -1,5 +1,14 @@
 // Calcoli finanziari per il simulatore
 
+/**
+ * Calcola il capitale finale con contributi mensili e interesse composto
+ * @param {number} initialCapital - Capitale iniziale in €
+ * @param {number} monthlyPayment - Versamento mensile in €
+ * @param {number} annualReturn - Rendimento annuo in percentuale (es. 7.5)
+ * @param {number} years - Anni di investimento
+ * @param {number} annualPaymentGrowth - Crescita annua del versamento in % (default 3)
+ * @returns {object} Risultati del calcolo
+ */
 export function calculateProjection(
   initialCapital,
   monthlyPayment,
@@ -9,12 +18,14 @@ export function calculateProjection(
 ) {
   const monthlyRate = annualReturn / 100 / 12
   const months = years * 12
+  const monthlyGrowthRate = annualPaymentGrowth / 100 / 12
 
   let capital = initialCapital
   let totalDeposited = initialCapital
   let currentMonthlyPayment = monthlyPayment
   const dataPoints = []
 
+  // Punto iniziale
   dataPoints.push({
     month: 0,
     year: 0,
@@ -24,13 +35,16 @@ export function calculateProjection(
   })
 
   for (let m = 1; m <= months; m++) {
+    // Applica rendimento mensile
     capital = capital * (1 + monthlyRate) + currentMonthlyPayment
     totalDeposited += currentMonthlyPayment
 
+    // Aumenta il versamento mensile ogni anno
     if (m % 12 === 0) {
       currentMonthlyPayment *= 1 + annualPaymentGrowth / 100
     }
 
+    // Salva punto dati ogni anno
     if (m % 12 === 0 || m === months) {
       dataPoints.push({
         month: m,
@@ -45,7 +59,7 @@ export function calculateProjection(
   const finalCapital = Math.round(capital)
   const totalDepositedFinal = Math.round(totalDeposited)
   const totalInterest = finalCapital - totalDepositedFinal
-  const monthlyIncome = Math.round((finalCapital * 0.04) / 12)
+  const monthlyIncome = Math.round((finalCapital * 0.04) / 12) // Regola 4%
 
   return {
     finalCapital,
@@ -57,6 +71,9 @@ export function calculateProjection(
   }
 }
 
+/**
+ * Calcola i 3 scenari (ottimista, base, ribassista)
+ */
 export function calculateScenarios(initialCapital, monthlyPayment, baseReturn, years, annualGrowth = 3) {
   const optimistic = calculateProjection(initialCapital, monthlyPayment, baseReturn + 2, years, annualGrowth)
   const base = calculateProjection(initialCapital, monthlyPayment, baseReturn, years, annualGrowth)
@@ -65,6 +82,9 @@ export function calculateScenarios(initialCapital, monthlyPayment, baseReturn, y
   return { optimistic, base, pessimistic }
 }
 
+/**
+ * Calcola le milestone (quando si raggiunge ogni soglia)
+ */
 export function calculateMilestones(initialCapital, monthlyPayment, annualReturn, years, annualGrowth = 3) {
   const targets = [10000, 25000, 50000, 100000, 250000, 500000, 1000000]
   const monthlyRate = annualReturn / 100 / 12
@@ -92,6 +112,7 @@ export function calculateMilestones(initialCapital, monthlyPayment, annualReturn
     }
   }
 
+  // Aggiungi milestone non raggiunte
   while (targetIndex < targets.length) {
     milestones.push({
       amount: targets[targetIndex],
@@ -105,20 +126,29 @@ export function calculateMilestones(initialCapital, monthlyPayment, annualReturn
   return milestones
 }
 
+/**
+ * Formatta un numero in euro
+ */
 export function formatEuro(amount) {
   if (amount >= 1000000) {
-    return `\u20ac${(amount / 1000000).toFixed(1)}M`
+    return `€${(amount / 1000000).toFixed(1)}M`
   }
   if (amount >= 1000) {
-    return `\u20ac${(amount / 1000).toFixed(0)}K`
+    return `€${(amount / 1000).toFixed(0)}K`
   }
   return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(amount)
 }
 
+/**
+ * Formatta un numero in euro con decimali
+ */
 export function formatEuroFull(amount) {
   return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 }).format(amount)
 }
 
+/**
+ * Genera insight testuale basato sul moltiplicatore
+ */
 export function generateInsight(multiplier, years) {
   if (multiplier >= 10) {
     return `Straordinario! In ${years} anni il tuo capitale si moltiplica per ${multiplier}x. La potenza dell'interesse composto fa il lavoro pesante al posto tuo.`
@@ -127,10 +157,10 @@ export function generateInsight(multiplier, years) {
     return `Ottimo risultato! In ${years} anni trasformi ogni euro in ${multiplier}. La costanza dei versamenti mensili fa la differenza.`
   }
   if (multiplier >= 3) {
-    return `In ${years} anni il tuo capitale triplica. L'interesse composto inizia a lavorare in modo significativo nella seconda met\u00e0 del periodo.`
+    return `In ${years} anni il tuo capitale triplica. L'interesse composto inizia a lavorare in modo significativo nella seconda metà del periodo.`
   }
   if (multiplier >= 2) {
     return `In ${years} anni il tuo capitale raddoppia. Considera di aumentare i versamenti o allungare l'orizzonte per accelerare la crescita.`
   }
-  return `Con orizzonte breve, la crescita \u00e8 limitata. I primi anni servono a costruire le fondamenta: continua con costanza.`
+  return `Con orizzonte breve, la crescita è limitata. I primi anni servono a costruire le fondamenta: continua con costanza.`
 }
