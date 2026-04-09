@@ -25,8 +25,18 @@ export default function Layout({ children }) {
             <div className="flex items-center gap-4">
               {user ? (
                 <>
-                  <Link to="/dashboard" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Dashboard</Link>
-                  <Link to="/profilo" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Profilo</Link>
+                  <Link
+                    to="/dashboard"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/profilo"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Profilo
+                  </Link>
                   <button
                     onClick={handleSignOut}
                     className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
@@ -36,7 +46,12 @@ export default function Layout({ children }) {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Accedi</Link>
+                  <Link
+                    to="/login"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Accedi
+                  </Link>
                   <Link
                     to="/registrazione"
                     className="text-sm px-4 py-2 rounded-lg text-white transition-colors"
