@@ -1,8 +1,5 @@
 // Calcoli finanziari per il simulatore
 
-/**
- * Calcola il capitale finale con contributi mensili e interesse composto
- */
 export function calculateProjection(
   initialCapital,
   monthlyPayment,
@@ -110,10 +107,10 @@ export function calculateMilestones(initialCapital, monthlyPayment, annualReturn
 
 export function formatEuro(amount) {
   if (amount >= 1000000) {
-    return `€${(amount / 1000000).toFixed(1)}M`
+    return `\u20ac${(amount / 1000000).toFixed(1)}M`
   }
   if (amount >= 1000) {
-    return `€${(amount / 1000).toFixed(0)}K`
+    return `\u20ac${(amount / 1000).toFixed(0)}K`
   }
   return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(amount)
 }
@@ -130,10 +127,10 @@ export function generateInsight(multiplier, years) {
     return `Ottimo risultato! In ${years} anni trasformi ogni euro in ${multiplier}. La costanza dei versamenti mensili fa la differenza.`
   }
   if (multiplier >= 3) {
-    return `In ${years} anni il tuo capitale triplica. L'interesse composto inizia a lavorare in modo significativo nella seconda metà del periodo.`
+    return `In ${years} anni il tuo capitale triplica. L'interesse composto inizia a lavorare in modo significativo nella seconda met\u00e0 del periodo.`
   }
   if (multiplier >= 2) {
     return `In ${years} anni il tuo capitale raddoppia. Considera di aumentare i versamenti o allungare l'orizzonte per accelerare la crescita.`
   }
-  return `Con orizzonte breve, la crescita è limitata. I primi anni servono a costruire le fondamenta: continua con costanza.`
+  return `Con orizzonte breve, la crescita \u00e8 limitata. I primi anni servono a costruire le fondamenta: continua con costanza.`
 }
