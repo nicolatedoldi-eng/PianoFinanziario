@@ -51,3 +51,9 @@ create policy "Users can update own profile"
 
 -- Index per performance
 create index if not exists user_profiles_user_id_idx on public.user_profiles(user_id);
+
+-- ============================================================
+-- NOTA: Le email automatiche (Resend) vengono inviate tramite
+-- Supabase Edge Functions o da un server separato.
+-- Le funzioni Edge sono nella cartella /supabase/functions/
+-- ============================================================
