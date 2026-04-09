@@ -1,0 +1,333 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import { supabase } from '../lib/supabase'
+import { recommendPortfolio, PORTFOLIOS } from '../lib/portfolios'
+
+const STEPS = [
+  {
+    id: 'goal',
+    question: 'Qual \u00e8 il tuo obiettivo principale?',
+    subtitle: 'Scegli quello pi\u00f9 vicino a ci\u00f2 che vuoi ottenere',
+    options: [
+      { value: 'casa', label: 'Comprare casa', icon: '\ud83c\udfe0', desc: "Voglio accumulare per l'acconto o per un acquisto" },
+      { value: 'pensione', label: 'Pensione integrativa', icon: '\ud83e\uddd3', desc: 'Voglio avere di pi\u00f9 quando smetto di lavorare' },
+      { value: 'liberta', label: 'Libert\u00e0 finanziaria', icon: '\ud83c\udf05', desc: 'Voglio vivere di rendita il prima possibile' },
+      { value: 'emergenze', label: 'Fondo emergenze', icon: '\ud83d\udee1\ufe0f', desc: "Voglio una rete di sicurezza per l'imprevisto" },
+    ],
+  },
+  {
+    id: 'experience',
+    question: 'Che esperienza hai con gli investimenti?',
+    subtitle: 'Sii onesto, non ci sono risposte sbagliate',
+    options: [
+      { value: 'zero', label: 'Zero esperienza', icon: '\ud83c\udf31', desc: 'Non ho mai investito, parto da zero' },
+      { value: 'letto', label: 'Ho letto qualcosa', icon: '\ud83d\udcda', desc: 'Conosco i concetti base ma non ho investito' },
+      { value: 'qualcosa', label: 'Ho gi\u00e0 qualcosa', icon: '\ud83d\udcbc', desc: 'Ho un fondo pensione, un ETF o azioni' },
+      { value: 'esperto', label: 'Sono esperto', icon: '\ud83c\udf93', desc: 'Gestisco gi\u00e0 un portafoglio in modo consapevole' },
+    ],
+  },
+  {
+    id: 'risk',
+    question: 'Il mercato crolla del 30%. Cosa fai?',
+    subtitle: 'Immagina di avere gi\u00e0 10.000\u20ac investiti',
+    options: [
+      { value: 'vendo', label: 'Vendo tutto', icon: '\ud83d\ude30', desc: 'Non riesco a sopportare le perdite, preferisco uscire' },
+      { value: 'aspetto', label: 'Aspetto e non tocco', icon: '\ud83d\ude10', desc: 'Lascio stare, tanto prima o poi risale' },
+      { value: 'continuo', label: 'Continuo il PAC', icon: '\ud83d\udcaa', desc: 'Continuo a versare come da piano' },
+      { value: 'compro', label: 'Compro di pi\u00f9', icon: '\ud83d\ude80', desc: 'Opportunit\u00e0! Aumento i versamenti approfittando del calo' },
+    ],
+  },
+]
+
+export default function Onboarding() {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+
+  const [step, setStep] = useState(0)
+  const [answers, setAnswers] = useState({
+    goal: null,
+    experience: null,
+    risk: null,
+    initialCapital: 5000,
+    monthlyPayment: 300,
+    horizon: 15,
+  })
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+
+  const totalSteps = 6
+  const progress = Math.min(((step) / totalSteps) * 100, 100)
+
+  const handleOptionSelect = (stepId, value) => {
+    setAnswers(prev => ({ ...prev, [stepId]: value }))
+    setTimeout(() => setStep(prev => prev + 1), 300)
+  }
+
+  const handleSliderNext = () => {
+    setStep(prev => prev + 1)
+  }
+
+  const recommendedProfileId = recommendPortfolio(answers)
+  const recommendedProfile = PORTFOLIOS[recommendedProfileId]
+
+  const handleSave = async (profileId) => {
+    setSaving(true)
+    setError('')
+    try {
+      const profile = PORTFOLIOS[profileId]
+      const { error } = await supabase.from('user_profiles').upsert({
+        user_id: user.id,
+        email: user.email,
+        profile: profileId,
+        initial_capital: answers.initialCapital,
+        monthly_payment: answers.monthlyPayment,
+        horizon_years: answers.horizon,
+        annual_return: profile.expectedReturn,
+        annual_payment_growth: 3,
+        goal: answers.goal,
+        experience: answers.experience,
+        risk_tolerance: answers.risk,
+        created_at: new Date().toISOString(),
+        last_rebalance_at: null,
+        onboarding_completed: true,
+      })
+      if (error) throw error
+
+      supabase.functions.invoke('send-welcome-email', {
+        body: {
+          email: user.email,
+          profile: profileId,
+          dashboardUrl: `${window.location.origin}/dashboard`,
+        },
+      }).catch(console.error)
+
+      navigate('/dashboard')
+    } catch (err) {
+      setError('Errore nel salvataggio. Riprova.')
+      console.error(err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (step < 3) {
+    const currentStep = STEPS[step]
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-2xl">
+          <div className="mb-8">
+            <div className="flex justify-between text-sm text-gray-400 mb-2">
+              <span>Domanda {step + 1} di {totalSteps}</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, backgroundColor: '#534AB7' }}></div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">{currentStep.question}</h2>
+            <p className="text-gray-500 mb-8">{currentStep.subtitle}</p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {currentStep.options.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => handleOptionSelect(currentStep.id, opt.value)}
+                  className={`text-left p-5 rounded-xl border-2 transition-all ${
+                    answers[currentStep.id] === opt.value
+                      ? 'border-[#534AB7] bg-[#EEF0FB]'
+                      : 'border-gray-200 hover:border-gray-300 bg-white'
+                  }`}
+                >
+                  <div className="text-2xl mb-2">{opt.icon}</div>
+                  <div className="font-semibold text-gray-900 mb-1">{opt.label}</div>
+                  <div className="text-sm text-gray-500">{opt.desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (step === 3) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-2xl">
+          <div className="mb-8">
+            <div className="flex justify-between text-sm text-gray-400 mb-2">
+              <span>Domanda 4 di {totalSteps}</span>
+              <span>{Math.round(4 / totalSteps * 100)}%</span>
+            </div>
+            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${4 / totalSteps * 100}%`, backgroundColor: '#534AB7' }}></div>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Quanto hai da investire subito?</h2>
+            <p className="text-gray-500 mb-8">Il capitale iniziale che puoi mettere da parte oggi. Puoi sempre aggiornarlo dopo.</p>
+            <div className="text-center mb-8">
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>\u20ac{answers.initialCapital.toLocaleString('it-IT')}</div>
+              <div className="text-sm text-gray-400">capitale iniziale</div>
+            </div>
+            <input type="range" min="0" max="100000" step="500" value={answers.initialCapital}
+              onChange={(e) => setAnswers(prev => ({ ...prev, initialCapital: Number(e.target.value) }))}
+              className="w-full mb-4 accent-[#534AB7]" />
+            <div className="flex justify-between text-xs text-gray-400 mb-8">
+              <span>\u20ac0</span><span>\u20ac10K</span><span>\u20ac25K</span><span>\u20ac50K</span><span>\u20ac100K</span>
+            </div>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>
+              Continua \u2192
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (step === 4) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-2xl">
+          <div className="mb-8">
+            <div className="flex justify-between text-sm text-gray-400 mb-2">
+              <span>Domanda 5 di {totalSteps}</span>
+              <span>{Math.round(5 / totalSteps * 100)}%</span>
+            </div>
+            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${5 / totalSteps * 100}%`, backgroundColor: '#534AB7' }}></div>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Quanto puoi versare ogni mese?</h2>
+            <p className="text-gray-500 mb-8">Il Piano di Accumulo (PAC) mensile. Anche piccole cifre, nel lungo periodo, fanno differenza.</p>
+            <div className="text-center mb-8">
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>\u20ac{answers.monthlyPayment.toLocaleString('it-IT')}</div>
+              <div className="text-sm text-gray-400">al mese</div>
+            </div>
+            <input type="range" min="50" max="2000" step="50" value={answers.monthlyPayment}
+              onChange={(e) => setAnswers(prev => ({ ...prev, monthlyPayment: Number(e.target.value) }))}
+              className="w-full mb-4 accent-[#534AB7]" />
+            <div className="flex justify-between text-xs text-gray-400 mb-8">
+              <span>\u20ac50</span><span>\u20ac500</span><span>\u20ac1.000</span><span>\u20ac1.500</span><span>\u20ac2.000</span>
+            </div>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>
+              Continua \u2192
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (step === 5) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-2xl">
+          <div className="mb-8">
+            <div className="flex justify-between text-sm text-gray-400 mb-2">
+              <span>Domanda 6 di {totalSteps}</span>
+              <span>90%</span>
+            </div>
+            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full rounded-full transition-all duration-500" style={{ width: '90%', backgroundColor: '#534AB7' }}></div>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Per quanti anni vuoi investire?</h2>
+            <p className="text-gray-500 mb-8">L'orizzonte temporale \u00e8 uno dei fattori pi\u00f9 importanti. Pi\u00f9 \u00e8 lungo, pi\u00f9 pu\u00f2 crescere il tuo capitale.</p>
+            <div className="text-center mb-8">
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>{answers.horizon} anni</div>
+              <div className="text-sm text-gray-400">
+                {answers.horizon <= 5 ? 'Orizzonte breve' : answers.horizon <= 15 ? 'Orizzonte medio' : 'Orizzonte lungo'}
+              </div>
+            </div>
+            <input type="range" min="1" max="35" step="1" value={answers.horizon}
+              onChange={(e) => setAnswers(prev => ({ ...prev, horizon: Number(e.target.value) }))}
+              className="w-full mb-4 accent-[#534AB7]" />
+            <div className="flex justify-between text-xs text-gray-400 mb-8">
+              <span>1 anno</span><span>10</span><span>20</span><span>30</span><span>35</span>
+            </div>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>
+              Scopri il tuo profilo \u2192
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-3xl">
+        <div className="text-center mb-8">
+          <div className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-4" style={{ backgroundColor: '#ECFDF5', color: '#1D9E75' }}>
+            Profilo trovato!
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Il tuo profilo \u00e8: <span style={{ color: recommendedProfile.color }}>{recommendedProfile.name}</span></h2>
+          <p className="text-gray-500">{recommendedProfile.description}</p>
+        </div>
+
+        <div className="bg-white border-2 rounded-2xl p-8 shadow-sm mb-6" style={{ borderColor: recommendedProfile.color }}>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-bold" style={{ backgroundColor: recommendedProfile.color }}>
+              {recommendedProfile.name[0]}
+            </div>
+            <div>
+              <div className="text-xl font-bold text-gray-900">{recommendedProfile.name}</div>
+              <div className="text-gray-500">Rendimento atteso: <strong>{recommendedProfile.expectedReturn}%</strong> annuo</div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            {recommendedProfile.etfs.map((etf) => (
+              <div key={etf.ticker} className="bg-gray-50 rounded-xl p-3 text-center">
+                <div className="font-bold text-gray-900 text-lg">{etf.ticker}</div>
+                <div className="text-2xl font-bold" style={{ color: recommendedProfile.color }}>{etf.percentage}%</div>
+                <div className="text-xs text-gray-400 mt-1">{etf.isin}</div>
+              </div>
+            ))}
+          </div>
+
+          {error && (
+            <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#FEF2F2', color: '#E24B4A' }}>{error}</div>
+          )}
+
+          <button
+            onClick={() => handleSave(recommendedProfileId)}
+            disabled={saving}
+            className="w-full py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90 disabled:opacity-60"
+            style={{ backgroundColor: recommendedProfile.color }}
+          >
+            {saving ? 'Salvataggio...' : `Inizia con il profilo ${recommendedProfile.name} \u2192`}
+          </button>
+        </div>
+
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <p className="text-sm text-gray-500 mb-4">Preferisci un altro profilo? Scegli tu:</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {Object.values(PORTFOLIOS)
+              .filter(p => p.id !== recommendedProfileId)
+              .map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => handleSave(p.id)}
+                  disabled={saving}
+                  className="p-4 rounded-xl border-2 border-gray-200 hover:border-gray-300 text-left transition-colors disabled:opacity-50"
+                >
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2" style={{ backgroundColor: p.color }}>
+                    {p.name[0]}
+                  </div>
+                  <div className="font-semibold text-gray-900 text-sm">{p.name}</div>
+                  <div className="text-xs text-gray-400">{p.expectedReturn}% annuo</div>
+                </button>
+              ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
