@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import { PORTFOLIOS } from '../lib/portfolios'
 import { calculateProjection, calculateScenarios, calculateMilestones, formatEuro, formatEuroFull, generateInsight } from '../lib/finance'
+import { generatePianoPDF } from '../lib/generatePdf'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts'
@@ -327,6 +328,7 @@ export default function Dashboard() {
   const [userProfile, setUserProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [selectedProfileId, setSelectedProfileId] = useState(null)
+  const [generatingPdf, setGeneratingPdf] = useState(false)
 
   const [params, setParams] = useState({
     initialCapital: 5000,
@@ -364,6 +366,17 @@ export default function Dashboard() {
     setParams(prev => ({ ...prev, [key]: value }))
   }
 
+  const handleDownloadPdf = () => {
+    setGeneratingPdf(true)
+    try {
+      const doc = generatePianoPDF(currentProfile, userProfile, params)
+      const filename = `piano-finanziario-${currentProfile.name.toLowerCase()}.pdf`
+      doc.output('dataurlnewwindow', { filename })
+    } finally {
+      setGeneratingPdf(false)
+    }
+  }
+
   const TABS = [
     { id: 'risparmio', label: 'Risparmio' },
     { id: 'investimento', label: 'Investimento' },
@@ -380,13 +393,25 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Il tuo piano finanziario</h1>
+      <div className="flex items-start justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Il tuo piano finanziario</h1>
+          {userProfile && (
+            <p className="text-gray-500 text-sm mt-1">
+              Profilo: <strong style={{ color: currentProfile.color }}>{currentProfile.name}</strong>
+              {' '}· Rendimento atteso: <strong>{currentProfile.expectedReturn}%</strong> annuo
+            </p>
+          )}
+        </div>
         {userProfile && (
-          <p className="text-gray-500 text-sm mt-1">
-            Profilo: <strong style={{ color: currentProfile.color }}>{currentProfile.name}</strong>
-            {' '}· Rendimento atteso: <strong>{currentProfile.expectedReturn}%</strong> annuo
-          </p>
+          <button
+            onClick={handleDownloadPdf}
+            disabled={generatingPdf}
+            className="shrink-0 px-5 py-2.5 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60"
+            style={{ backgroundColor: '#534AB7' }}
+          >
+            {generatingPdf ? 'Generazione...' : 'Scarica il tuo piano →'}
+          </button>
         )}
       </div>
 
