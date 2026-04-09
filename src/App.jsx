@@ -13,12 +13,10 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          {/* Pagine pubbliche */}
           <Route path="/" element={<Layout><Landing /></Layout>} />
           <Route path="/login" element={<Auth mode="login" />} />
           <Route path="/registrazione" element={<Auth mode="register" />} />
 
-          {/* Onboarding (protetto: solo utenti loggati) */}
           <Route
             path="/onboarding"
             element={
@@ -28,7 +26,6 @@ export default function App() {
             }
           />
 
-          {/* Dashboard (protetta + onboarding completato) */}
           <Route
             path="/dashboard"
             element={
@@ -40,7 +37,6 @@ export default function App() {
             }
           />
 
-          {/* Profilo (protetto + onboarding completato) */}
           <Route
             path="/profilo"
             element={
@@ -52,7 +48,6 @@ export default function App() {
             }
           />
 
-          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
