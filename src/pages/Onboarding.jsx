@@ -7,13 +7,13 @@ import { recommendPortfolio, PORTFOLIOS } from '../lib/portfolios'
 const STEPS = [
   {
     id: 'goal',
-    question: 'Qual \u00e8 il tuo obiettivo principale?',
-    subtitle: 'Scegli quello pi\u00f9 vicino a ci\u00f2 che vuoi ottenere',
+    question: 'Qual è il tuo obiettivo principale?',
+    subtitle: 'Scegli quello più vicino a ciò che vuoi ottenere',
     options: [
-      { value: 'casa', label: 'Comprare casa', icon: '\ud83c\udfe0', desc: "Voglio accumulare per l'acconto o per un acquisto" },
-      { value: 'pensione', label: 'Pensione integrativa', icon: '\ud83e\uddd3', desc: 'Voglio avere di pi\u00f9 quando smetto di lavorare' },
-      { value: 'liberta', label: 'Libert\u00e0 finanziaria', icon: '\ud83c\udf05', desc: 'Voglio vivere di rendita il prima possibile' },
-      { value: 'emergenze', label: 'Fondo emergenze', icon: '\ud83d\udee1\ufe0f', desc: "Voglio una rete di sicurezza per l'imprevisto" },
+      { value: 'casa', label: 'Comprare casa', icon: '🏠', desc: 'Voglio accumulare per l\'acconto o per un acquisto' },
+      { value: 'pensione', label: 'Pensione integrativa', icon: '🧓', desc: 'Voglio avere di più quando smetto di lavorare' },
+      { value: 'liberta', label: 'Libertà finanziaria', icon: '🌅', desc: 'Voglio vivere di rendita il prima possibile' },
+      { value: 'emergenze', label: 'Fondo emergenze', icon: '🛡️', desc: 'Voglio una rete di sicurezza per l\'imprevisto' },
     ],
   },
   {
@@ -21,21 +21,21 @@ const STEPS = [
     question: 'Che esperienza hai con gli investimenti?',
     subtitle: 'Sii onesto, non ci sono risposte sbagliate',
     options: [
-      { value: 'zero', label: 'Zero esperienza', icon: '\ud83c\udf31', desc: 'Non ho mai investito, parto da zero' },
-      { value: 'letto', label: 'Ho letto qualcosa', icon: '\ud83d\udcda', desc: 'Conosco i concetti base ma non ho investito' },
-      { value: 'qualcosa', label: 'Ho gi\u00e0 qualcosa', icon: '\ud83d\udcbc', desc: 'Ho un fondo pensione, un ETF o azioni' },
-      { value: 'esperto', label: 'Sono esperto', icon: '\ud83c\udf93', desc: 'Gestisco gi\u00e0 un portafoglio in modo consapevole' },
+      { value: 'zero', label: 'Zero esperienza', icon: '🌱', desc: 'Non ho mai investito, parto da zero' },
+      { value: 'letto', label: 'Ho letto qualcosa', icon: '📚', desc: 'Conosco i concetti base ma non ho investito' },
+      { value: 'qualcosa', label: 'Ho già qualcosa', icon: '💼', desc: 'Ho un fondo pensione, un ETF o azioni' },
+      { value: 'esperto', label: 'Sono esperto', icon: '🎓', desc: 'Gestisco già un portafoglio in modo consapevole' },
     ],
   },
   {
     id: 'risk',
     question: 'Il mercato crolla del 30%. Cosa fai?',
-    subtitle: 'Immagina di avere gi\u00e0 10.000\u20ac investiti',
+    subtitle: 'Immagina di avere già 10.000€ investiti',
     options: [
-      { value: 'vendo', label: 'Vendo tutto', icon: '\ud83d\ude30', desc: 'Non riesco a sopportare le perdite, preferisco uscire' },
-      { value: 'aspetto', label: 'Aspetto e non tocco', icon: '\ud83d\ude10', desc: 'Lascio stare, tanto prima o poi risale' },
-      { value: 'continuo', label: 'Continuo il PAC', icon: '\ud83d\udcaa', desc: 'Continuo a versare come da piano' },
-      { value: 'compro', label: 'Compro di pi\u00f9', icon: '\ud83d\ude80', desc: 'Opportunit\u00e0! Aumento i versamenti approfittando del calo' },
+      { value: 'vendo', label: 'Vendo tutto', icon: '😰', desc: 'Non riesco a sopportare le perdite, preferisco uscire' },
+      { value: 'aspetto', label: 'Aspetto e non tocco', icon: '😐', desc: 'Lascio stare, tanto prima o poi risale' },
+      { value: 'continuo', label: 'Continuo il PAC', icon: '💪', desc: 'Continuo a versare come da piano' },
+      { value: 'compro', label: 'Compro di più', icon: '🚀', desc: 'Opportunità! Aumento i versamenti approfittando del calo' },
     ],
   },
 ]
@@ -125,11 +125,9 @@ export default function Onboarding() {
               <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, backgroundColor: '#534AB7' }}></div>
             </div>
           </div>
-
           <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">{currentStep.question}</h2>
             <p className="text-gray-500 mb-8">{currentStep.subtitle}</p>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {currentStep.options.map((opt) => (
                 <button
@@ -170,18 +168,16 @@ export default function Onboarding() {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Quanto hai da investire subito?</h2>
             <p className="text-gray-500 mb-8">Il capitale iniziale che puoi mettere da parte oggi. Puoi sempre aggiornarlo dopo.</p>
             <div className="text-center mb-8">
-              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>\u20ac{answers.initialCapital.toLocaleString('it-IT')}</div>
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>€{answers.initialCapital.toLocaleString('it-IT')}</div>
               <div className="text-sm text-gray-400">capitale iniziale</div>
             </div>
             <input type="range" min="0" max="100000" step="500" value={answers.initialCapital}
               onChange={(e) => setAnswers(prev => ({ ...prev, initialCapital: Number(e.target.value) }))}
               className="w-full mb-4 accent-[#534AB7]" />
             <div className="flex justify-between text-xs text-gray-400 mb-8">
-              <span>\u20ac0</span><span>\u20ac10K</span><span>\u20ac25K</span><span>\u20ac50K</span><span>\u20ac100K</span>
+              <span>€0</span><span>€10K</span><span>€25K</span><span>€50K</span><span>€100K</span>
             </div>
-            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>
-              Continua \u2192
-            </button>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua →</button>
           </div>
         </div>
       </div>
@@ -205,18 +201,16 @@ export default function Onboarding() {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Quanto puoi versare ogni mese?</h2>
             <p className="text-gray-500 mb-8">Il Piano di Accumulo (PAC) mensile. Anche piccole cifre, nel lungo periodo, fanno differenza.</p>
             <div className="text-center mb-8">
-              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>\u20ac{answers.monthlyPayment.toLocaleString('it-IT')}</div>
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>€{answers.monthlyPayment.toLocaleString('it-IT')}</div>
               <div className="text-sm text-gray-400">al mese</div>
             </div>
             <input type="range" min="50" max="2000" step="50" value={answers.monthlyPayment}
               onChange={(e) => setAnswers(prev => ({ ...prev, monthlyPayment: Number(e.target.value) }))}
               className="w-full mb-4 accent-[#534AB7]" />
             <div className="flex justify-between text-xs text-gray-400 mb-8">
-              <span>\u20ac50</span><span>\u20ac500</span><span>\u20ac1.000</span><span>\u20ac1.500</span><span>\u20ac2.000</span>
+              <span>€50</span><span>€500</span><span>€1.000</span><span>€1.500</span><span>€2.000</span>
             </div>
-            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>
-              Continua \u2192
-            </button>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua →</button>
           </div>
         </div>
       </div>
@@ -238,7 +232,7 @@ export default function Onboarding() {
           </div>
           <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Per quanti anni vuoi investire?</h2>
-            <p className="text-gray-500 mb-8">L'orizzonte temporale \u00e8 uno dei fattori pi\u00f9 importanti. Pi\u00f9 \u00e8 lungo, pi\u00f9 pu\u00f2 crescere il tuo capitale.</p>
+            <p className="text-gray-500 mb-8">L'orizzonte temporale è uno dei fattori più importanti. Più è lungo, più può crescere il tuo capitale.</p>
             <div className="text-center mb-8">
               <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>{answers.horizon} anni</div>
               <div className="text-sm text-gray-400">
@@ -251,9 +245,7 @@ export default function Onboarding() {
             <div className="flex justify-between text-xs text-gray-400 mb-8">
               <span>1 anno</span><span>10</span><span>20</span><span>30</span><span>35</span>
             </div>
-            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>
-              Scopri il tuo profilo \u2192
-            </button>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Scopri il tuo profilo →</button>
           </div>
         </div>
       </div>
@@ -264,24 +256,19 @@ export default function Onboarding() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl">
         <div className="text-center mb-8">
-          <div className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-4" style={{ backgroundColor: '#ECFDF5', color: '#1D9E75' }}>
-            Profilo trovato!
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Il tuo profilo \u00e8: <span style={{ color: recommendedProfile.color }}>{recommendedProfile.name}</span></h2>
+          <div className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-4" style={{ backgroundColor: '#ECFDF5', color: '#1D9E75' }}>Profilo trovato!</div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Il tuo profilo è: <span style={{ color: recommendedProfile.color }}>{recommendedProfile.name}</span></h2>
           <p className="text-gray-500">{recommendedProfile.description}</p>
         </div>
 
         <div className="bg-white border-2 rounded-2xl p-8 shadow-sm mb-6" style={{ borderColor: recommendedProfile.color }}>
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-bold" style={{ backgroundColor: recommendedProfile.color }}>
-              {recommendedProfile.name[0]}
-            </div>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-bold" style={{ backgroundColor: recommendedProfile.color }}>{recommendedProfile.name[0]}</div>
             <div>
               <div className="text-xl font-bold text-gray-900">{recommendedProfile.name}</div>
               <div className="text-gray-500">Rendimento atteso: <strong>{recommendedProfile.expectedReturn}%</strong> annuo</div>
             </div>
           </div>
-
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             {recommendedProfile.etfs.map((etf) => (
               <div key={etf.ticker} className="bg-gray-50 rounded-xl p-3 text-center">
@@ -291,40 +278,25 @@ export default function Onboarding() {
               </div>
             ))}
           </div>
-
-          {error && (
-            <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#FEF2F2', color: '#E24B4A' }}>{error}</div>
-          )}
-
-          <button
-            onClick={() => handleSave(recommendedProfileId)}
-            disabled={saving}
+          {error && <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#FEF2F2', color: '#E24B4A' }}>{error}</div>}
+          <button onClick={() => handleSave(recommendedProfileId)} disabled={saving}
             className="w-full py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90 disabled:opacity-60"
-            style={{ backgroundColor: recommendedProfile.color }}
-          >
-            {saving ? 'Salvataggio...' : `Inizia con il profilo ${recommendedProfile.name} \u2192`}
+            style={{ backgroundColor: recommendedProfile.color }}>
+            {saving ? 'Salvataggio...' : `Inizia con il profilo ${recommendedProfile.name} →`}
           </button>
         </div>
 
         <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
           <p className="text-sm text-gray-500 mb-4">Preferisci un altro profilo? Scegli tu:</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {Object.values(PORTFOLIOS)
-              .filter(p => p.id !== recommendedProfileId)
-              .map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => handleSave(p.id)}
-                  disabled={saving}
-                  className="p-4 rounded-xl border-2 border-gray-200 hover:border-gray-300 text-left transition-colors disabled:opacity-50"
-                >
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2" style={{ backgroundColor: p.color }}>
-                    {p.name[0]}
-                  </div>
-                  <div className="font-semibold text-gray-900 text-sm">{p.name}</div>
-                  <div className="text-xs text-gray-400">{p.expectedReturn}% annuo</div>
-                </button>
-              ))}
+            {Object.values(PORTFOLIOS).filter(p => p.id !== recommendedProfileId).map((p) => (
+              <button key={p.id} onClick={() => handleSave(p.id)} disabled={saving}
+                className="p-4 rounded-xl border-2 border-gray-200 hover:border-gray-300 text-left transition-colors disabled:opacity-50">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2" style={{ backgroundColor: p.color }}>{p.name[0]}</div>
+                <div className="font-semibold text-gray-900 text-sm">{p.name}</div>
+                <div className="text-xs text-gray-400">{p.expectedReturn}% annuo</div>
+              </button>
+            ))}
           </div>
         </div>
       </div>
