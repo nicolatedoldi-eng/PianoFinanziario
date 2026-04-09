@@ -167,9 +167,7 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
             }`}
             style={profile.id === p.id ? { borderColor: p.color, backgroundColor: `${p.color}10` } : {}}
           >
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2" style={{ backgroundColor: p.color }}>
-              {p.name[0]}
-            </div>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2" style={{ backgroundColor: p.color }}>{p.name[0]}</div>
             <div className="font-semibold text-gray-900 text-sm">{p.name}</div>
             <div className="text-xs" style={{ color: p.color }}>{p.expectedReturn}% annuo</div>
           </button>
@@ -227,11 +225,7 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
             <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
             <XAxis dataKey="year" tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => `${v}a`} />
             <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => formatEuro(v)} width={60} />
-            <Tooltip
-              formatter={(value, name) => [formatEuroFull(value), name]}
-              labelFormatter={l => `Anno ${l}`}
-              contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '12px' }}
-            />
+            <Tooltip formatter={(value, name) => [formatEuroFull(value), name]} labelFormatter={l => `Anno ${l}`} contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '12px' }} />
             <Legend />
             <Line type="monotone" dataKey="ottimista" stroke="#1D9E75" strokeWidth={2} dot={false} />
             <Line type="monotone" dataKey="base" stroke="#534AB7" strokeWidth={2.5} dot={false} />
@@ -245,9 +239,7 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
         <div className="space-y-4">
           {profile.steps.map((step, i) => (
             <div key={i} className="flex gap-4">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>
-                {i + 1}
-              </div>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>{i + 1}</div>
               <p className="text-gray-700 text-sm pt-1">{step}</p>
             </div>
           ))}
