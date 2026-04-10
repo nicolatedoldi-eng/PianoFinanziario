@@ -39,14 +39,16 @@ export default async function handler(req, res) {
   // Initialize Stripe inside handler so STRIPE_SECRET_KEY is guaranteed available
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-  // Derive appUrl from the incoming request so it always matches the live domain
+  // VERCEL_PROJECT_PRODUCTION_URL is set automatically by Vercel to the stable
+  // canonical production domain (e.g. myproject.vercel.app) — never changes per deployment
   const appUrl = process.env.APP_URL ||
-    (req.headers['x-forwarded-host']
-      ? `https://${req.headers['x-forwarded-host']}`
-      : `http://${req.headers.host}`)
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : 'http://localhost:5173')
 
   const priceId = process.env.STRIPE_PRICE_ID || 'price_1TKfFmJyUH2vL85IAslzZj8m'
   console.log('priceId:', priceId, '| appUrl:', appUrl)
+  console.log('VERCEL_PROJECT_PRODUCTION_URL:', process.env.VERCEL_PROJECT_PRODUCTION_URL)
 
   try {
     const session = await stripe.checkout.sessions.create({
