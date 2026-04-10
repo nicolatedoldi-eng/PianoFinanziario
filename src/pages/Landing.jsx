@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
+import { useAuth } from '../contexts/AuthContext'
 
 const PREVIEW_DATA = [
   { year: 0,  capitale: 0,       versati: 0 },
@@ -76,6 +78,22 @@ function ChartTooltip({ active, payload, label }) {
 }
 
 export default function Landing() {
+  const { user, loading } = useAuth()
+  const navigate = useNavigate()
+  const [checking, setChecking] = useState(true)
+
+  useEffect(() => {
+    if (!loading) {
+      if (user) {
+        navigate('/dashboard', { replace: true })
+      } else {
+        setChecking(false)
+      }
+    }
+  }, [user, loading, navigate])
+
+  if (checking) return null
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Hero */}
