@@ -37,6 +37,12 @@ export default function Layout({ children }) {
                   >
                     Profilo
                   </Link>
+                  <Link
+                    to="/prezzi"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Prezzi
+                  </Link>
                   <button
                     onClick={handleSignOut}
                     className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"

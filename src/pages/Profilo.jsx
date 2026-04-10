@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 import { PORTFOLIOS } from '../lib/portfolios'
 import { formatEuroFull } from '../lib/finance'
 import { generatePianoPDF } from '../lib/generatePdf'
+import ProModal from '../components/ProModal'
 
 export default function Profilo() {
   const { user } = useAuth()
@@ -78,8 +79,13 @@ export default function Profilo() {
   }
 
   const [generatingPdf, setGeneratingPdf] = useState(false)
+  const [showProModal, setShowProModal] = useState(false)
 
   const handleDownloadPdf = () => {
+    if (!profile?.is_pro) {
+      setShowProModal(true)
+      return
+    }
     setGeneratingPdf(true)
     try {
       const params = {
@@ -132,7 +138,19 @@ export default function Profilo() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Il mio profilo</h1>
+      {showProModal && <ProModal onClose={() => setShowProModal(false)} />}
+
+      <div className="flex items-center gap-3 mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Il mio profilo</h1>
+        {profile.is_pro && (
+          <span
+            className="text-xs font-bold px-2.5 py-1 rounded-full text-white"
+            style={{ backgroundColor: '#534AB7' }}
+          >
+            PRO
+          </span>
+        )}
+      </div>
 
       {error && (
         <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#FEF2F2', color: '#E24B4A' }}>{error}</div>
@@ -237,9 +255,10 @@ export default function Profilo() {
             <button
               onClick={handleDownloadPdf}
               disabled={generatingPdf}
-              className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60"
+              className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2"
               style={{ backgroundColor: '#534AB7' }}
             >
+              {!profile.is_pro && <span>🔒</span>}
               {generatingPdf ? 'Generazione...' : 'Scarica il tuo piano PDF →'}
             </button>
             <p className="text-xs text-gray-400 mt-1.5">

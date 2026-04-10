@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import ProModal from '../components/ProModal'
 import { PORTFOLIOS } from '../lib/portfolios'
 import { calculateProjection, calculateScenarios, calculateMilestones, formatEuro, formatEuroFull, generateInsight } from '../lib/finance'
 import { generatePianoPDF } from '../lib/generatePdf'
@@ -81,12 +83,16 @@ function TabRisparmio({ params, profile }) {
           </div>
         ))}
       </div>
+
       <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="text-2xl">💡</div>
-          <p className="text-gray-700 text-sm leading-relaxed">{generateInsight(Number(result.multiplier), params.horizon)}</p>
+          <p className="text-gray-700 text-sm leading-relaxed">
+            {generateInsight(Number(result.multiplier), params.horizon)}
+          </p>
         </div>
       </div>
+
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 mb-4">Crescita nel tempo</h3>
         <ResponsiveContainer width="100%" height={280}>
@@ -94,24 +100,35 @@ function TabRisparmio({ params, profile }) {
             <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
             <XAxis dataKey="year" tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => `${v}a`} />
             <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => formatEuro(v)} width={60} />
-            <Tooltip formatter={(value, name) => [formatEuroFull(value), name === 'capital' ? 'Capitale totale' : 'Versato']} labelFormatter={l => `Anno ${l}`} contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '12px' }} />
+            <Tooltip
+              formatter={(value, name) => [formatEuroFull(value), name === 'capital' ? 'Capitale totale' : 'Versato']}
+              labelFormatter={l => `Anno ${l}`}
+              contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '12px' }}
+            />
             <Legend formatter={v => v === 'capital' ? 'Capitale totale' : 'Versato'} />
             <Line type="monotone" dataKey="capital" stroke="#534AB7" strokeWidth={2.5} dot={false} name="capital" />
             <Line type="monotone" dataKey="deposited" stroke="#1D9E75" strokeWidth={2} dot={false} strokeDasharray="5 5" name="deposited" />
           </LineChart>
         </ResponsiveContainer>
       </div>
+
       <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 mb-4">Quando raggiungi le milestone</h3>
         <div className="space-y-3">
           {milestones.map(m => (
             <div key={m.amount} className="flex items-center gap-4">
-              <div className="w-20 text-sm font-semibold text-right shrink-0" style={{ color: m.year !== null ? '#534AB7' : '#D1D5DB' }}>{formatEuro(m.amount)}</div>
+              <div className="w-20 text-sm font-semibold text-right shrink-0" style={{ color: m.year !== null ? '#534AB7' : '#D1D5DB' }}>
+                {formatEuro(m.amount)}
+              </div>
               <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                {m.year !== null && <div className="h-full rounded-full" style={{ width: `${Math.min((m.year / params.horizon) * 100, 100)}%`, backgroundColor: '#534AB7' }} />}
+                {m.year !== null && (
+                  <div className="h-full rounded-full" style={{ width: `${Math.min((m.year / params.horizon) * 100, 100)}%`, backgroundColor: '#534AB7' }} />
+                )}
               </div>
               <div className="w-28 text-sm text-gray-500 shrink-0">
-                {m.year !== null ? `Anno ${m.year}${m.monthInYear > 0 ? ` (mese ${m.monthInYear})` : ''}` : <span className="text-gray-300">Non raggiunto</span>}
+                {m.year !== null
+                  ? `Anno ${m.year}${m.monthInYear > 0 ? ` (mese ${m.monthInYear})` : ''}`
+                  : <span className="text-gray-300">Non raggiunto</span>}
               </div>
             </div>
           ))}
@@ -126,8 +143,13 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
     calculateScenarios(params.initialCapital, params.monthlyPayment, profile.expectedReturn, params.horizon, params.annualGrowth),
     [params, profile]
   )
+
   const scenarioData = useMemo(() => {
-    const maxLen = Math.max(scenarios.optimistic.dataPoints.length, scenarios.base.dataPoints.length, scenarios.pessimistic.dataPoints.length)
+    const maxLen = Math.max(
+      scenarios.optimistic.dataPoints.length,
+      scenarios.base.dataPoints.length,
+      scenarios.pessimistic.dataPoints.length
+    )
     return Array.from({ length: maxLen }, (_, i) => ({
       year: scenarios.base.dataPoints[i]?.year ?? i,
       ottimista: scenarios.optimistic.dataPoints[i]?.capital,
@@ -140,15 +162,21 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
     <div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         {Object.values(allProfiles).map(p => (
-          <button key={p.id} onClick={() => onProfileChange(p.id)}
-            className={`p-4 rounded-xl border-2 text-left transition-all ${profile.id === p.id ? 'shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
-            style={profile.id === p.id ? { borderColor: p.color, backgroundColor: `${p.color}10` } : {}}>
+          <button
+            key={p.id}
+            onClick={() => onProfileChange(p.id)}
+            className={`p-4 rounded-xl border-2 text-left transition-all ${
+              profile.id === p.id ? 'shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white'
+            }`}
+            style={profile.id === p.id ? { borderColor: p.color, backgroundColor: `${p.color}10` } : {}}
+          >
             <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2" style={{ backgroundColor: p.color }}>{p.name[0]}</div>
             <div className="font-semibold text-gray-900 text-sm">{p.name}</div>
             <div className="text-xs" style={{ color: p.color }}>{p.expectedReturn}% annuo</div>
           </button>
         ))}
       </div>
+
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm overflow-x-auto">
         <h3 className="font-semibold text-gray-900 mb-4">Composizione portafoglio</h3>
         <table className="w-full text-sm">
@@ -166,7 +194,10 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
             {profile.etfs.map(etf => (
               <tr key={etf.ticker} className="border-b border-gray-100">
                 <td className="py-3 pr-4 font-bold" style={{ color: profile.color }}>{etf.ticker}</td>
-                <td className="py-3 pr-4 text-gray-700"><div>{etf.name}</div><div className="text-xs text-gray-400 mt-0.5">{etf.description}</div></td>
+                <td className="py-3 pr-4 text-gray-700">
+                  <div>{etf.name}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">{etf.description}</div>
+                </td>
                 <td className="py-3 pr-4 text-gray-400 font-mono text-xs hidden md:table-cell">{etf.isin}</td>
                 <td className="py-3 pr-4 text-right font-semibold">{etf.percentage}%</td>
                 <td className="py-3 pr-4 text-right">{formatEuroFull(params.initialCapital * etf.percentage / 100)}</td>
@@ -176,6 +207,7 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
           </tbody>
         </table>
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         {[
           { key: 'optimistic', label: 'Ottimista', suffix: `+2% (${profile.expectedReturn + 2}%)`, color: '#1D9E75', value: scenarios.optimistic.finalCapital },
@@ -188,6 +220,7 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
           </div>
         ))}
       </div>
+
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 mb-4">I 3 scenari nel tempo</h3>
         <ResponsiveContainer width="100%" height={280}>
@@ -203,6 +236,7 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
           </LineChart>
         </ResponsiveContainer>
       </div>
+
       <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 mb-4">Come iniziare con il profilo {profile.name}</h3>
         <div className="space-y-4">
@@ -226,6 +260,7 @@ function TabRibilanciamento({ profile }) {
     { year: '5-10', label: 'Crescita', desc: 'Il compounding inizia a farsi sentire. Aumenta il PAC se puoi.' },
     { year: '10+', label: 'Maturità', desc: 'Valuta di ridurre il rischio man mano che si avvicina il tuo orizzonte' },
   ]
+
   return (
     <div>
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
@@ -235,6 +270,7 @@ function TabRibilanciamento({ profile }) {
           🔔 Frequenza: {profile.rebalanceFrequency}
         </div>
       </div>
+
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 mb-4">Quando agire</h3>
         <div className="space-y-3">
@@ -249,6 +285,7 @@ function TabRibilanciamento({ profile }) {
           ))}
         </div>
       </div>
+
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 mb-6">Timeline dell'investimento</h3>
         <div className="relative">
@@ -269,6 +306,7 @@ function TabRibilanciamento({ profile }) {
           </div>
         </div>
       </div>
+
       <div className="border rounded-xl p-6 shadow-sm" style={{ backgroundColor: '#FEF2F2', borderColor: '#FECACA' }}>
         <div className="flex gap-3">
           <div className="text-2xl shrink-0">🚫</div>
@@ -288,11 +326,15 @@ function TabRibilanciamento({ profile }) {
 
 export default function Dashboard() {
   const { user } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('risparmio')
   const [userProfile, setUserProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [selectedProfileId, setSelectedProfileId] = useState(null)
   const [generatingPdf, setGeneratingPdf] = useState(false)
+  const [showProModal, setShowProModal] = useState(false)
+  const [showUpgradeBanner, setShowUpgradeBanner] = useState(false)
 
   const [params, setParams] = useState({
     initialCapital: 5000,
@@ -308,6 +350,7 @@ export default function Dashboard() {
         .select('*')
         .eq('user_id', user.id)
         .single()
+
       if (data && !error) {
         setUserProfile(data)
         setSelectedProfileId(data.profile)
@@ -323,15 +366,30 @@ export default function Dashboard() {
     fetchProfile()
   }, [user.id])
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    if (params.get('upgrade') === 'success') {
+      setShowUpgradeBanner(true)
+      navigate('/dashboard', { replace: true })
+    }
+  }, [location.search, navigate])
+
   const currentProfile = PORTFOLIOS[selectedProfileId] || Object.values(PORTFOLIOS)[2]
 
-  const handleParamChange = (key, value) => setParams(prev => ({ ...prev, [key]: value }))
+  const handleParamChange = (key, value) => {
+    setParams(prev => ({ ...prev, [key]: value }))
+  }
 
   const handleDownloadPdf = () => {
+    if (!userProfile?.is_pro) {
+      setShowProModal(true)
+      return
+    }
     setGeneratingPdf(true)
     try {
       const doc = generatePianoPDF(currentProfile, userProfile, params)
-      doc.output('dataurlnewwindow', { filename: `piano-finanziario-${currentProfile.name.toLowerCase()}.pdf` })
+      const filename = `piano-finanziario-${currentProfile.name.toLowerCase()}.pdf`
+      doc.output('dataurlnewwindow', { filename })
     } finally {
       setGeneratingPdf(false)
     }
@@ -353,6 +411,24 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {showUpgradeBanner && (
+        <div
+          className="mb-6 flex items-center justify-between p-4 rounded-xl"
+          style={{ backgroundColor: '#ECFDF5', border: '1px solid #6EE7B7' }}
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-xl">🎉</span>
+            <div>
+              <div className="font-semibold text-sm" style={{ color: '#065F46' }}>Benvenuto nel piano Pro!</div>
+              <div className="text-xs mt-0.5" style={{ color: '#047857' }}>Puoi ora scaricare il tuo piano PDF personalizzato.</div>
+            </div>
+          </div>
+          <button onClick={() => setShowUpgradeBanner(false)} className="text-gray-400 hover:text-gray-600 text-lg leading-none">×</button>
+        </div>
+      )}
+
+      {showProModal && <ProModal onClose={() => setShowProModal(false)} />}
+
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Il tuo piano finanziario</h1>
@@ -367,24 +443,35 @@ export default function Dashboard() {
           <button
             onClick={handleDownloadPdf}
             disabled={generatingPdf}
-            className="shrink-0 px-5 py-2.5 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="shrink-0 px-5 py-2.5 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60 flex items-center gap-2"
             style={{ backgroundColor: '#534AB7' }}
           >
+            {!userProfile.is_pro && <span>🔒</span>}
             {generatingPdf ? 'Generazione...' : 'Scarica il tuo piano →'}
           </button>
         )}
       </div>
+
       <GlobalSliders params={params} onChange={handleParamChange} />
+
       <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-6">
         {TABS.map(tab => (
-          <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              activeTab === tab.id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
             {tab.label}
           </button>
         ))}
       </div>
+
       {activeTab === 'risparmio' && <TabRisparmio params={params} profile={currentProfile} />}
-      {activeTab === 'investimento' && <TabInvestimento params={params} profile={currentProfile} onProfileChange={setSelectedProfileId} allProfiles={PORTFOLIOS} />}
+      {activeTab === 'investimento' && (
+        <TabInvestimento params={params} profile={currentProfile} onProfileChange={setSelectedProfileId} allProfiles={PORTFOLIOS} />
+      )}
       {activeTab === 'ribilanciamento' && <TabRibilanciamento profile={currentProfile} />}
     </div>
   )

@@ -7,16 +7,20 @@ import Auth from './pages/Auth'
 import Onboarding from './pages/Onboarding'
 import Dashboard from './pages/Dashboard'
 import Profilo from './pages/Profilo'
+import Pricing from './pages/Pricing'
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          {/* Pagine pubbliche */}
           <Route path="/" element={<Layout><Landing /></Layout>} />
           <Route path="/login" element={<Auth mode="login" />} />
           <Route path="/registrazione" element={<Auth mode="register" />} />
+          <Route path="/prezzi" element={<Layout><Pricing /></Layout>} />
 
+          {/* Onboarding (protetto: solo utenti loggati) */}
           <Route
             path="/onboarding"
             element={
@@ -26,6 +30,7 @@ export default function App() {
             }
           />
 
+          {/* Dashboard (protetta + onboarding completato) */}
           <Route
             path="/dashboard"
             element={
@@ -37,6 +42,7 @@ export default function App() {
             }
           />
 
+          {/* Profilo (protetto + onboarding completato) */}
           <Route
             path="/profilo"
             element={
@@ -48,6 +54,7 @@ export default function App() {
             }
           />
 
+          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
