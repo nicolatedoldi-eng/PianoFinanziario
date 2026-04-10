@@ -52,9 +52,9 @@ export const PORTFOLIOS = {
       },
       {
         ticker: 'IBTM',
-        name: 'iShares $ Treasury Bond 7-10yr UCITS ETF',
+        name: 'iShares EUR Govt Bond 7-10yr UCITS ETF',
         isin: 'IE00B1FZS467',
-        description: 'Titoli di stato USA a medio termine, molto stabili',
+        description: 'Titoli di stato europei in euro - nessun rischio valutario',
         percentage: 35,
       },
       {
