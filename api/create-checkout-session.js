@@ -7,8 +7,7 @@ export default async function handler(req, res) {
 
   // Debug: verify env vars are available at runtime
   console.log('STRIPE_SECRET_KEY set:', !!process.env.STRIPE_SECRET_KEY)
-  console.log('APP_URL:', process.env.APP_URL || '(not set, using VERCEL_URL)')
-  console.log('VERCEL_URL:', process.env.VERCEL_URL || '(not set)')
+  console.log('x-forwarded-host:', req.headers['x-forwarded-host'])
 
   if (!process.env.STRIPE_SECRET_KEY) {
     console.error('STRIPE_SECRET_KEY is not configured')
@@ -40,8 +39,11 @@ export default async function handler(req, res) {
   // Initialize Stripe inside handler so STRIPE_SECRET_KEY is guaranteed available
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
+  // Derive appUrl from the incoming request so it always matches the live domain
   const appUrl = process.env.APP_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173')
+    (req.headers['x-forwarded-host']
+      ? `https://${req.headers['x-forwarded-host']}`
+      : `http://${req.headers.host}`)
 
   const priceId = process.env.STRIPE_PRICE_ID || 'price_1TKfFmJyUH2vL85IAslzZj8m'
   console.log('priceId:', priceId, '| appUrl:', appUrl)
