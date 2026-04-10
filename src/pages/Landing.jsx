@@ -150,9 +150,9 @@ export default function Landing() {
       </div>
 
       {/* Features */}
-      <div className="mb-20">
+      <div className="mb-12">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-12">
-          Tutto quello che ti serve, niente di più
+          Smetti di rimandare. Inizia con €50 al mese.
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {FEATURES.map((f) => (
@@ -163,6 +163,20 @@ export default function Landing() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Trust box */}
+      <div className="mb-20 border border-gray-200 rounded-xl bg-white px-6 py-5 flex items-start gap-4">
+        <div
+          className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-base font-bold"
+          style={{ backgroundColor: '#EEF0FB', color: '#534AB7' }}
+        >
+          ✓
+        </div>
+        <p style={{ fontSize: '13px', color: '#374151', lineHeight: '1.6' }}>
+          Nessun accesso ai tuoi conti bancari. Nessun dato finanziario sensibile richiesto.
+          Solo calcoli matematici basati su quello che ci dici tu.
+        </p>
       </div>
 
       {/* Profili */}
@@ -198,19 +212,19 @@ export default function Landing() {
       {/* CTA */}
       <div
         className="text-center py-16 rounded-2xl mb-20"
-        style={{ backgroundColor: '#EEF0FB' }}
+        style={{ backgroundColor: '#3730A3' }}
       >
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
           Inizia in 3 minuti, gratis
         </h2>
-        <p className="text-gray-500 mb-8 max-w-lg mx-auto">
+        <p className="mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.75)' }}>
           Rispondi alle 6 domande, scopri il tuo profilo e vedi subito
           quanto puoi accumulare nel tempo.
         </p>
         <Link
           to="/registrazione"
-          className="inline-block px-8 py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90"
-          style={{ backgroundColor: '#534AB7' }}
+          className="inline-block px-8 py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90"
+          style={{ backgroundColor: '#ffffff', color: '#3730A3' }}
         >
           Crea il tuo piano →
         </Link>
