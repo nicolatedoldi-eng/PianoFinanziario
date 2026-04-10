@@ -92,11 +92,11 @@ export default function Pricing() {
             <div className="flex items-center gap-2 mb-2">
               <span className="text-sm font-medium text-white/80">Pro</span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
-                Una tantum
+                Mensile
               </span>
             </div>
             <div className="text-4xl font-bold text-white">€9</div>
-            <div className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>pagamento unico</div>
+            <div className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>/mese</div>
           </div>
           <ul className="space-y-3 mb-8">
             {PRO_FEATURES.map(f => (
@@ -118,7 +118,7 @@ export default function Pricing() {
       </div>
 
       <p className="text-center text-xs text-gray-400 mt-8">
-        Pagamento sicuro via Stripe. Nessun abbonamento, nessun rinnovo automatico.
+        Pagamento sicuro via Stripe. Puoi annullare in qualsiasi momento.
       </p>
     </div>
   )
