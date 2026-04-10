@@ -7,6 +7,7 @@ import Auth from './pages/Auth'
 import Onboarding from './pages/Onboarding'
 import Dashboard from './pages/Dashboard'
 import Profilo from './pages/Profilo'
+import Pricing from './pages/Pricing'
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/" element={<Layout><Landing /></Layout>} />
           <Route path="/login" element={<Auth mode="login" />} />
           <Route path="/registrazione" element={<Auth mode="register" />} />
+          <Route path="/prezzi" element={<Layout><Pricing /></Layout>} />
 
           {/* Onboarding (protetto: solo utenti loggati) */}
           <Route
