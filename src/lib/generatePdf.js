@@ -187,15 +187,20 @@ export function generatePianoPDF(profile, dbProfile, params) {
   // ── 4. MINI RIEPILOGO CRESCITA ──────────────────────────────────────────
   const multiplier = result.totalDeposited > 0
     ? (result.finalCapital / result.totalDeposited).toFixed(1)
-    : '—'
-  const summaryLine = `In ${params.horizon} anni: versati €${fmtK(result.totalDeposited)} → accumulati €${fmtK(result.finalCapital)} (×${multiplier} il capitale investito)`
-  doc.setFillColor(...C.purpleLight)
-  doc.roundedRect(MARGIN, y, CW, 10, 2, 2, 'F')
+    : '-'
+  // ASCII arrow: jsPDF built-in Helvetica (Windows-1252) does not support U+2192
+  const summaryLine = `In ${params.horizon} anni: versati EUR ${fmtK(result.totalDeposited)} -> accumulati EUR ${fmtK(result.finalCapital)} (x${multiplier} il capitale investito)`
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(9)
+  const summaryLines = doc.splitTextToSize(summaryLine, CW - 6)
+  const summaryBoxH = summaryLines.length * 5.5 + 5
+  doc.setFillColor(...C.purpleLight)
+  doc.roundedRect(MARGIN, y, CW, summaryBoxH, 2, 2, 'F')
   doc.setTextColor(...C.green)
-  doc.text(summaryLine, MARGIN + CW / 2, y + 6.5, { align: 'center' })
-  y += 15
+  summaryLines.forEach((line, i) => {
+    doc.text(line, MARGIN + CW / 2, y + 6 + i * 5.5, { align: 'center' })
+  })
+  y += summaryBoxH + 5
 
   // ── 5. TABELLA ETF ───────────────────────────────────────────────────────────────────────
   sectionTitle('3. Portafoglio ETF consigliato')
@@ -316,10 +321,10 @@ export function generatePianoPDF(profile, dbProfile, params) {
   doc.line(0, PAGE_H - FOOTER_H, W, PAGE_H - FOOTER_H)
 
   doc.setFont('helvetica', 'normal')
-  doc.setFontSize(7)
+  doc.setFontSize(9)
   doc.setTextColor(...C.gray)
   doc.text(
-    'Strumento educativo — non costituisce consulenza finanziaria',
+    'Strumento educativo - non costituisce consulenza finanziaria',
     W / 2, PAGE_H - FOOTER_H + 5.5, { align: 'center' },
   )
   doc.text(
