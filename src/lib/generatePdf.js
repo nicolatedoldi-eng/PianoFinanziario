@@ -45,7 +45,7 @@ function fmtK(n) {
 export function generatePianoPDF(profile, dbProfile, params) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
 
-  // ── 1. HEADER BAND ────────────────────────────────────────────
+  // ── 1. HEADER BAND ───────────────────────────────────
   const HEADER_H = 18
   doc.setFillColor(...C.purple)
   doc.rect(0, 0, W, HEADER_H, 'F')
@@ -93,7 +93,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
     doc.line(MARGIN, y, MARGIN + CW, y)
   }
 
-  // ── 2. PROFILO BOX ────────────────────────────────────────────
+  // ── 2. PROFILO BOX ──────────────────────────────────
   sectionTitle('1. Il tuo profilo')
 
   const BOX_H = 20
@@ -127,7 +127,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   })
   y += BOX_H + 8
 
-  // ── 3. PROIEZIONE ───────────────────────────────────────────────────
+  // ── 3. PROIEZIONE ───────────────────────────────────────────────────────
   sectionTitle('2. Proiezione finanziaria (scenario base)')
 
   const result = calculateProjection(
@@ -153,11 +153,12 @@ export function generatePianoPDF(profile, dbProfile, params) {
   y += 5
 
   const statW = (CW - 4) / 3
-  [
+  const statCards = [
     { label: 'Totale versato', value: fmt(result.totalDeposited), color: C.dark },
     { label: 'Interessi guadagnati', value: fmt(result.totalInterest), color: C.green },
     { label: 'Rendita mensile (regola 4%)', value: fmt(result.monthlyIncome), color: [239, 159, 39] },
-  ].forEach((sc, i) => {
+  ]
+  statCards.forEach((sc, i) => {
     const sx = MARGIN + i * (statW + 2)
     doc.setFillColor(249, 250, 251)
     doc.setDrawColor(...C.border)
@@ -183,7 +184,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   )
   y += 8
 
-  // ── 4. MINI RIEPILOGO CRESCITA ────────────────────────────────────────────
+  // ── 4. MINI RIEPILOGO CRESCITA ──────────────────────────────────────────
   const multiplier = result.totalDeposited > 0
     ? (result.finalCapital / result.totalDeposited).toFixed(1)
     : '—'
@@ -196,7 +197,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   doc.text(summaryLine, MARGIN + CW / 2, y + 6.5, { align: 'center' })
   y += 15
 
-  // ── 5. TABELLA ETF ───────────────────────────────────────────────────────────
+  // ── 5. TABELLA ETF ───────────────────────────────────────────────────────────────────────
   sectionTitle('3. Portafoglio ETF consigliato')
 
   const cols = [
@@ -261,7 +262,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   })
   y += 8
 
-  // ── 6. RIBILANCIAMENTO ──────────────────────────────────────────────────────
+  // ── 6. RIBILANCIAMENTO ────────────────────────────────────────────────────────
   sectionTitle('4. Regola di ribilanciamento')
 
   const ruleLines = doc.splitTextToSize(profile.rebalanceRule, CW - 10)
@@ -288,7 +289,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   doc.text(`Frequenza controllo: ${profile.rebalanceFrequency}`, MARGIN + 4, y + 4.8)
   y += 13
 
-  // ── 7. DISCLAIMER ─────────────────────────────────────────────────────
+  // ── 7. DISCLAIMER ────────────────────────────────────────────────────────
   if (y > PAGE_H - FOOTER_H - 28) { doc.addPage(); y = 16 }
 
   const disclaimer = 'Questo documento è generato automaticamente a scopo informativo e non costituisce consulenza finanziaria. Gli investimenti comportano rischi. Rendimenti passati non garantiscono risultati futuri.'
@@ -307,7 +308,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   doc.setTextColor(127, 29, 29)
   doc.text(discLines, MARGIN + 4, y + 12)
 
-  // ── 8. FOOTER BAND ──────────────────────────────────────────────────────
+  // ── 8. FOOTER BAND ────────────────────────────────────────────────────────
   doc.setFillColor(...C.grayFoot)
   doc.rect(0, PAGE_H - FOOTER_H, W, FOOTER_H, 'F')
   doc.setDrawColor(...C.border)
