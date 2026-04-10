@@ -30,7 +30,7 @@ export const PORTFOLIOS = {
     ],
     steps: [
       'Apri un conto su un broker come Directa, Fineco o DEGIRO',
-      'Acquista VWCE con l\'80% del tuo capitale iniziale',
+      "Acquista VWCE con l'80% del tuo capitale iniziale",
       'Acquista AGGH con il restante 20%',
       'Imposta un ordine ricorrente mensile con la stessa proporzione 80/20',
     ],
@@ -46,14 +46,14 @@ export const PORTFOLIOS = {
       {
         ticker: 'SWRD',
         name: 'SPDR MSCI World UCITS ETF',
-        isin: 'IE00BFY0GT14',
+        isin: 'IE00B4L5Y983',
         description: 'Azioni dei paesi sviluppati (Europa, USA, Giappone...)',
         percentage: 40,
       },
       {
         ticker: 'IBTM',
         name: 'iShares $ Treasury Bond 7-10yr UCITS ETF',
-        isin: 'IE00B1FZS798',
+        isin: 'IE00B1FZS467',
         description: 'Titoli di stato USA a medio termine, molto stabili',
         percentage: 35,
       },
@@ -61,7 +61,7 @@ export const PORTFOLIOS = {
         ticker: 'SGLE',
         name: 'iShares Physical Gold ETC',
         isin: 'IE00B4ND3602',
-        description: 'Oro fisico come protezione dall\'inflazione',
+        description: "Oro fisico come protezione dall'inflazione",
         percentage: 15,
       },
       {
@@ -75,7 +75,7 @@ export const PORTFOLIOS = {
     rebalanceRule: 'Verifica ogni 6 mesi (gennaio e luglio) le percentuali. Ribilancia se qualcuno si allontana di oltre 5% dal target.',
     alerts: [
       { when: 'Azionario (SWRD) > 45% o < 35%', action: 'Ribilancia verso i target originali' },
-      { when: 'Crisi di mercato', action: 'L\'oro e le obbligazioni proteggono. Non intervenire.' },
+      { when: 'Crisi di mercato', action: "L'oro e le obbligazioni proteggono. Non intervenire." },
     ],
     steps: [
       'Apri un conto su un broker (Directa, Fineco o DEGIRO)',
@@ -121,7 +121,7 @@ export const PORTFOLIOS = {
         percentage: 10,
       },
     ],
-    rebalanceRule: 'Controlla ogni 6 mesi. Ribilancia se l\'azionario totale (VWCE + EIMI) supera il 70% o scende sotto il 60%.',
+    rebalanceRule: "Controlla ogni 6 mesi. Ribilancia se l'azionario totale (VWCE + EIMI) supera il 70% o scende sotto il 60%.",
     alerts: [
       { when: 'Azionario totale > 70% o < 60%', action: 'Ribilancia per tornare a 65% azionario' },
       { when: 'EIMI > 15%', action: 'Riduci gli emergenti, hanno corso troppo' },
@@ -188,24 +188,14 @@ export const PORTFOLIOS = {
 // Logica per determinare il profilo consigliato
 export function recommendPortfolio(answers) {
   let score = 0
-
-  // Obiettivo
   const goalScores = { casa: 0, pensione: 1, liberta: 2, emergenze: 0 }
   score += goalScores[answers.goal] || 0
-
-  // Esperienza
   const expScores = { zero: 0, letto: 1, qualcosa: 2, esperto: 3 }
   score += expScores[answers.experience] || 0
-
-  // Tolleranza al rischio
   const riskScores = { vendo: 0, aspetto: 1, continuo: 2, compro: 3 }
   score += riskScores[answers.risk] || 0
-
-  // Orizzonte temporale
   if (answers.horizon >= 20) score += 2
   else if (answers.horizon >= 10) score += 1
-
-  // Determina profilo
   if (score <= 2) return 'dormiglione'
   if (score <= 4) return 'prudente'
   if (score <= 6) return 'bilanciato'
