@@ -165,18 +165,53 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* Trust box */}
-      <div className="mb-20 border border-gray-200 rounded-xl bg-white px-6 py-5 flex items-start gap-4">
-        <div
-          className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-base font-bold"
-          style={{ backgroundColor: '#EEF0FB', color: '#534AB7' }}
-        >
-          ✓
+      {/* Trust section */}
+      <div
+        className="-mx-4 sm:-mx-6 lg:-mx-8 mb-20 border-t border-b border-gray-200 bg-white"
+        style={{ paddingTop: '40px', paddingBottom: '40px' }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2
+            className="text-center font-bold text-gray-900 mb-10"
+            style={{ fontSize: '22px' }}
+          >
+            Perché puoi fidarti
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center text-center gap-3">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <polyline points="9 12 11 14 15 10"/>
+              </svg>
+              <h3 className="font-bold text-gray-900" style={{ fontSize: '15px' }}>Zero accesso bancario</h3>
+              <p style={{ fontSize: '13px', color: '#6B7280' }}>
+                Non colleghiamo nessun conto. Non vediamo i tuoi movimenti. Mai.
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center gap-3">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <h3 className="font-bold text-gray-900" style={{ fontSize: '15px' }}>Solo calcoli matematici</h3>
+              <p style={{ fontSize: '13px', color: '#6B7280' }}>
+                Inserisci solo quello che vuoi tu. Il resto lo calcoliamo noi.
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center gap-3">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="9" y1="13" x2="15" y2="19"/>
+                <line x1="15" y1="13" x2="9" y2="19"/>
+              </svg>
+              <h3 className="font-bold text-gray-900" style={{ fontSize: '15px' }}>Nessuna consulenza</h3>
+              <p style={{ fontSize: '13px', color: '#6B7280' }}>
+                Siamo uno strumento educativo, non un consulente finanziario.
+              </p>
+            </div>
+          </div>
         </div>
-        <p style={{ fontSize: '13px', color: '#374151', lineHeight: '1.6' }}>
-          Nessun accesso ai tuoi conti bancari. Nessun dato finanziario sensibile richiesto.
-          Solo calcoli matematici basati su quello che ci dici tu.
-        </p>
       </div>
 
       {/* Profili */}
