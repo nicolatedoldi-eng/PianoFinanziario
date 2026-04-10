@@ -67,7 +67,7 @@ export function calculateProjection(
     totalInterest,
     monthlyIncome,
     dataPoints,
-    multiplier: initialCapital > 0 ? (finalCapital / initialCapital).toFixed(1) : 0,
+    multiplier: totalDepositedFinal > 0 ? (finalCapital / totalDepositedFinal).toFixed(1) : 0,
   }
 }
 
@@ -150,17 +150,5 @@ export function formatEuroFull(amount) {
  * Genera insight testuale basato sul moltiplicatore
  */
 export function generateInsight(multiplier, years) {
-  if (multiplier >= 10) {
-    return `Straordinario! In ${years} anni il tuo capitale si moltiplica per ${multiplier}x. La potenza dell'interesse composto fa il lavoro pesante al posto tuo.`
-  }
-  if (multiplier >= 5) {
-    return `Ottimo risultato! In ${years} anni trasformi ogni euro in ${multiplier}. La costanza dei versamenti mensili fa la differenza.`
-  }
-  if (multiplier >= 3) {
-    return `In ${years} anni il tuo capitale triplica. L'interesse composto inizia a lavorare in modo significativo nella seconda metà del periodo.`
-  }
-  if (multiplier >= 2) {
-    return `In ${years} anni il tuo capitale raddoppia. Considera di aumentare i versamenti o allungare l'orizzonte per accelerare la crescita.`
-  }
-  return `Con orizzonte breve, la crescita è limitata. I primi anni servono a costruire le fondamenta: continua con costanza.`
+  return `In ${years} anni il tuo capitale si moltiplica per ${multiplier}x rispetto a quanto hai versato.`
 }
