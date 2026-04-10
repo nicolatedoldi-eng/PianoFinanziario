@@ -11,7 +11,7 @@ export const PORTFOLIOS = {
       {
         ticker: 'VWCE',
         name: 'Vanguard FTSE All-World UCITS ETF',
-        isin: 'IE00BK5BQT80',
+        isin: 'IE00B3RBWM25',
         description: 'Azioni di tutto il mondo (sia sviluppati che emergenti)',
         percentage: 80,
       },
@@ -95,14 +95,14 @@ export const PORTFOLIOS = {
       {
         ticker: 'VWCE',
         name: 'Vanguard FTSE All-World UCITS ETF',
-        isin: 'IE00BK5BQT80',
+        isin: 'IE00B3RBWM25',
         description: 'Azioni di tutto il mondo (sia sviluppati che emergenti)',
         percentage: 55,
       },
       {
         ticker: 'EIMI',
         name: 'iShares Core MSCI Emerging Markets IMI UCITS ETF',
-        isin: 'IE00BKM4GZ66',
+        isin: 'IE00B4L5YC18',
         description: 'Mercati emergenti extra per maggiore diversificazione',
         percentage: 10,
       },
@@ -144,14 +144,14 @@ export const PORTFOLIOS = {
       {
         ticker: 'VWCE',
         name: 'Vanguard FTSE All-World UCITS ETF',
-        isin: 'IE00BK5BQT80',
+        isin: 'IE00B3RBWM25',
         description: 'Azioni di tutto il mondo come base globale',
         percentage: 60,
       },
       {
         ticker: 'EIMI',
         name: 'iShares Core MSCI Emerging Markets IMI UCITS ETF',
-        isin: 'IE00BKM4GZ66',
+        isin: 'IE00B4L5YC18',
         description: 'Overweight sui mercati emergenti per più crescita',
         percentage: 15,
       },
