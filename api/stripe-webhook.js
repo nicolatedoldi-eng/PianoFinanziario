@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     const session = event.data.object
     const userId = session.metadata?.userId
 
-    if (userId && session.payment_status === 'paid') {
+    if (userId && session.status === 'complete') {
       const { error } = await supabase
         .from('user_profiles')
         .update({ is_pro: true })
