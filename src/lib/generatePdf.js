@@ -1,179 +1,334 @@
 import { jsPDF } from 'jspdf'
 import { calculateProjection } from './finance'
 
-const PURPLE = [83, 74, 183]
-const GREEN  = [29, 158, 117]
-const GRAY   = [107, 114, 128]
-const DARK   = [17, 24, 39]
-const LIGHT  = [249, 250, 251]
-const BORDER = [229, 231, 235]
-
-function euro(n) {
-  return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n)
+// Palette
+const C = {
+  purple:      [83, 74, 183],    // #534AB7
+  purpleLight: [238, 237, 254],  // #EEEDFE
+  green:       [29, 158, 117],   // #1D9E75
+  gray:        [107, 114, 128],  // #6B7280
+  grayLight:   [248, 248, 248],  // #F8F8F8
+  grayFoot:    [241, 241, 241],  // #F1F1F1
+  dark:        [17, 24, 39],     // #111827
+  border:      [229, 231, 235],  // #E5E7EB
+  white:       [255, 255, 255],
+  red:         [185, 28, 28],
+  redLight:    [254, 242, 242],
+  redBorder:   [254, 202, 202],
+  amber:       [180, 120, 0],
+  amberLight:  [255, 251, 235],
+  amberBorder: [253, 230, 138],
 }
-function euroFull(n) {
-  return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 }).format(n)
+
+const W = 210
+const MARGIN = 16
+const CW = W - MARGIN * 2
+const PAGE_H = 297
+const FOOTER_H = 14
+
+function fmt(n) {
+  return new Intl.NumberFormat('it-IT', {
+    style: 'currency', currency: 'EUR', maximumFractionDigits: 0,
+  }).format(n)
+}
+function fmtFull(n) {
+  return new Intl.NumberFormat('it-IT', {
+    style: 'currency', currency: 'EUR', minimumFractionDigits: 2,
+  }).format(n)
+}
+function fmtK(n) {
+  if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`
+  if (n >= 1000) return `${Math.round(n / 1000)}K`
+  return String(Math.round(n))
 }
 
 export function generatePianoPDF(profile, dbProfile, params) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
-  const W = 210
-  const margin = 18
-  const contentW = W - margin * 2
 
-  doc.setFillColor(...PURPLE)
-  doc.rect(0, 0, W, 38, 'F')
-  doc.setFillColor(255, 255, 255)
-  doc.circle(margin + 5, 19, 5, 'F')
+  // ── 1. HEADER BAND ────────────────────────────────────────────
+  const HEADER_H = 18
+  doc.setFillColor(...C.purple)
+  doc.rect(0, 0, W, HEADER_H, 'F')
+
+  doc.setFillColor(...C.white)
+  doc.circle(MARGIN + 5, HEADER_H / 2, 4.5, 'F')
   doc.setFont('helvetica', 'bold')
-  doc.setFontSize(10)
-  doc.setTextColor(...PURPLE)
-  doc.text('P', margin + 5, 22.5, { align: 'center' })
-  doc.setTextColor(255, 255, 255)
-  doc.setFontSize(16)
-  doc.text('PianoFinanziario', margin + 13, 17)
-  doc.setFont('helvetica', 'normal')
   doc.setFontSize(9)
-  doc.setTextColor(200, 200, 230)
-  doc.text('Il tuo piano finanziario personale', margin + 13, 24)
-  const today = new Date().toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })
-  doc.setFontSize(8.5)
-  doc.text(`Generato il ${today}`, W - margin, 19, { align: 'right' })
+  doc.setTextColor(...C.purple)
+  doc.text('P', MARGIN + 5, HEADER_H / 2 + 3, { align: 'center' })
 
-  let y = 50
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(13)
+  doc.setTextColor(...C.white)
+  doc.text('PianoFinanziario', MARGIN + 12, HEADER_H / 2 - 1)
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7.5)
+  doc.setTextColor(200, 200, 240)
+  doc.text('Piano di investimento personalizzato', MARGIN + 12, HEADER_H / 2 + 4.5)
+
+  const today = new Date().toLocaleDateString('it-IT', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  })
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8)
+  doc.setTextColor(...C.white)
+  doc.text(`Generato il ${today}`, W - MARGIN, HEADER_H / 2 + 1.5, { align: 'right' })
+
+  let y = HEADER_H + 8
 
   function sectionTitle(text) {
     doc.setFont('helvetica', 'bold')
-    doc.setFontSize(11)
-    doc.setTextColor(...PURPLE)
-    doc.text(text, margin, y)
-    doc.setDrawColor(...PURPLE)
-    doc.setLineWidth(0.4)
-    doc.line(margin, y + 1.5, margin + contentW, y + 1.5)
-    y += 7
-  }
-
-  function labelValue(label, value, x, yy, valueColor = DARK) {
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(8.5)
-    doc.setTextColor(...GRAY)
-    doc.text(label, x, yy)
-    doc.setFont('helvetica', 'bold')
     doc.setFontSize(10.5)
-    doc.setTextColor(...valueColor)
-    doc.text(value, x, yy + 5)
+    doc.setTextColor(...C.purple)
+    doc.text(text, MARGIN, y)
+    doc.setDrawColor(...C.purple)
+    doc.setLineWidth(0.35)
+    doc.line(MARGIN, y + 1.5, MARGIN + CW, y + 1.5)
+    y += 6.5
   }
 
-  function statCard(label, value, x, yy, w, valueColor = DARK) {
-    doc.setFillColor(...LIGHT)
-    doc.setDrawColor(...BORDER)
-    doc.setLineWidth(0.3)
-    doc.roundedRect(x, yy, w, 18, 2, 2, 'FD')
+  function hRule(color = C.border, lw = 0.25) {
+    doc.setDrawColor(...color)
+    doc.setLineWidth(lw)
+    doc.line(MARGIN, y, MARGIN + CW, y)
+  }
+
+  // ── 2. PROFILO BOX ────────────────────────────────────────────
+  sectionTitle('1. Il tuo profilo')
+
+  const BOX_H = 20
+  doc.setFillColor(...C.purpleLight)
+  doc.setDrawColor(...C.purple)
+  doc.setLineWidth(0.3)
+  doc.roundedRect(MARGIN, y, CW, BOX_H, 3, 3, 'FD')
+
+  const cells = [
+    { label: 'Profilo', value: profile.name },
+    { label: 'Capitale iniziale', value: fmt(params.initialCapital) },
+    { label: 'PAC mensile', value: fmt(params.monthlyPayment) },
+    { label: 'Orizzonte', value: `${params.horizon} anni` },
+  ]
+  const cellW = CW / 4
+  cells.forEach((cell, i) => {
+    const cx = MARGIN + i * cellW
+    if (i > 0) {
+      doc.setDrawColor(...C.purple)
+      doc.setLineWidth(0.25)
+      doc.line(cx, y + 3, cx, y + BOX_H - 3)
+    }
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(7)
+    doc.setTextColor(...C.purple)
+    doc.text(cell.label, cx + cellW / 2, y + 6.5, { align: 'center' })
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(10)
+    doc.setTextColor(...C.purple)
+    doc.text(cell.value, cx + cellW / 2, y + 14.5, { align: 'center' })
+  })
+  y += BOX_H + 8
+
+  // ── 3. PROIEZIONE ───────────────────────────────────────────────────
+  sectionTitle('2. Proiezione finanziaria (scenario base)')
+
+  const result = calculateProjection(
+    params.initialCapital,
+    params.monthlyPayment,
+    profile.expectedReturn,
+    params.horizon,
+    params.annualGrowth,
+  )
+
+  hRule(C.border, 0.25)
+  y += 3
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8)
+  doc.setTextColor(...C.gray)
+  doc.text('Capitale finale stimato', MARGIN, y + 1)
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(18)
+  doc.setTextColor(...C.green)
+  doc.text(fmt(result.finalCapital), MARGIN + CW / 2, y + 10, { align: 'center' })
+  y += 14
+  hRule(C.border, 0.25)
+  y += 5
+
+  const statW = (CW - 4) / 3
+  [
+    { label: 'Totale versato', value: fmt(result.totalDeposited), color: C.dark },
+    { label: 'Interessi guadagnati', value: fmt(result.totalInterest), color: C.green },
+    { label: 'Rendita mensile (regola 4%)', value: fmt(result.monthlyIncome), color: [239, 159, 39] },
+  ].forEach((sc, i) => {
+    const sx = MARGIN + i * (statW + 2)
+    doc.setFillColor(249, 250, 251)
+    doc.setDrawColor(...C.border)
+    doc.setLineWidth(0.25)
+    doc.roundedRect(sx, y, statW, 16, 2, 2, 'FD')
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(7)
+    doc.setTextColor(...C.gray)
+    doc.text(sc.label, sx + statW / 2, y + 5, { align: 'center' })
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(10)
+    doc.setTextColor(...sc.color)
+    doc.text(sc.value, sx + statW / 2, y + 12, { align: 'center' })
+  })
+  y += 20
+
+  doc.setFont('helvetica', 'italic')
+  doc.setFontSize(7)
+  doc.setTextColor(...C.gray)
+  doc.text(
+    `Ipotesi: rendimento annuo ${profile.expectedReturn}%, crescita PAC ${params.annualGrowth}% annuo, orizzonte ${params.horizon} anni.`,
+    MARGIN, y,
+  )
+  y += 8
+
+  // ── 4. MINI RIEPILOGO CRESCITA ────────────────────────────────────────────
+  const multiplier = result.totalDeposited > 0
+    ? (result.finalCapital / result.totalDeposited).toFixed(1)
+    : '—'
+  const summaryLine = `In ${params.horizon} anni: versati €${fmtK(result.totalDeposited)} → accumulati €${fmtK(result.finalCapital)} (×${multiplier} il capitale investito)`
+  doc.setFillColor(...C.purpleLight)
+  doc.roundedRect(MARGIN, y, CW, 10, 2, 2, 'F')
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(9)
+  doc.setTextColor(...C.green)
+  doc.text(summaryLine, MARGIN + CW / 2, y + 6.5, { align: 'center' })
+  y += 15
+
+  // ── 5. TABELLA ETF ───────────────────────────────────────────────────────────
+  sectionTitle('3. Portafoglio ETF consigliato')
+
+  const cols = [
+    { label: 'Ticker',    x: MARGIN,       w: 17 },
+    { label: 'Strumento', x: MARGIN + 17,  w: 66 },
+    { label: 'ISIN',      x: MARGIN + 83,  w: 34 },
+    { label: '%',         x: MARGIN + 117, w: 12 },
+    { label: 'Importo',   x: MARGIN + 129, w: 27 },
+    { label: 'PAC/mese',  x: MARGIN + 156, w: 22 },
+  ]
+
+  doc.setFillColor(...C.purple)
+  doc.rect(MARGIN, y, CW, 6.5, 'F')
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(7.5)
+  doc.setTextColor(...C.white)
+  cols.forEach(c => doc.text(c.label, c.x + 1.5, y + 4.5))
+  y += 6.5
+
+  profile.etfs.forEach((etf, idx) => {
+    const rowH = 13
+    doc.setFillColor(...(idx % 2 === 0 ? C.grayLight : C.white))
+    doc.rect(MARGIN, y, CW, rowH, 'F')
+    doc.setDrawColor(...C.border)
+    doc.setLineWidth(0.2)
+    doc.rect(MARGIN, y, CW, rowH, 'D')
+
+    doc.setFillColor(...C.purpleLight)
+    doc.roundedRect(cols[0].x + 1, y + 2.5, 14, 7, 1.5, 1.5, 'F')
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(7.5)
+    doc.setTextColor(...C.purple)
+    doc.text(etf.ticker, cols[0].x + 8, y + 7.5, { align: 'center' })
+
+    const nameLines = doc.splitTextToSize(etf.name, cols[1].w - 3)
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(7.5)
+    doc.setTextColor(...C.dark)
+    doc.text(nameLines[0], cols[1].x + 1.5, y + 5.5)
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(6.5)
+    doc.setTextColor(...C.gray)
+    doc.text(etf.description || '', cols[1].x + 1.5, y + 10.5)
+
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(6.5)
+    doc.setTextColor(...C.gray)
+    doc.text(etf.isin, cols[2].x + 1.5, y + 7)
+
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(9)
+    doc.setTextColor(...C.purple)
+    doc.text(`${etf.percentage}%`, cols[3].x + 1.5, y + 7)
+
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(7.5)
-    doc.setTextColor(...GRAY)
-    doc.text(label, x + 3, yy + 5.5)
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(11)
-    doc.setTextColor(...valueColor)
-    doc.text(value, x + 3, yy + 13.5)
-  }
+    doc.setTextColor(...C.dark)
+    doc.text(fmt(params.initialCapital * etf.percentage / 100), cols[4].x + 1.5, y + 7)
+    doc.text(fmtFull(params.monthlyPayment * etf.percentage / 100), cols[5].x + 1.5, y + 7)
 
-  sectionTitle('1. Il tuo profilo')
-  const cardW = (contentW - 6) / 4
-  labelValue('Profilo', profile.name, margin, y, PURPLE)
-  y += 12
-  [
-    { label: 'Capitale iniziale', value: euro(params.initialCapital) },
-    { label: 'PAC mensile', value: euro(params.monthlyPayment) },
-    { label: 'Orizzonte', value: `${params.horizon} anni` },
-    { label: 'Rendimento atteso', value: `${profile.expectedReturn}%` },
-  ].forEach((c, i) => statCard(c.label, c.value, margin + i * (cardW + 2), y, cardW))
-  y += 24
-
-  sectionTitle('2. Proiezione finanziaria (scenario base)')
-  const result = calculateProjection(params.initialCapital, params.monthlyPayment, profile.expectedReturn, params.horizon, params.annualGrowth)
-  const projW = (contentW - 6) / 4
-  [
-    { label: 'Capitale finale stimato', value: euro(result.finalCapital), color: PURPLE },
-    { label: 'Totale versato', value: euro(result.totalDeposited), color: GREEN },
-    { label: 'Interessi guadagnati', value: euro(result.totalInterest), color: GREEN },
-    { label: 'Rendita mensile (regola 4%)', value: euro(result.monthlyIncome), color: [239, 159, 39] },
-  ].forEach((c, i) => statCard(c.label, c.value, margin + i * (projW + 2), y, projW, c.color))
-  y += 24
-  doc.setFont('helvetica', 'italic')
-  doc.setFontSize(7.5)
-  doc.setTextColor(...GRAY)
-  doc.text(`Ipotesi: rendimento annuo ${profile.expectedReturn}%, crescita PAC ${params.annualGrowth}% annuo, orizzonte ${params.horizon} anni.`, margin, y)
-  y += 10
-
-  sectionTitle('3. Portafoglio ETF consigliato')
-  const cols = [
-    { label: 'Ticker', x: margin }, { label: 'ETF', x: margin + 18 },
-    { label: 'ISIN', x: margin + 86 }, { label: '%', x: margin + 120 },
-    { label: 'Importo', x: margin + 134 }, { label: 'PAC/mese', x: margin + 160 },
-  ]
-  doc.setFillColor(...PURPLE)
-  doc.rect(margin, y, contentW, 7, 'F')
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(8)
-  doc.setTextColor(255, 255, 255)
-  cols.forEach(c => doc.text(c.label, c.x + 1.5, y + 4.8))
-  y += 7
-  profile.etfs.forEach((etf, idx) => {
-    const rowH = 12
-    if (idx % 2 === 0) { doc.setFillColor(...LIGHT); doc.rect(margin, y, contentW, rowH, 'F') }
-    doc.setDrawColor(...BORDER); doc.setLineWidth(0.2); doc.rect(margin, y, contentW, rowH, 'D')
-    doc.setFillColor(238, 240, 251); doc.roundedRect(cols[0].x + 1, y + 2, 15, 7, 1, 1, 'F')
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5); doc.setTextColor(...PURPLE)
-    doc.text(etf.ticker, cols[0].x + 8.5, y + 7.2, { align: 'center' })
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...DARK)
-    const nameLines = doc.splitTextToSize(etf.name, 65)
-    doc.text(nameLines[0], cols[1].x + 1.5, y + 5)
-    if (nameLines.length > 1) { doc.setFontSize(6.5); doc.setTextColor(...GRAY); doc.text(nameLines[1], cols[1].x + 1.5, y + 9.5) }
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...GRAY)
-    doc.text(etf.isin, cols[2].x + 1.5, y + 6.5)
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...PURPLE)
-    doc.text(`${etf.percentage}%`, cols[3].x + 1.5, y + 6.5)
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...DARK)
-    doc.text(euro(params.initialCapital * etf.percentage / 100), cols[4].x + 1.5, y + 6.5)
-    doc.text(euroFull(params.monthlyPayment * etf.percentage / 100), cols[5].x + 1.5, y + 6.5)
     y += rowH
   })
   y += 8
 
+  // ── 6. RIBILANCIAMENTO ──────────────────────────────────────────────────────
   sectionTitle('4. Regola di ribilanciamento')
-  const ruleLines = doc.splitTextToSize(profile.rebalanceRule, contentW - 8)
-  const ruleBoxH = ruleLines.length * 4.5 + 8
-  doc.setFillColor(255, 251, 235); doc.setDrawColor(253, 230, 138); doc.setLineWidth(0.4)
-  doc.roundedRect(margin, y, contentW, ruleBoxH, 3, 3, 'FD')
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(180, 120, 0)
-  doc.text('!', margin + 4, y + ruleBoxH / 2 + 2)
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(120, 80, 0)
-  doc.text(ruleLines, margin + 10, y + 6)
-  y += ruleBoxH + 6
-  doc.setFillColor(238, 240, 251); doc.roundedRect(margin, y, 62, 7, 2, 2, 'F')
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...PURPLE)
-  doc.text(`Frequenza controllo: ${profile.rebalanceFrequency}`, margin + 4, y + 4.8)
-  y += 14
 
-  if (y > 260) { doc.addPage(); y = 20 }
+  const ruleLines = doc.splitTextToSize(profile.rebalanceRule, CW - 10)
+  const ruleH = ruleLines.length * 4.5 + 9
+  doc.setFillColor(...C.amberLight)
+  doc.setDrawColor(...C.amberBorder)
+  doc.setLineWidth(0.35)
+  doc.roundedRect(MARGIN, y, CW, ruleH, 3, 3, 'FD')
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(9)
+  doc.setTextColor(...C.amber)
+  doc.text('!', MARGIN + 4, y + ruleH / 2 + 2)
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8.5)
+  doc.setTextColor(120, 80, 0)
+  doc.text(ruleLines, MARGIN + 10, y + 6.5)
+  y += ruleH + 4
+
+  doc.setFillColor(...C.purpleLight)
+  doc.roundedRect(MARGIN, y, 64, 7, 2, 2, 'F')
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(8)
+  doc.setTextColor(...C.purple)
+  doc.text(`Frequenza controllo: ${profile.rebalanceFrequency}`, MARGIN + 4, y + 4.8)
+  y += 13
+
+  // ── 7. DISCLAIMER ─────────────────────────────────────────────────────
+  if (y > PAGE_H - FOOTER_H - 28) { doc.addPage(); y = 16 }
+
   const disclaimer = 'Questo documento è generato automaticamente a scopo informativo e non costituisce consulenza finanziaria. Gli investimenti comportano rischi. Rendimenti passati non garantiscono risultati futuri.'
-  const discLines = doc.splitTextToSize(disclaimer, contentW - 10)
-  const discH = discLines.length * 4.5 + 10
-  doc.setFillColor(254, 242, 242); doc.setDrawColor(254, 202, 202); doc.setLineWidth(0.3)
-  doc.roundedRect(margin, y, contentW, discH, 3, 3, 'FD')
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(185, 28, 28)
-  doc.text('Avviso legale', margin + 4, y + 6)
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(127, 29, 29)
-  doc.text(discLines, margin + 4, y + 11)
+  const discLines = doc.splitTextToSize(disclaimer, CW - 10)
+  const discH = discLines.length * 4.5 + 11
+  doc.setFillColor(...C.redLight)
+  doc.setDrawColor(...C.redBorder)
+  doc.setLineWidth(0.3)
+  doc.roundedRect(MARGIN, y, CW, discH, 3, 3, 'FD')
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(8)
+  doc.setTextColor(...C.red)
+  doc.text('Avviso legale', MARGIN + 4, y + 6.5)
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7.5)
+  doc.setTextColor(127, 29, 29)
+  doc.text(discLines, MARGIN + 4, y + 12)
 
-  const pageH = 297
-  doc.setDrawColor(...BORDER); doc.setLineWidth(0.3)
-  doc.line(margin, pageH - 14, W - margin, pageH - 14)
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...GRAY)
-  doc.text('PianoFinanziario — Strumento educativo, non consulenza finanziaria', margin, pageH - 9)
-  doc.text('Pagina 1', W - margin, pageH - 9, { align: 'right' })
+  // ── 8. FOOTER BAND ──────────────────────────────────────────────────────
+  doc.setFillColor(...C.grayFoot)
+  doc.rect(0, PAGE_H - FOOTER_H, W, FOOTER_H, 'F')
+  doc.setDrawColor(...C.border)
+  doc.setLineWidth(0.25)
+  doc.line(0, PAGE_H - FOOTER_H, W, PAGE_H - FOOTER_H)
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7)
+  doc.setTextColor(...C.gray)
+  doc.text(
+    'Strumento educativo — non costituisce consulenza finanziaria',
+    W / 2, PAGE_H - FOOTER_H + 5.5, { align: 'center' },
+  )
+  doc.text(
+    'I rendimenti passati non garantiscono quelli futuri.',
+    W / 2, PAGE_H - FOOTER_H + 10, { align: 'center' },
+  )
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(7.5)
+  doc.setTextColor(...C.purple)
+  doc.text('PianoFinanziario.it', W - MARGIN, PAGE_H - FOOTER_H + 7.5, { align: 'right' })
 
   return doc
 }
