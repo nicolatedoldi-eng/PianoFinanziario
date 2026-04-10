@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
 
 const PREVIEW_DATA = [
   { year: 0,  capitale: 0,       versati: 0 },
@@ -59,6 +59,21 @@ const PROFILES = [
   { name: 'Bilanciato', return: '7.5%', color: '#EF9F27', desc: '4 ETF, crescita + protezione' },
   { name: 'Crescita', return: '9.5%', color: '#E24B4A', desc: '4 ETF, massimizza il rendimento' },
 ]
+
+function ChartTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null
+  const labels = ['Capitale accumulato', 'Versamenti']
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, padding: '10px 14px', fontSize: 13, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+      <p style={{ fontWeight: 600, color: '#111827', marginBottom: 4 }}>Anno {label}</p>
+      {payload.map((entry, i) => (
+        <p key={i} style={{ color: '#374151', margin: '2px 0' }}>
+          {labels[i]}: € {Math.round(entry.value).toLocaleString('it-IT')}
+        </p>
+      ))}
+    </div>
+  )
+}
 
 export default function Landing() {
   return (
@@ -121,14 +136,15 @@ export default function Landing() {
             ))}
           </div>
 
-          {/* Grafico statico decorativo */}
-          <div aria-hidden="true">
+          {/* Grafico preview */}
+          <div>
             <ResponsiveContainer width="100%" height={180}>
               <LineChart data={PREVIEW_DATA} margin={{ top: 5, right: 10, bottom: 0, left: 10 }}>
                 <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={v => `${v}a`} tickLine={false} axisLine={false} interval={4} />
                 <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={v => v >= 1000 ? `€${v/1000}K` : `€${v}`} tickLine={false} axisLine={false} width={48} domain={[0, 500000]} />
-                <Line type="monotone" dataKey="capitale" stroke="#1D9E75" strokeWidth={2.5} dot={false} isAnimationActive={false} />
-                <Line type="monotone" dataKey="versati" stroke="#B5D4F4" strokeWidth={2} dot={false} isAnimationActive={false} />
+                <Tooltip content={<ChartTooltip />} />
+                <Line type="monotone" dataKey="capitale" stroke="#1D9E75" strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: '#1D9E75' }} isAnimationActive={false} />
+                <Line type="monotone" dataKey="versati" stroke="#B5D4F4" strokeWidth={2} dot={false} activeDot={{ r: 4, fill: '#B5D4F4' }} isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
             <div className="flex justify-center gap-6 mt-2">
