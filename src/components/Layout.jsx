@@ -15,7 +15,7 @@ export default function Layout({ children }) {
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link to="/" className="flex items-center gap-2">
+            <Link to={user ? '/dashboard' : '/'} className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#534AB7' }}>
                 <span className="text-white text-sm font-bold">P</span>
               </div>
@@ -25,8 +25,18 @@ export default function Layout({ children }) {
             <div className="flex items-center gap-4">
               {user ? (
                 <>
-                  <Link to="/dashboard" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Dashboard</Link>
-                  <Link to="/profilo" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Profilo</Link>
+                  <Link
+                    to="/dashboard"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/profilo"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Profilo
+                  </Link>
                   <button
                     onClick={handleSignOut}
                     className="text-sm px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
@@ -36,7 +46,12 @@ export default function Layout({ children }) {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Accedi</Link>
+                  <Link
+                    to="/login"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Accedi
+                  </Link>
                   <Link
                     to="/registrazione"
                     className="text-sm px-4 py-2 rounded-lg text-white transition-colors"
