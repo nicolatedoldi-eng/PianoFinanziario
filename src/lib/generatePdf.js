@@ -153,11 +153,12 @@ export function generatePianoPDF(profile, dbProfile, params) {
   y += 5
 
   const statW = (CW - 4) / 3
-  [
+  const statCards = [
     { label: 'Totale versato', value: fmt(result.totalDeposited), color: C.dark },
     { label: 'Interessi guadagnati', value: fmt(result.totalInterest), color: C.green },
     { label: 'Rendita mensile (regola 4%)', value: fmt(result.monthlyIncome), color: [239, 159, 39] },
-  ].forEach((sc, i) => {
+  ]
+  statCards.forEach((sc, i) => {
     const sx = MARGIN + i * (statW + 2)
     doc.setFillColor(249, 250, 251)
     doc.setDrawColor(...C.border)
