@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import { PORTFOLIOS } from '../lib/portfolios'
 import { formatEuroFull } from '../lib/finance'
+import { generatePianoPDF } from '../lib/generatePdf'
 
 export default function Profilo() {
   const { user } = useAuth()
@@ -73,6 +74,24 @@ export default function Profilo() {
       setError('Errore nel salvataggio. Riprova.')
     } finally {
       setSaving(false)
+    }
+  }
+
+  const [generatingPdf, setGeneratingPdf] = useState(false)
+
+  const handleDownloadPdf = () => {
+    setGeneratingPdf(true)
+    try {
+      const params = {
+        initialCapital: profile.initial_capital ?? 0,
+        monthlyPayment: profile.monthly_payment ?? 0,
+        horizon: profile.horizon_years ?? 15,
+        annualGrowth: profile.annual_payment_growth ?? 3,
+      }
+      const doc = generatePianoPDF(portfolio, profile, params)
+      doc.output('dataurlnewwindow', { filename: `piano-finanziario-${portfolio.name.toLowerCase()}.pdf` })
+    } finally {
+      setGeneratingPdf(false)
     }
   }
 
@@ -213,8 +232,21 @@ export default function Profilo() {
 
       <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <h2 className="font-semibold text-gray-900 mb-4">Azioni</h2>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <button onClick={handleRedoOnboarding} className="flex-1 py-3 rounded-xl border-2 font-semibold text-sm transition-colors" style={{ borderColor: '#534AB7', color: '#534AB7' }}>
+        <div className="flex flex-col gap-3">
+          <div>
+            <button
+              onClick={handleDownloadPdf}
+              disabled={generatingPdf}
+              className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60"
+              style={{ backgroundColor: '#534AB7' }}
+            >
+              {generatingPdf ? 'Generazione...' : 'Scarica il tuo piano PDF →'}
+            </button>
+            <p className="text-xs text-gray-400 mt-1.5">
+              Il PDF include il tuo profilo, la proiezione finanziaria e gli ETF consigliati.
+            </p>
+          </div>
+          <button onClick={handleRedoOnboarding} className="w-full py-3 rounded-xl border-2 font-semibold text-sm transition-colors" style={{ borderColor: '#534AB7', color: '#534AB7' }}>
             Rifai il percorso guidato
           </button>
         </div>
