@@ -27,8 +27,13 @@ export default function Layout({ children }) {
             <div className="flex items-center gap-4">
               <Link
                 to="/impara"
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                className="flex items-center gap-1.5 text-sm font-medium transition-colors hover:opacity-80"
+                style={{ color: '#534AB7' }}
               >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
                 Impara
               </Link>
               {user ? (
@@ -62,6 +67,7 @@ export default function Layout({ children }) {
                 </>
               ) : (
                 <>
+                  <div className="w-px h-4 bg-gray-200" />
                   <Link
                     to="/login"
                     className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
