@@ -1,6 +1,11 @@
 import { etfContent } from './etf'
 import { obbligazioniContent } from './obbligazioni'
 import { etfVsObbligazioniContent } from './etfVsObbligazioni'
+import { pacContent } from './pac'
+import { interesseCompostoContent } from './interesseComposto'
+import { brokerContent } from './broker'
+import { ribilanciamentoContent } from './ribilanciamento'
+import { tasseEtfContent } from './tasseEtf'
 
 export const ARTICLES = [
   {
@@ -52,8 +57,8 @@ export const ARTICLES = [
     badge: null,
     metaDescription: "Cos'è il PAC, come funziona il dollar cost averaging e perché investire €50/mese è meglio di non fare nulla.",
     next: 'interesse-composto',
-    available: false,
-    content: [],
+    available: true,
+    content: pacContent,
   },
   {
     slug: 'interesse-composto',
@@ -65,8 +70,8 @@ export const ARTICLES = [
     badge: null,
     metaDescription: "Scopri l'interesse composto con esempi numerici semplici: la regola del 72, il potere del tempo e perché iniziare prima fa una differenza enorme.",
     next: 'come-scegliere-un-broker',
-    available: false,
-    content: [],
+    available: true,
+    content: interesseCompostoContent,
   },
   {
     slug: 'come-scegliere-un-broker',
@@ -78,8 +83,8 @@ export const ARTICLES = [
     badge: null,
     metaDescription: 'Guida alla scelta del broker per ETF in Italia: confronto tra Fineco, Scalable Capital, Trade Republic, DEGIRO e Interactive Brokers.',
     next: 'come-ribilanciare',
-    available: false,
-    content: [],
+    available: true,
+    content: brokerContent,
   },
   {
     slug: 'come-ribilanciare',
@@ -91,8 +96,8 @@ export const ARTICLES = [
     badge: null,
     metaDescription: "Guida al ribilanciamento del portafoglio ETF: quando farlo, come usare i nuovi versamenti e l'impatto fiscale delle vendite.",
     next: 'tasse-etf-italia',
-    available: false,
-    content: [],
+    available: true,
+    content: ribilanciamentoContent,
   },
   {
     slug: 'tasse-etf-italia',
@@ -104,8 +109,8 @@ export const ARTICLES = [
     badge: null,
     metaDescription: 'Come funzionano le tasse sugli ETF in Italia: aliquota 26%, differenza tra accumulo e distribuzione, broker italiano vs estero.',
     next: null,
-    available: false,
-    content: [],
+    available: true,
+    content: tasseEtfContent,
   },
 ]
 
