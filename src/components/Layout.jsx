@@ -25,6 +25,12 @@ export default function Layout({ children }) {
             </Link>
 
             <div className="flex items-center gap-4">
+              <Link
+                to="/impara"
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Impara
+              </Link>
               {user ? (
                 <>
                   <Link
