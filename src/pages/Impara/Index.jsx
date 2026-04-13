@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ARTICLES } from './articles'
+import { ICONS } from './icons'
 
 export default function ImparaIndex() {
   useEffect(() => {
@@ -25,7 +26,7 @@ export default function ImparaIndex() {
             <Link
               key={article.slug}
               to={`/impara/${article.slug}`}
-              className="group bg-white border border-gray-200 rounded-xl p-6 hover:border-gray-300 hover:shadow-sm transition-all"
+              className="bg-white border border-gray-200 rounded-xl p-6 hover:border-gray-300 hover:shadow-sm transition-all"
             >
               <ArticleCard article={article} />
             </Link>
@@ -46,19 +47,24 @@ export default function ImparaIndex() {
 function ArticleCard({ article, comingSoon }) {
   return (
     <>
-      <div className="flex items-start justify-between mb-3">
-        <span className="text-3xl" aria-hidden>{article.icon}</span>
-        <div className="flex items-center gap-2">
+      <div className="flex items-start justify-between mb-4">
+        <div
+          className="w-12 h-12 flex items-center justify-center rounded-xl shrink-0"
+          style={{ backgroundColor: '#EEEDFE' }}
+        >
+          {ICONS[article.slug]}
+        </div>
+        <div className="flex items-center gap-2 ml-3">
           {article.badge && (
             <span
-              className="text-xs font-bold px-2 py-0.5 rounded-full text-white"
+              className="text-xs font-bold px-2 py-0.5 rounded-full text-white whitespace-nowrap"
               style={{ backgroundColor: '#534AB7' }}
             >
               {article.badge}
             </span>
           )}
           {comingSoon && (
-            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-400">
+            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-400 whitespace-nowrap">
               Prossimamente
             </span>
           )}
