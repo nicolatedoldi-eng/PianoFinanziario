@@ -50,7 +50,7 @@ export default function ProModal({ onClose }) {
           </div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Funzione Pro</h2>
           <p className="text-gray-500 text-sm">
-            Il download del PDF è riservato al piano Pro. Sblocca il tuo piano personalizzato con un pagamento unico.
+            Questa funzione è riservata al piano Pro. Sblocca scenari avanzati, confronto portafogli, crescita PAC personalizzabile e download PDF.
           </p>
         </div>
 
@@ -62,14 +62,16 @@ export default function ProModal({ onClose }) {
 
         <div className="bg-gray-50 rounded-xl p-4 mb-6">
           <div className="flex items-baseline gap-2 mb-3">
-            <span className="text-3xl font-bold text-gray-900">€9</span>
-            <span className="text-gray-400 text-sm">pagamento unico</span>
+            <span className="text-3xl font-bold text-gray-900">€7,99</span>
+            <span className="text-gray-400 text-sm">/mese</span>
           </div>
           <ul className="space-y-2">
             {[
+              'Scenari ottimista e ribassista',
+              'Confronto tra i 4 profili di investimento',
+              'Crescita PAC personalizzabile',
               'Download PDF del piano personalizzato',
-              'Accesso permanente',
-              'Nessun rinnovo automatico',
+              'Puoi annullare in qualsiasi momento',
             ].map(f => (
               <li key={f} className="flex items-center gap-2 text-sm text-gray-700">
                 <span style={{ color: '#1D9E75' }}>✓</span>
@@ -85,7 +87,7 @@ export default function ProModal({ onClose }) {
           className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60 mb-3"
           style={{ backgroundColor: '#534AB7' }}
         >
-          {loading ? 'Reindirizzamento...' : 'Passa a Pro — €9 →'}
+          {loading ? 'Reindirizzamento...' : 'Passa a Pro → €7,99/mese'}
         </button>
         <button
           onClick={onClose}
