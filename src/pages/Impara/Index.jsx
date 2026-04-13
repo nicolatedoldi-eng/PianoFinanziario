@@ -2,8 +2,11 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ARTICLES } from './articles'
 import { ICONS } from './icons'
+import { useAuth } from '../../contexts/AuthContext'
 
 export default function ImparaIndex() {
+  const { user } = useAuth()
+
   useEffect(() => {
     document.title = 'Impara a investire — PianoFinanziario'
     return () => { document.title = 'PianoFinanziario' }
@@ -39,6 +42,27 @@ export default function ImparaIndex() {
             </div>
           )
         )}
+      </div>
+
+      {/* CTA */}
+      <div
+        className="text-center mt-16 py-16 rounded-2xl"
+        style={{ backgroundColor: '#3730A3' }}
+      >
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          Pronto a mettere in pratica?
+        </h2>
+        <p className="mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.75)' }}>
+          Rispondi a 6 domande e scopri quale portafoglio ETF fa per te.
+          Gratis, senza carta di credito.
+        </p>
+        <Link
+          to={user ? '/dashboard' : '/onboarding'}
+          className="inline-block px-8 py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90"
+          style={{ backgroundColor: '#ffffff', color: '#3730A3' }}
+        >
+          {user ? 'Vai alla tua dashboard →' : 'Crea il tuo piano gratuito →'}
+        </Link>
       </div>
     </div>
   )
