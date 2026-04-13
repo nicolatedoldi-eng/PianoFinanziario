@@ -134,7 +134,7 @@ export default function ImparaArticle() {
           className="text-sm font-medium hover:opacity-75 transition-opacity"
           style={{ color: '#534AB7' }}
         >
-          ← Torna a Impara
+          ← Come investire?
         </Link>
       </div>
 
