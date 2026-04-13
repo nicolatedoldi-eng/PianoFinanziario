@@ -7,21 +7,25 @@ const S = {
 export const ICONS = {
   'cosa-sono-gli-etf': (
     <svg {...S}>
-      <circle cx="10" cy="13" r="7"/>
-      <line x1="7" y1="11" x2="13" y2="11"/>
-      <line x1="7" y1="13" x2="13" y2="13"/>
-      <line x1="7" y1="15" x2="13" y2="15"/>
-      <line x1="15" y1="8" x2="21" y2="3"/>
-      <polyline points="17,3 21,3 21,7"/>
+      {/* Contenitore/paniere — rettangolo arrotondato con linee lista */}
+      <rect x="2" y="5" width="15" height="15" rx="3"/>
+      <line x1="5" y1="9.5" x2="14" y2="9.5"/>
+      <line x1="5" y1="12.5" x2="14" y2="12.5"/>
+      <line x1="5" y1="15.5" x2="11" y2="15.5"/>
+      {/* Freccia su-destra (performance) separata dal contenitore */}
+      <line x1="18" y1="8" x2="22" y2="3"/>
+      <polyline points="19,3 22,3 22,6"/>
     </svg>
   ),
   'cosa-sono-le-obbligazioni': (
     <svg {...S}>
+      {/* Documento con angolo piegato */}
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
       <polyline points="14,2 14,8 20,8"/>
-      <circle cx="9.5" cy="11" r="1.2"/>
-      <circle cx="14.5" cy="16" r="1.2"/>
-      <line x1="8.5" y1="17" x2="15.5" y2="10"/>
+      {/* Simbolo % grande e leggibile al centro */}
+      <circle cx="9" cy="11" r="2"/>
+      <circle cx="15" cy="17" r="2"/>
+      <line x1="7" y1="19" x2="17" y2="9"/>
     </svg>
   ),
   'etf-vs-obbligazioni': (
