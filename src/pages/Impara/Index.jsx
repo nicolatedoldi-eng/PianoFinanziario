@@ -8,18 +8,24 @@ export default function ImparaIndex() {
   const { user } = useAuth()
 
   useEffect(() => {
-    document.title = 'Impara a investire — PianoFinanziario'
-    return () => { document.title = 'PianoFinanziario' }
+    document.title = 'Come investire? Guida pratica agli ETF | PianoFinanziario'
+    const meta = document.querySelector('meta[name="description"]')
+    const prevMeta = meta?.getAttribute('content') ?? ''
+    if (meta) meta.setAttribute('content', 'Scopri come investire in ETF partendo da zero. Guide pratiche su ETF, PAC, obbligazioni e ribilanciamento. Senza gergo finanziario.')
+    return () => {
+      document.title = 'PianoFinanziario'
+      if (meta) meta.setAttribute('content', prevMeta)
+    }
   }, [])
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-12">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-          Impara a investire
+          Come investire?
         </h1>
         <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-          Tutto quello che devi sapere, spiegato senza gergo finanziario
+          Le risposte alle domande che tutti si fanno, spiegate senza gergo finanziario
         </p>
       </div>
 
