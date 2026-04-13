@@ -10,11 +10,11 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts'
 
-function GlobalSliders({ params, onChange }) {
+function GlobalSliders({ params, onChange, isPro }) {
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
       <h3 className="font-semibold text-gray-900 mb-4">Parametri del simulatore</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${isPro ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
         <div>
           <div className="flex justify-between text-sm mb-1.5">
             <span className="text-gray-600">Capitale iniziale</span>
@@ -42,15 +42,17 @@ function GlobalSliders({ params, onChange }) {
             onChange={e => onChange('horizon', Number(e.target.value))}
             className="w-full accent-[#534AB7]" />
         </div>
-        <div>
-          <div className="flex justify-between text-sm mb-1.5">
-            <span className="text-gray-600">Crescita PAC annua</span>
-            <span className="font-semibold" style={{ color: '#534AB7' }}>{params.annualGrowth}%</span>
+        {isPro && (
+          <div>
+            <div className="flex justify-between text-sm mb-1.5">
+              <span className="text-gray-600">Crescita PAC annua</span>
+              <span className="font-semibold" style={{ color: '#534AB7' }}>{params.annualGrowth}%</span>
+            </div>
+            <input type="range" min="0" max="10" step="0.5" value={params.annualGrowth}
+              onChange={e => onChange('annualGrowth', Number(e.target.value))}
+              className="w-full accent-[#534AB7]" />
           </div>
-          <input type="range" min="0" max="10" step="0.5" value={params.annualGrowth}
-            onChange={e => onChange('annualGrowth', Number(e.target.value))}
-            className="w-full accent-[#534AB7]" />
-        </div>
+        )}
       </div>
     </div>
   )
@@ -138,7 +140,7 @@ function TabRisparmio({ params, profile }) {
   )
 }
 
-function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
+function TabInvestimento({ params, profile, onProfileChange, allProfiles, isPro, onProClick, userAssignedProfileId }) {
   const scenarios = useMemo(() =>
     calculateScenarios(params.initialCapital, params.monthlyPayment, profile.expectedReturn, params.horizon, params.annualGrowth),
     [params, profile]
@@ -160,21 +162,37 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
 
   return (
     <div>
+      {/* Portfolio selector */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        {Object.values(allProfiles).map(p => (
-          <button
-            key={p.id}
-            onClick={() => onProfileChange(p.id)}
-            className={`p-4 rounded-xl border-2 text-left transition-all ${
-              profile.id === p.id ? 'shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white'
-            }`}
-            style={profile.id === p.id ? { borderColor: p.color, backgroundColor: `${p.color}10` } : {}}
-          >
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2" style={{ backgroundColor: p.color }}>{p.name[0]}</div>
-            <div className="font-semibold text-gray-900 text-sm">{p.name}</div>
-            <div className="text-xs" style={{ color: p.color }}>{p.expectedReturn}% annuo</div>
-          </button>
-        ))}
+        {Object.values(allProfiles).map(p => {
+          const isSelected = profile.id === p.id
+          const isLocked = !isPro && p.id !== userAssignedProfileId
+          return (
+            <button
+              key={p.id}
+              onClick={() => isLocked ? onProClick() : onProfileChange(p.id)}
+              className={`p-4 rounded-xl border-2 text-left transition-all ${
+                isSelected ? 'shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white'
+              }`}
+              style={
+                isSelected
+                  ? { borderColor: p.color, backgroundColor: `${p.color}10` }
+                  : isLocked ? { borderColor: '#E5E7EB', backgroundColor: '#F9FAFB' } : {}
+              }
+            >
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2"
+                style={{ backgroundColor: isLocked ? '#D1D5DB' : p.color }}
+              >
+                {isLocked ? '🔒' : p.name[0]}
+              </div>
+              <div className={`font-semibold text-sm ${isLocked ? 'text-gray-400' : 'text-gray-900'}`}>{p.name}</div>
+              <div className="text-xs" style={{ color: isLocked ? '#9CA3AF' : p.color }}>
+                {isLocked ? 'Piano Pro' : `${p.expectedReturn}% annuo`}
+              </div>
+            </button>
+          )
+        })}
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm overflow-x-auto">
@@ -208,33 +226,67 @@ function TabInvestimento({ params, profile, onProfileChange, allProfiles }) {
         </table>
       </div>
 
+      {/* Scenario cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         {[
           { key: 'optimistic', label: 'Ottimista', suffix: `+2% (${profile.expectedReturn + 2}%)`, color: '#1D9E75', value: scenarios.optimistic.finalCapital },
           { key: 'base', label: 'Base', suffix: `${profile.expectedReturn}%`, color: '#534AB7', value: scenarios.base.finalCapital },
           { key: 'pessimistic', label: 'Ribassista', suffix: `-2% (${profile.expectedReturn - 2}%)`, color: '#EF9F27', value: scenarios.pessimistic.finalCapital },
-        ].map(s => (
-          <div key={s.key} className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-            <div className="text-sm text-gray-500 mb-1">{s.label} ({s.suffix})</div>
-            <div className="text-2xl font-bold" style={{ color: s.color }}>{formatEuro(s.value)}</div>
-          </div>
-        ))}
+        ].map(s => {
+          const isLocked = !isPro && s.key !== 'base'
+          return (
+            <div key={s.key} className="relative">
+              <div
+                className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm"
+                style={isLocked ? { opacity: 0.3, userSelect: 'none', pointerEvents: 'none' } : {}}
+              >
+                <div className="text-sm text-gray-500 mb-1">{s.label} ({s.suffix})</div>
+                <div className="text-2xl font-bold" style={{ color: s.color }}>{formatEuro(s.value)}</div>
+              </div>
+              {isLocked && (
+                <div
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-xl cursor-pointer"
+                  onClick={onProClick}
+                >
+                  <span className="text-lg">🔒</span>
+                  <span className="text-xs font-medium text-gray-500 text-center px-2">Disponibile nel piano Pro</span>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
-        <h3 className="font-semibold text-gray-900 mb-4">I 3 scenari nel tempo</h3>
-        <ResponsiveContainer width="100%" height={280}>
-          <LineChart data={scenarioData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
-            <XAxis dataKey="year" tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => `${v}a`} />
-            <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => formatEuro(v)} width={60} />
-            <Tooltip formatter={(value, name) => [formatEuroFull(value), name]} labelFormatter={l => `Anno ${l}`} contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '12px' }} />
-            <Legend />
-            <Line type="monotone" dataKey="ottimista" stroke="#1D9E75" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="base" stroke="#534AB7" strokeWidth={2.5} dot={false} />
-            <Line type="monotone" dataKey="ribassista" stroke="#EF9F27" strokeWidth={2} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
+      {/* Scenario chart */}
+      <div className="relative mb-6">
+        <div
+          className={`bg-white border border-gray-200 rounded-xl p-6 shadow-sm${!isPro ? ' select-none pointer-events-none' : ''}`}
+          style={!isPro ? { filter: 'blur(4px)' } : {}}
+        >
+          <h3 className="font-semibold text-gray-900 mb-4">I 3 scenari nel tempo</h3>
+          <ResponsiveContainer width="100%" height={280}>
+            <LineChart data={scenarioData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
+              <XAxis dataKey="year" tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => `${v}a`} />
+              <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => formatEuro(v)} width={60} />
+              <Tooltip formatter={(value, name) => [formatEuroFull(value), name]} labelFormatter={l => `Anno ${l}`} contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '12px' }} />
+              <Legend />
+              <Line type="monotone" dataKey="ottimista" stroke="#1D9E75" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="base" stroke="#534AB7" strokeWidth={2.5} dot={false} />
+              <Line type="monotone" dataKey="ribassista" stroke="#EF9F27" strokeWidth={2} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+        {!isPro && (
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl cursor-pointer"
+            style={{ backgroundColor: 'rgba(255,255,255,0.65)' }}
+            onClick={onProClick}
+          >
+            <span className="text-3xl">🔒</span>
+            <span className="text-sm font-semibold text-gray-700">Disponibile nel piano Pro</span>
+          </div>
+        )}
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
@@ -375,10 +427,14 @@ export default function Dashboard() {
   }, [location.search, navigate])
 
   const currentProfile = PORTFOLIOS[selectedProfileId] || Object.values(PORTFOLIOS)[2]
+  const isPro = !!userProfile?.is_pro
 
   const handleParamChange = (key, value) => {
     setParams(prev => ({ ...prev, [key]: value }))
   }
+
+  // Free users always use annualGrowth=0 in calculations
+  const effectiveParams = isPro ? params : { ...params, annualGrowth: 0 }
 
   const handleDownloadPdf = () => {
     if (!userProfile?.is_pro) {
@@ -452,7 +508,7 @@ export default function Dashboard() {
         )}
       </div>
 
-      <GlobalSliders params={params} onChange={handleParamChange} />
+      <GlobalSliders params={params} onChange={handleParamChange} isPro={isPro} />
 
       <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-6">
         {TABS.map(tab => (
@@ -468,9 +524,17 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {activeTab === 'risparmio' && <TabRisparmio params={params} profile={currentProfile} />}
+      {activeTab === 'risparmio' && <TabRisparmio params={effectiveParams} profile={currentProfile} />}
       {activeTab === 'investimento' && (
-        <TabInvestimento params={params} profile={currentProfile} onProfileChange={setSelectedProfileId} allProfiles={PORTFOLIOS} />
+        <TabInvestimento
+          params={effectiveParams}
+          profile={currentProfile}
+          onProfileChange={setSelectedProfileId}
+          allProfiles={PORTFOLIOS}
+          isPro={isPro}
+          onProClick={() => setShowProModal(true)}
+          userAssignedProfileId={userProfile?.profile}
+        />
       )}
       {activeTab === 'ribilanciamento' && <TabRibilanciamento profile={currentProfile} />}
     </div>
