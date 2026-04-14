@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
+import { useAuth } from '../contexts/AuthContext'
 
 const PREVIEW_DATA = [
   { year: 0,  capitale: 0,       versati: 0 },
@@ -76,6 +78,22 @@ function ChartTooltip({ active, payload, label }) {
 }
 
 export default function Landing() {
+  const { user, loading } = useAuth()
+  const navigate = useNavigate()
+  const [checking, setChecking] = useState(true)
+
+  useEffect(() => {
+    if (!loading) {
+      if (user) {
+        navigate('/dashboard', { replace: true })
+      } else {
+        setChecking(false)
+      }
+    }
+  }, [user, loading, navigate])
+
+  if (checking) return null
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Hero */}
@@ -136,7 +154,6 @@ export default function Landing() {
             ))}
           </div>
 
-          {/* Grafico preview */}
           <div>
             <ResponsiveContainer width="100%" height={180}>
               <LineChart data={PREVIEW_DATA} margin={{ top: 5, right: 10, bottom: 0, left: 10 }}>
@@ -187,12 +204,7 @@ export default function Landing() {
         style={{ paddingTop: '40px', paddingBottom: '40px' }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2
-            className="text-center font-bold text-gray-900 mb-10"
-            style={{ fontSize: '22px' }}
-          >
-            Perché puoi fidarti
-          </h2>
+          <h2 className="text-center font-bold text-gray-900 mb-10" style={{ fontSize: '22px' }}>Perché puoi fidarti</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             <div className="flex flex-col items-center text-center gap-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -200,9 +212,7 @@ export default function Landing() {
                 <polyline points="9 12 11 14 15 10"/>
               </svg>
               <h3 className="font-bold text-gray-900" style={{ fontSize: '15px' }}>Zero accesso bancario</h3>
-              <p style={{ fontSize: '13px', color: '#6B7280' }}>
-                Non colleghiamo nessun conto. Non vediamo i tuoi movimenti. Mai.
-              </p>
+              <p style={{ fontSize: '13px', color: '#6B7280' }}>Non colleghiamo nessun conto. Non vediamo i tuoi movimenti. Mai.</p>
             </div>
             <div className="flex flex-col items-center text-center gap-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -210,9 +220,7 @@ export default function Landing() {
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
               <h3 className="font-bold text-gray-900" style={{ fontSize: '15px' }}>Solo calcoli matematici</h3>
-              <p style={{ fontSize: '13px', color: '#6B7280' }}>
-                Inserisci solo quello che vuoi tu. Il resto lo calcoliamo noi.
-              </p>
+              <p style={{ fontSize: '13px', color: '#6B7280' }}>Inserisci solo quello che vuoi tu. Il resto lo calcoliamo noi.</p>
             </div>
             <div className="flex flex-col items-center text-center gap-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -222,9 +230,7 @@ export default function Landing() {
                 <line x1="15" y1="13" x2="9" y2="19"/>
               </svg>
               <h3 className="font-bold text-gray-900" style={{ fontSize: '15px' }}>Nessuna consulenza</h3>
-              <p style={{ fontSize: '13px', color: '#6B7280' }}>
-                Siamo uno strumento educativo, non un consulente finanziario.
-              </p>
+              <p style={{ fontSize: '13px', color: '#6B7280' }}>Siamo uno strumento educativo, non un consulente finanziario.</p>
             </div>
           </div>
         </div>
@@ -232,28 +238,14 @@ export default function Landing() {
 
       {/* Profili */}
       <div className="mb-20">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-4">
-          4 profili, uno per te
-        </h2>
-        <p className="text-gray-500 text-center mb-12">
-          Rispondi a 6 domande e ti assegniamo il portafoglio più adatto ai tuoi obiettivi
-        </p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-4">4 profili, uno per te</h2>
+        <p className="text-gray-500 text-center mb-12">Rispondi a 6 domande e ti assegniamo il portafoglio più adatto ai tuoi obiettivi</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {PROFILES.map((p) => (
-            <div
-              key={p.name}
-              className="bg-white border border-gray-200 rounded-xl p-5 text-center"
-            >
-              <div
-                className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-bold text-lg"
-                style={{ backgroundColor: p.color }}
-              >
-                {p.name[0]}
-              </div>
+            <div key={p.name} className="bg-white border border-gray-200 rounded-xl p-5 text-center">
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-bold text-lg" style={{ backgroundColor: p.color }}>{p.name[0]}</div>
               <div className="font-semibold text-gray-900 mb-1">{p.name}</div>
-              <div className="text-2xl font-bold mb-1" style={{ color: p.color }}>
-                {p.return}
-              </div>
+              <div className="text-2xl font-bold mb-1" style={{ color: p.color }}>{p.return}</div>
               <div className="text-xs text-gray-400">{p.desc}</div>
             </div>
           ))}
@@ -261,22 +253,12 @@ export default function Landing() {
       </div>
 
       {/* CTA */}
-      <div
-        className="text-center py-16 rounded-2xl mb-20"
-        style={{ backgroundColor: '#3730A3' }}
-      >
-        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-          Inizia in 3 minuti, gratis
-        </h2>
+      <div className="text-center py-16 rounded-2xl mb-20" style={{ backgroundColor: '#3730A3' }}>
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Inizia in 3 minuti, gratis</h2>
         <p className="mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.75)' }}>
-          Rispondi alle 6 domande, scopri il tuo profilo e vedi subito
-          quanto puoi accumulare nel tempo.
+          Rispondi alle 6 domande, scopri il tuo profilo e vedi subito quanto puoi accumulare nel tempo.
         </p>
-        <Link
-          to="/registrazione"
-          className="inline-block px-8 py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90"
-          style={{ backgroundColor: '#ffffff', color: '#3730A3' }}
-        >
+        <Link to="/registrazione" className="inline-block px-8 py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90" style={{ backgroundColor: '#ffffff', color: '#3730A3' }}>
           Crea il tuo piano →
         </Link>
       </div>
