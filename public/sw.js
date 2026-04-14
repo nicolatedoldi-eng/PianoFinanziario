@@ -1,29 +1,13 @@
-const CACHE = 'pianofinanziario-v1';
-const STATIC = ['/', '/impara', '/prezzi'];
+// Service worker v2 — minimal, no HTML caching
+// Clears all old caches to fix stale bundle issue
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(STATIC))
-  );
-  self.skipWaiting();
-});
+self.addEventListener('install', () => self.skipWaiting());
 
 self.addEventListener('activate', e => {
+  // Delete all old caches so clients get fresh HTML/JS after each deploy
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
-  );
-  self.clients.claim();
-});
-
-self.addEventListener('fetch', e => {
-  // Only handle GET requests
-  if (e.request.method !== 'GET') return;
-  // Skip API and Supabase requests
-  if (e.request.url.includes('/api/') || e.request.url.includes('supabase')) return;
-
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request))
+    caches.keys()
+      .then(keys => Promise.all(keys.map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
