@@ -21,10 +21,10 @@ export default function Layout({ children }) {
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#534AB7' }}>
                 <span className="text-white text-sm font-bold">P</span>
               </div>
-              <span className="font-semibold text-gray-900 text-lg">PianoFinanziario</span>
+              <span className="font-semibold text-gray-900 text-lg hidden sm:inline">PianoFinanziario</span>
             </Link>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <Link
                 to="/impara"
                 className="flex items-center gap-1.5 text-sm font-medium transition-colors hover:opacity-80"
@@ -34,26 +34,26 @@ export default function Layout({ children }) {
                   <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
                   <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
                 </svg>
-                <span className="hidden sm:inline">Come investire?</span>
+                <span>Come investire?</span>
               </Link>
               {user ? (
                 <>
                   <Link
                     to="/dashboard"
-                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors hidden sm:block"
                   >
                     Dashboard
                   </Link>
                   <Link
                     to="/profilo"
-                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors hidden sm:block"
                   >
                     Profilo
                   </Link>
                   {!profile?.is_pro && (
                     <Link
                       to="/prezzi"
-                      className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                      className="text-sm text-gray-600 hover:text-gray-900 transition-colors hidden sm:block"
                     >
                       Prezzi
                     </Link>
@@ -67,10 +67,10 @@ export default function Layout({ children }) {
                 </>
               ) : (
                 <>
-                  <div className="w-px h-4 bg-gray-200" />
+                  <div className="w-px h-4 bg-gray-200 hidden sm:block" />
                   <Link
                     to="/login"
-                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition-colors hidden sm:block"
                   >
                     Accedi
                   </Link>
