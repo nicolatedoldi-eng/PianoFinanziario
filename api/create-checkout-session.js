@@ -1,39 +1,70 @@
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { userId, userEmail } = req.body
+  // Debug: verify env vars are available at runtime
+  console.log('STRIPE_SECRET_KEY set:', !!process.env.STRIPE_SECRET_KEY)
+  console.log('x-forwarded-host:', req.headers['x-forwarded-host'])
+
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.error('STRIPE_SECRET_KEY is not configured')
+    return res.status(500).json({ error: 'Stripe not configured' })
+  }
+
+  // Parse body — Vercel non-Next.js functions may not auto-parse
+  let body = req.body
+  if (!body || typeof body === 'string') {
+    try {
+      const chunks = []
+      for await (const chunk of req) {
+        chunks.push(chunk)
+      }
+      body = JSON.parse(Buffer.concat(chunks).toString())
+    } catch (parseErr) {
+      console.error('Body parse error:', parseErr.message)
+      return res.status(400).json({ error: 'Invalid JSON body' })
+    }
+  }
+
+  const { userId, userEmail } = body
+  console.log('userId:', userId, '| userEmail:', userEmail)
 
   if (!userId) {
     return res.status(400).json({ error: 'userId required' })
   }
 
+  // Initialize Stripe inside handler so STRIPE_SECRET_KEY is guaranteed available
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+  // VERCEL_PROJECT_PRODUCTION_URL is set automatically by Vercel to the stable
+  // canonical production domain (e.g. myproject.vercel.app) — never changes per deployment
   const appUrl = process.env.APP_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173')
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : 'http://localhost:5173')
+
+  const priceId = process.env.STRIPE_PRICE_ID || 'price_1TKfFmJyUH2vL85IAslzZj8m'
+  console.log('priceId:', priceId, '| appUrl:', appUrl)
+  console.log('VERCEL_PROJECT_PRODUCTION_URL:', process.env.VERCEL_PROJECT_PRODUCTION_URL)
 
   try {
     const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
+      mode: 'subscription',
       payment_method_types: ['card'],
-      line_items: [
-        {
-          price: process.env.STRIPE_PRICE_ID || 'price_1TKfFmJyUH2vL85IAslzZj8m',
-          quantity: 1,
-        },
-      ],
+      line_items: [{ price: priceId, quantity: 1 }],
       customer_email: userEmail,
       metadata: { userId },
       success_url: `${appUrl}/dashboard?upgrade=success`,
       cancel_url: `${appUrl}/prezzi`,
     })
 
+    console.log('Stripe session created:', session.id)
     res.status(200).json({ url: session.url })
   } catch (err) {
+    console.error('Stripe error:', err.message)
     res.status(500).json({ error: err.message })
   }
 }

@@ -13,6 +13,12 @@ export function useProfile() {
       return
     }
 
+    // Reset to loading before each fetch so OnboardingGuard
+    // shows the spinner instead of redirecting to /onboarding
+    // while the profile is being fetched (e.g. on fresh page load
+    // after Stripe redirect)
+    setLoading(true)
+
     async function fetch() {
       const { data } = await supabase
         .from('user_profiles')
