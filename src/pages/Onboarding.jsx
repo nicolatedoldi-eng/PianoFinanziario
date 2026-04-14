@@ -120,17 +120,12 @@ export default function Onboarding() {
               <span>{Math.round(progress)}%</span>
             </div>
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{ width: `${progress}%`, backgroundColor: '#534AB7' }}
-              ></div>
+              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, backgroundColor: '#534AB7' }}></div>
             </div>
           </div>
-
           <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">{currentStep.question}</h2>
             <p className="text-gray-500 mb-8">{currentStep.subtitle}</p>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {currentStep.options.map((opt) => (
                 <button
@@ -171,9 +166,7 @@ export default function Onboarding() {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Quanto hai da investire subito?</h2>
             <p className="text-gray-500 mb-8">Il capitale iniziale che puoi mettere da parte oggi. Puoi sempre aggiornarlo dopo.</p>
             <div className="text-center mb-8">
-              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>
-                €{answers.initialCapital.toLocaleString('it-IT')}
-              </div>
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>€{answers.initialCapital.toLocaleString('it-IT')}</div>
               <div className="text-sm text-gray-400">capitale iniziale</div>
             </div>
             <input type="range" min="0" max="100000" step="500" value={answers.initialCapital}
@@ -182,9 +175,7 @@ export default function Onboarding() {
             <div className="flex justify-between text-xs text-gray-400 mb-8">
               <span>€0</span><span>€10K</span><span>€25K</span><span>€50K</span><span>€100K</span>
             </div>
-            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>
-              Continua →
-            </button>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua →</button>
           </div>
         </div>
       </div>
@@ -208,9 +199,7 @@ export default function Onboarding() {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Quanto puoi versare ogni mese?</h2>
             <p className="text-gray-500 mb-8">Il Piano di Accumulo (PAC) mensile. Anche piccole cifre, nel lungo periodo, fanno differenza.</p>
             <div className="text-center mb-8">
-              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>
-                €{answers.monthlyPayment.toLocaleString('it-IT')}
-              </div>
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>€{answers.monthlyPayment.toLocaleString('it-IT')}</div>
               <div className="text-sm text-gray-400">al mese</div>
             </div>
             <input type="range" min="50" max="2000" step="50" value={answers.monthlyPayment}
@@ -219,9 +208,7 @@ export default function Onboarding() {
             <div className="flex justify-between text-xs text-gray-400 mb-8">
               <span>€50</span><span>€500</span><span>€1.000</span><span>€1.500</span><span>€2.000</span>
             </div>
-            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>
-              Continua →
-            </button>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua →</button>
           </div>
         </div>
       </div>
@@ -245,9 +232,7 @@ export default function Onboarding() {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Per quanti anni vuoi investire?</h2>
             <p className="text-gray-500 mb-8">L'orizzonte temporale è uno dei fattori più importanti. Più è lungo, più può crescere il tuo capitale.</p>
             <div className="text-center mb-8">
-              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>
-                {answers.horizon} anni
-              </div>
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>{answers.horizon} anni</div>
               <div className="text-sm text-gray-400">
                 {answers.horizon <= 5 ? 'Orizzonte breve' : answers.horizon <= 15 ? 'Orizzonte medio' : 'Orizzonte lungo'}
               </div>
@@ -258,9 +243,7 @@ export default function Onboarding() {
             <div className="flex justify-between text-xs text-gray-400 mb-8">
               <span>1 anno</span><span>10</span><span>20</span><span>30</span><span>35</span>
             </div>
-            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>
-              Scopri il tuo profilo →
-            </button>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Scopri il tuo profilo →</button>
           </div>
         </div>
       </div>
@@ -271,24 +254,19 @@ export default function Onboarding() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl">
         <div className="text-center mb-8">
-          <div className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-4" style={{ backgroundColor: '#ECFDF5', color: '#1D9E75' }}>
-            Profilo trovato!
-          </div>
+          <div className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-4" style={{ backgroundColor: '#ECFDF5', color: '#1D9E75' }}>Profilo trovato!</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Il tuo profilo è: <span style={{ color: recommendedProfile.color }}>{recommendedProfile.name}</span></h2>
           <p className="text-gray-500">{recommendedProfile.description}</p>
         </div>
 
         <div className="bg-white border-2 rounded-2xl p-8 shadow-sm mb-6" style={{ borderColor: recommendedProfile.color }}>
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-bold" style={{ backgroundColor: recommendedProfile.color }}>
-              {recommendedProfile.name[0]}
-            </div>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-bold" style={{ backgroundColor: recommendedProfile.color }}>{recommendedProfile.name[0]}</div>
             <div>
               <div className="text-xl font-bold text-gray-900">{recommendedProfile.name}</div>
               <div className="text-gray-500">Rendimento atteso: <strong>{recommendedProfile.expectedReturn}%</strong> annuo</div>
             </div>
           </div>
-
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             {recommendedProfile.etfs.map((etf) => (
               <div key={etf.ticker} className="bg-gray-50 rounded-xl p-3 text-center">
@@ -298,19 +276,10 @@ export default function Onboarding() {
               </div>
             ))}
           </div>
-
-          {error && (
-            <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#FEF2F2', color: '#E24B4A' }}>
-              {error}
-            </div>
-          )}
-
-          <button
-            onClick={() => handleSave(recommendedProfileId)}
-            disabled={saving}
+          {error && <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#FEF2F2', color: '#E24B4A' }}>{error}</div>}
+          <button onClick={() => handleSave(recommendedProfileId)} disabled={saving}
             className="w-full py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90 disabled:opacity-60"
-            style={{ backgroundColor: recommendedProfile.color }}
-          >
+            style={{ backgroundColor: recommendedProfile.color }}>
             {saving ? 'Salvataggio...' : `Inizia con il profilo ${recommendedProfile.name} →`}
           </button>
         </div>
@@ -318,22 +287,14 @@ export default function Onboarding() {
         <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
           <p className="text-sm text-gray-500 mb-4">Preferisci un altro profilo? Scegli tu:</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {Object.values(PORTFOLIOS)
-              .filter(p => p.id !== recommendedProfileId)
-              .map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => handleSave(p.id)}
-                  disabled={saving}
-                  className="p-4 rounded-xl border-2 border-gray-200 hover:border-gray-300 text-left transition-colors disabled:opacity-50"
-                >
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2" style={{ backgroundColor: p.color }}>
-                    {p.name[0]}
-                  </div>
-                  <div className="font-semibold text-gray-900 text-sm">{p.name}</div>
-                  <div className="text-xs text-gray-400">{p.expectedReturn}% annuo</div>
-                </button>
-              ))}
+            {Object.values(PORTFOLIOS).filter(p => p.id !== recommendedProfileId).map((p) => (
+              <button key={p.id} onClick={() => handleSave(p.id)} disabled={saving}
+                className="p-4 rounded-xl border-2 border-gray-200 hover:border-gray-300 text-left transition-colors disabled:opacity-50">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold mb-2" style={{ backgroundColor: p.color }}>{p.name[0]}</div>
+                <div className="font-semibold text-gray-900 text-sm">{p.name}</div>
+                <div className="text-xs text-gray-400">{p.expectedReturn}% annuo</div>
+              </button>
+            ))}
           </div>
         </div>
       </div>
