@@ -3,16 +3,19 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 const FREE_FEATURES = [
-  'Simulatore finanziario completo',
-  'Tutti e 4 i profili ETF',
-  'Calcolo scenari e milestone',
+  'Simulatore con capitale, PAC e orizzonte',
+  "Profilo ETF personalizzato dall'onboarding",
+  'Scenario base e milestone di accumulo',
   'Guide al ribilanciamento',
+  '"Come investire?" con 8 guide pratiche',
 ]
 
 const PRO_FEATURES = [
   'Tutto il piano Free',
+  'Scenari ottimista e ribassista',
+  'Confronto tra i 4 profili di investimento',
+  'Crescita PAC personalizzabile',
   'Download PDF del piano personalizzato',
-  'Aggiornamenti futuri inclusi',
 ]
 
 export default function Pricing() {
@@ -53,7 +56,7 @@ export default function Pricing() {
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
           Semplice e trasparente
         </h1>
-        <p className="text-gray-500 text-lg">Tutto gratis. Il PDF in Pro.</p>
+        <p className="text-gray-500 text-lg">Inizia gratis. Passa a Pro per le funzioni avanzate.</p>
       </div>
 
       {error && (
@@ -92,11 +95,11 @@ export default function Pricing() {
             <div className="flex items-center gap-2 mb-2">
               <span className="text-sm font-medium text-white/80">Pro</span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
-                Una tantum
+                Mensile
               </span>
             </div>
-            <div className="text-4xl font-bold text-white">€9</div>
-            <div className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>pagamento unico</div>
+            <div className="text-4xl font-bold text-white">€7,99</div>
+            <div className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>/mese</div>
           </div>
           <ul className="space-y-3 mb-8">
             {PRO_FEATURES.map(f => (
@@ -112,13 +115,13 @@ export default function Pricing() {
             className="w-full py-3 rounded-xl font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-60"
             style={{ backgroundColor: '#ffffff', color: '#534AB7' }}
           >
-            {loading ? 'Reindirizzamento...' : 'Ottieni Pro →'}
+            {loading ? 'Reindirizzamento...' : 'Passa a Pro → €7,99/mese'}
           </button>
         </div>
       </div>
 
       <p className="text-center text-xs text-gray-400 mt-8">
-        Pagamento sicuro via Stripe. Nessun abbonamento, nessun rinnovo automatico.
+        Pagamento sicuro via Stripe. Puoi annullare in qualsiasi momento.
       </p>
     </div>
   )
