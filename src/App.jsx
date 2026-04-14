@@ -8,6 +8,8 @@ import Onboarding from './pages/Onboarding'
 import Dashboard from './pages/Dashboard'
 import Profilo from './pages/Profilo'
 import Pricing from './pages/Pricing'
+import ImparaIndex from './pages/Impara/Index'
+import ImparaArticle from './pages/Impara/Article'
 
 export default function App() {
   return (
@@ -19,6 +21,8 @@ export default function App() {
           <Route path="/login" element={<Auth mode="login" />} />
           <Route path="/registrazione" element={<Auth mode="register" />} />
           <Route path="/prezzi" element={<Layout><Pricing /></Layout>} />
+          <Route path="/impara" element={<Layout><ImparaIndex /></Layout>} />
+          <Route path="/impara/:slug" element={<Layout><ImparaArticle /></Layout>} />
 
           {/* Onboarding (protetto: solo utenti loggati) */}
           <Route
