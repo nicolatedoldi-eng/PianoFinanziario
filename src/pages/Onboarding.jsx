@@ -40,6 +40,32 @@ const STEPS = [
   },
 ]
 
+function getProfileReasons(profileId, answers) {
+  const reasons = []
+  const h = answers.horizon
+
+  if (profileId === 'bilanciato') {
+    if (h > 10) reasons.push(`Hai un orizzonte di ${h} anni — abbastanza lungo per assorbire le oscillazioni del mercato.`)
+    if (answers.risk === 'continuo' || answers.risk === 'compro') {
+      reasons.push('Hai detto che continueresti a investire durante un calo — questo ti permette di puntare su rendimenti più alti.')
+    }
+    reasons.push('Il profilo Bilanciato è il più scelto da chi vuole crescita senza rinunciare alla stabilità.')
+  } else if (profileId === 'prudente') {
+    reasons.push('Preferisci la stabilità alla crescita massima — scelta saggia se il tuo orizzonte è sotto i 10 anni.')
+    if (h) reasons.push(`Con ${h} anni davanti, la componente bond ti protegge dalle oscillazioni più forti.`)
+  } else if (profileId === 'crescita') {
+    if (h) reasons.push(`Con ${h} anni di orizzonte e alta tolleranza al rischio, puoi permetterti di puntare al massimo rendimento.`)
+    if (answers.risk === 'compro') {
+      reasons.push("Hai detto che compreresti di più durante un crollo — è esattamente la mentalità giusta per questo portafoglio.")
+    }
+  } else if (profileId === 'essenziale') {
+    reasons.push('Hai scelto la semplicità — due ETF coprono già il 95% del mercato globale.')
+    reasons.push('Meno decisioni da prendere significa meno errori. È una strategia, non una scorciatoia.')
+  }
+
+  return reasons
+}
+
 export default function Onboarding() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -270,6 +296,21 @@ export default function Onboarding() {
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Il tuo profilo è: <span style={{ color: recommendedProfile.color }}>{recommendedProfile.name}</span></h2>
           <p className="text-gray-500">{recommendedProfile.description}</p>
         </div>
+
+        {(() => {
+          const reasons = getProfileReasons(recommendedProfileId, answers)
+          if (!reasons.length) return null
+          return (
+            <div className="mb-6 px-4 py-3.5" style={{ backgroundColor: '#E1F5EE', border: '0.5px solid #9FE1CB', borderRadius: '12px' }}>
+              <p className="uppercase tracking-wider mb-2" style={{ fontSize: '12px', color: '#085041', fontWeight: 700, letterSpacing: '0.08em' }}>Perché questo profilo?</p>
+              {reasons.map((r, i) => (
+                <p key={i} className="leading-relaxed" style={{ fontSize: '13px', color: '#085041', marginBottom: i < reasons.length - 1 ? '6px' : 0 }}>
+                  · {r}
+                </p>
+              ))}
+            </div>
+          )
+        })()}
 
         <div className="bg-white border-2 rounded-2xl p-8 shadow-sm mb-6" style={{ borderColor: recommendedProfile.color }}>
           <div className="flex items-center gap-4 mb-6">
