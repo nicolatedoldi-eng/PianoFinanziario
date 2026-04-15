@@ -45,7 +45,7 @@ function fmtK(n) {
 export function generatePianoPDF(profile, dbProfile, params) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
 
-  // ── 1. HEADER BAND ───────────────────────────────────
+  // ── 1. HEADER BAND ─────────────────────────────────────────────────
   const HEADER_H = 18
   doc.setFillColor(...C.purple)
   doc.rect(0, 0, W, HEADER_H, 'F')
@@ -93,7 +93,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
     doc.line(MARGIN, y, MARGIN + CW, y)
   }
 
-  // ── 2. PROFILO BOX ──────────────────────────────────
+  // ── 2. PROFILO BOX ──────────────────────────────────────────────
   sectionTitle('1. Il tuo profilo')
 
   const BOX_H = 20
@@ -127,7 +127,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   })
   y += BOX_H + 8
 
-  // ── 3. PROIEZIONE ───────────────────────────────────────────────────────
+  // ── 3. PROIEZIONE ──────────────────────────────────────────────────────────────────────
   sectionTitle('2. Proiezione finanziaria (scenario base)')
 
   const result = calculateProjection(
@@ -184,7 +184,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   )
   y += 8
 
-  // ── 4. MINI RIEPILOGO CRESCITA ──────────────────────────────────────────
+  // ── 4. MINI RIEPILOGO CRESCITA ──────────────────────────────────────────────────────
   const multiplier = result.totalDeposited > 0
     ? (result.finalCapital / result.totalDeposited).toFixed(1)
     : '-'
@@ -202,7 +202,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   })
   y += summaryBoxH + 5
 
-  // ── 5. TABELLA ETF ───────────────────────────────────────────────────────────────────────
+  // ── 5. TABELLA ETF ─────────────────────────────────────────────────────────────────────────────────────
   sectionTitle('3. Portafoglio ETF consigliato')
 
   const cols = [
@@ -267,7 +267,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   })
   y += 8
 
-  // ── 6. RIBILANCIAMENTO ────────────────────────────────────────────────────────
+  // ── 6. RIBILANCIAMENTO ────────────────────────────────────────────────────────────────────────
   sectionTitle('4. Regola di ribilanciamento')
 
   const ruleLines = doc.splitTextToSize(profile.rebalanceRule, CW - 10)
@@ -294,10 +294,10 @@ export function generatePianoPDF(profile, dbProfile, params) {
   doc.text(`Frequenza controllo: ${profile.rebalanceFrequency}`, MARGIN + 4, y + 4.8)
   y += 13
 
-  // ── 7. DISCLAIMER ────────────────────────────────────────────────────────
+  // ── 7. DISCLAIMER ──────────────────────────────────────────────────────────────────────
   if (y > PAGE_H - FOOTER_H - 28) { doc.addPage(); y = 16 }
 
-  const disclaimer = 'Questo documento è generato automaticamente a scopo informativo e non costituisce consulenza finanziaria. Gli investimenti comportano rischi. Rendimenti passati non garantiscono risultati futuri.'
+  const disclaimer = 'PianoFinanziario è uno strumento educativo gratuito. Non gestiamo i tuoi soldi, non abbiamo accesso ai tuoi conti bancari e non siamo una società di gestione del risparmio. Le decisioni di investimento sono sempre e solo tue. I rendimenti mostrati sono basati su dati storici e non garantiscono risultati futuri.'
   const discLines = doc.splitTextToSize(disclaimer, CW - 10)
   const discH = discLines.length * 4.5 + 11
   doc.setFillColor(...C.redLight)
@@ -307,13 +307,13 @@ export function generatePianoPDF(profile, dbProfile, params) {
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(8)
   doc.setTextColor(...C.red)
-  doc.text('Avviso legale', MARGIN + 4, y + 6.5)
+  doc.text('Nota', MARGIN + 4, y + 6.5)
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(7.5)
   doc.setTextColor(127, 29, 29)
   doc.text(discLines, MARGIN + 4, y + 12)
 
-  // ── 8. FOOTER BAND ────────────────────────────────────────────────────────
+  // ── 8. FOOTER BAND ───────────────────────────────────────────────────────────────────────
   doc.setFillColor(...C.grayFoot)
   doc.rect(0, PAGE_H - FOOTER_H, W, FOOTER_H, 'F')
   doc.setDrawColor(...C.border)
@@ -324,11 +324,11 @@ export function generatePianoPDF(profile, dbProfile, params) {
   doc.setFontSize(9)
   doc.setTextColor(...C.gray)
   doc.text(
-    'Strumento educativo - non costituisce consulenza finanziaria',
+    'Strumento educativo gratuito — non consulenza finanziaria',
     W / 2, PAGE_H - FOOTER_H + 5.5, { align: 'center' },
   )
   doc.text(
-    'I rendimenti passati non garantiscono quelli futuri.',
+    'Rendimenti basati su dati storici — non garantiscono risultati futuri.',
     W / 2, PAGE_H - FOOTER_H + 10, { align: 'center' },
   )
   doc.setFont('helvetica', 'bold')
