@@ -1,9 +1,9 @@
 // Definizione dei 4 profili portafoglio
 export const PORTFOLIOS = {
-  dormiglione: {
-    id: 'dormiglione',
-    name: 'Dormiglione',
-    description: 'Il portafoglio più semplice: 2 ETF, set and forget. Ideale per chi vuole investire senza pensarci.',
+  essenziale: {
+    id: 'essenziale',
+    name: 'Essenziale',
+    description: 'Il punto di partenza ideale. Due soli ETF, un acquisto al mese, zero decisioni complesse. Perfetto per chi inizia da zero.',
     expectedReturn: 6.5,
     rebalanceFrequency: 'mensile',
     color: '#534AB7',
@@ -23,10 +23,10 @@ export const PORTFOLIOS = {
         percentage: 20,
       },
     ],
-    rebalanceRule: 'Controlla ogni mese se gli ETF si sono allontanati di oltre il 5% dai target. Se VWCE supera 85% o scende sotto 75%, ribilancia.',
+    rebalanceRule: 'Controlla ogni mese se gli ETF si sono allontanati di oltre il 5% dai target. Imposta una volta, funziona sempre: se VWCE supera 85% o scende sotto 75%, ribilancia.',
     alerts: [
       { when: 'VWCE > 85% o < 75%', action: 'Ribilancia vendendo/comprando per tornare a 80/20' },
-      { when: 'Mercato cala > 20%', action: 'Non vendere. Continua il PAC, compra di più se puoi' },
+      { when: 'Mercato cala > 20%', action: 'Nessuna azione. Continua il PAC, massima semplicità' },
     ],
     steps: [
       'Apri un conto su un broker come Directa, Fineco o DEGIRO',
@@ -196,7 +196,7 @@ export function recommendPortfolio(answers) {
   score += riskScores[answers.risk] || 0
   if (answers.horizon >= 20) score += 2
   else if (answers.horizon >= 10) score += 1
-  if (score <= 2) return 'dormiglione'
+  if (score <= 2) return 'essenziale'
   if (score <= 4) return 'prudente'
   if (score <= 6) return 'bilanciato'
   return 'crescita'

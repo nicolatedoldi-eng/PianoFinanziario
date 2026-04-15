@@ -56,7 +56,7 @@ const FEATURES = [
 ]
 
 const PROFILES = [
-  { name: 'Dormiglione', return: '6.5%', color: '#534AB7', desc: '2 ETF, massima semplicità' },
+  { name: 'Essenziale', return: '6.5%', color: '#534AB7', desc: '2 ETF · massima semplicità' },
   { name: 'Prudente', return: '5.5%', color: '#1D9E75', desc: '4 ETF, stabilità prima di tutto' },
   { name: 'Bilanciato', return: '7.5%', color: '#EF9F27', desc: '4 ETF, crescita + protezione' },
   { name: 'Crescita', return: '9.5%', color: '#E24B4A', desc: '4 ETF, massimizza il rendimento' },
