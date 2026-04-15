@@ -7,13 +7,13 @@ import { recommendPortfolio, PORTFOLIOS } from '../lib/portfolios'
 const STEPS = [
   {
     id: 'goal',
-    question: 'Qual \u00e8 il tuo obiettivo principale?',
-    subtitle: 'Scegli quello pi\u00f9 vicino a ci\u00f2 che vuoi ottenere',
+    question: 'Qual è il tuo obiettivo principale?',
+    subtitle: 'Scegli quello più vicino a ciò che vuoi ottenere',
     options: [
-      { value: 'casa', label: 'Comprare casa', icon: '\uD83C\uDFE0', desc: 'Voglio accumulare per l\'acconto o per un acquisto' },
-      { value: 'pensione', label: 'Pensione integrativa', icon: '\uD83E\uDDD3', desc: 'Voglio avere di pi\u00f9 quando smetto di lavorare' },
-      { value: 'liberta', label: 'Libert\u00e0 finanziaria', icon: '\uD83C\uDF05', desc: 'Voglio vivere di rendita il prima possibile' },
-      { value: 'emergenze', label: 'Fondo emergenze', icon: '\uD83D\uDEE1\uFE0F', desc: 'Voglio una rete di sicurezza per l\'imprevisto' },
+      { value: 'casa', label: 'Comprare casa', icon: '🏠', desc: 'Voglio accumulare per l\'acconto o per un acquisto' },
+      { value: 'pensione', label: 'Pensione integrativa', icon: '🧓', desc: 'Voglio avere di più quando smetto di lavorare' },
+      { value: 'liberta', label: 'Libertà finanziaria', icon: '🌅', desc: 'Voglio vivere di rendita il prima possibile' },
+      { value: 'emergenze', label: 'Fondo emergenze', icon: '🛡️', desc: 'Voglio una rete di sicurezza per l\'imprevisto' },
     ],
   },
   {
@@ -21,21 +21,21 @@ const STEPS = [
     question: 'Che esperienza hai con gli investimenti?',
     subtitle: 'Sii onesto, non ci sono risposte sbagliate',
     options: [
-      { value: 'zero', label: 'Zero esperienza', icon: '\uD83C\uDF31', desc: 'Non ho mai investito, parto da zero' },
-      { value: 'letto', label: 'Ho letto qualcosa', icon: '\uD83D\uDCDA', desc: 'Conosco i concetti base ma non ho investito' },
-      { value: 'qualcosa', label: 'Ho gi\u00e0 qualcosa', icon: '\uD83D\uDCBC', desc: 'Ho un fondo pensione, un ETF o azioni' },
-      { value: 'esperto', label: 'Sono esperto', icon: '\uD83C\uDF93', desc: 'Gestisco gi\u00e0 un portafoglio in modo consapevole' },
+      { value: 'zero', label: 'Zero esperienza', icon: '🌱', desc: 'Non ho mai investito, parto da zero' },
+      { value: 'letto', label: 'Ho letto qualcosa', icon: '📚', desc: 'Conosco i concetti base ma non ho investito' },
+      { value: 'qualcosa', label: 'Ho già qualcosa', icon: '💼', desc: 'Ho un fondo pensione, un ETF o azioni' },
+      { value: 'esperto', label: 'Sono esperto', icon: '🎓', desc: 'Gestisco già un portafoglio in modo consapevole' },
     ],
   },
   {
     id: 'risk',
     question: 'Il mercato crolla del 30%. Cosa fai?',
-    subtitle: 'Immagina di avere gi\u00e0 10.000\u20ac investiti',
+    subtitle: 'Immagina di avere già 10.000€ investiti',
     options: [
-      { value: 'vendo', label: 'Vendo tutto', icon: '\uD83D\uDE30', desc: 'Non riesco a sopportare le perdite, preferisco uscire' },
-      { value: 'aspetto', label: 'Aspetto e non tocco', icon: '\uD83D\uDE10', desc: 'Lascio stare, tanto prima o poi risale' },
-      { value: 'continuo', label: 'Continuo il PAC', icon: '\uD83D\uDCAA', desc: 'Continuo a versare come da piano' },
-      { value: 'compro', label: 'Compro di pi\u00f9', icon: '\uD83D\uDE80', desc: 'Opportunit\u00e0! Aumento i versamenti approfittando del calo' },
+      { value: 'vendo', label: 'Vendo tutto', icon: '😰', desc: 'Non riesco a sopportare le perdite, preferisco uscire' },
+      { value: 'aspetto', label: 'Aspetto e non tocco', icon: '😐', desc: 'Lascio stare, tanto prima o poi risale' },
+      { value: 'continuo', label: 'Continuo il PAC', icon: '💪', desc: 'Continuo a versare come da piano' },
+      { value: 'compro', label: 'Compro di più', icon: '🚀', desc: 'Opportunità! Aumento i versamenti approfittando del calo' },
     ],
   },
 ]
@@ -166,20 +166,20 @@ export default function Onboarding() {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Quanto hai da investire subito?</h2>
             <p className="text-gray-500 mb-8">Il capitale iniziale che puoi mettere da parte oggi. Puoi sempre aggiornarlo dopo.</p>
             <div className="text-center mb-8">
-              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>&euro;{answers.initialCapital.toLocaleString('it-IT')}</div>
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>€{answers.initialCapital.toLocaleString('it-IT')}</div>
               <div className="text-sm text-gray-400">capitale iniziale</div>
             </div>
             <input type="range" min="0" max="100000" step="500" value={answers.initialCapital}
               onChange={(e) => setAnswers(prev => ({ ...prev, initialCapital: Number(e.target.value) }))}
               className="w-full mb-4 accent-[#534AB7]" />
             <div className="relative mb-8" style={{ height: '16px' }}>
-              <span className="absolute text-xs text-gray-400" style={{ left: '0%' }}>&euro;0</span>
-              <span className="absolute text-xs text-gray-400" style={{ left: '10%', transform: 'translateX(-50%)' }}>&euro;10K</span>
-              <span className="absolute text-xs text-gray-400" style={{ left: '25%', transform: 'translateX(-50%)' }}>&euro;25K</span>
-              <span className="absolute text-xs text-gray-400" style={{ left: '50%', transform: 'translateX(-50%)' }}>&euro;50K</span>
-              <span className="absolute text-xs text-gray-400" style={{ left: '100%', transform: 'translateX(-100%)' }}>&euro;100K</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '0%' }}>€0</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '10%', transform: 'translateX(-50%)' }}>€10K</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '25%', transform: 'translateX(-50%)' }}>€25K</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '50%', transform: 'translateX(-50%)' }}>€50K</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '100%', transform: 'translateX(-100%)' }}>€100K</span>
             </div>
-            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua &rarr;</button>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua →</button>
           </div>
         </div>
       </div>
@@ -203,20 +203,20 @@ export default function Onboarding() {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Quanto puoi versare ogni mese?</h2>
             <p className="text-gray-500 mb-8">Il Piano di Accumulo (PAC) mensile. Anche piccole cifre, nel lungo periodo, fanno differenza.</p>
             <div className="text-center mb-8">
-              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>&euro;{answers.monthlyPayment.toLocaleString('it-IT')}</div>
+              <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>€{answers.monthlyPayment.toLocaleString('it-IT')}</div>
               <div className="text-sm text-gray-400">al mese</div>
             </div>
             <input type="range" min="50" max="2000" step="50" value={answers.monthlyPayment}
               onChange={(e) => setAnswers(prev => ({ ...prev, monthlyPayment: Number(e.target.value) }))}
               className="w-full mb-4 accent-[#534AB7]" />
             <div className="relative mb-8" style={{ height: '16px' }}>
-              <span className="absolute text-xs text-gray-400" style={{ left: '0%' }}>&euro;50</span>
-              <span className="absolute text-xs text-gray-400" style={{ left: '23.1%', transform: 'translateX(-50%)' }}>&euro;500</span>
-              <span className="absolute text-xs text-gray-400" style={{ left: '48.7%', transform: 'translateX(-50%)' }}>&euro;1.000</span>
-              <span className="absolute text-xs text-gray-400" style={{ left: '74.4%', transform: 'translateX(-50%)' }}>&euro;1.500</span>
-              <span className="absolute text-xs text-gray-400" style={{ left: '100%', transform: 'translateX(-100%)' }}>&euro;2.000</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '0%' }}>€50</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '23.1%', transform: 'translateX(-50%)' }}>€500</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '48.7%', transform: 'translateX(-50%)' }}>€1.000</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '74.4%', transform: 'translateX(-50%)' }}>€1.500</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '100%', transform: 'translateX(-100%)' }}>€2.000</span>
             </div>
-            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua &rarr;</button>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua →</button>
           </div>
         </div>
       </div>
@@ -238,7 +238,7 @@ export default function Onboarding() {
           </div>
           <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Per quanti anni vuoi investire?</h2>
-            <p className="text-gray-500 mb-8">L'orizzonte temporale \u00e8 uno dei fattori pi\u00f9 importanti. Pi\u00f9 \u00e8 lungo, pi\u00f9 pu\u00f2 crescere il tuo capitale.</p>
+            <p className="text-gray-500 mb-8">L'orizzonte temporale è uno dei fattori più importanti. Più è lungo, più può crescere il tuo capitale.</p>
             <div className="text-center mb-8">
               <div className="text-5xl font-bold mb-1" style={{ color: '#534AB7' }}>{answers.horizon} anni</div>
               <div className="text-sm text-gray-400">
@@ -255,7 +255,7 @@ export default function Onboarding() {
               <span className="absolute text-xs text-gray-400" style={{ left: '85.3%', transform: 'translateX(-50%)' }}>30</span>
               <span className="absolute text-xs text-gray-400" style={{ left: '100%', transform: 'translateX(-100%)' }}>35</span>
             </div>
-            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Scopri il tuo profilo &rarr;</button>
+            <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Scopri il tuo profilo →</button>
           </div>
         </div>
       </div>
@@ -267,7 +267,7 @@ export default function Onboarding() {
       <div className="w-full max-w-3xl">
         <div className="text-center mb-8">
           <div className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-4" style={{ backgroundColor: '#ECFDF5', color: '#1D9E75' }}>Profilo trovato!</div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Il tuo profilo \u00e8: <span style={{ color: recommendedProfile.color }}>{recommendedProfile.name}</span></h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Il tuo profilo è: <span style={{ color: recommendedProfile.color }}>{recommendedProfile.name}</span></h2>
           <p className="text-gray-500">{recommendedProfile.description}</p>
         </div>
 
@@ -292,7 +292,7 @@ export default function Onboarding() {
           <button onClick={() => handleSave(recommendedProfileId)} disabled={saving}
             className="w-full py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90 disabled:opacity-60"
             style={{ backgroundColor: recommendedProfile.color }}>
-            {saving ? 'Salvataggio...' : `Inizia con il profilo ${recommendedProfile.name} \u2192`}
+            {saving ? 'Salvataggio...' : `Inizia con il profilo ${recommendedProfile.name} →`}
           </button>
         </div>
 
