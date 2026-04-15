@@ -34,30 +34,30 @@ const PREVIEW_DATA = [
 
 const FEATURES = [
   {
-    icon: '\uD83C\uDFAF',
+    icon: '🎯',
     title: 'Profilo su misura',
     description: '6 domande per capire il tuo profilo e assegnarti il portafoglio giusto',
   },
   {
-    icon: '\uD83D\uDCC8',
+    icon: '📈',
     title: 'Simulatore reale',
     description: 'Vedi crescere il tuo patrimonio anno per anno con grafici interattivi',
   },
   {
-    icon: '\uD83D\uDD14',
+    icon: '🔔',
     title: 'Promemoria intelligenti',
-    description: 'Email automatiche quando \u00e8 il momento di ribilanciare il portafoglio',
+    description: 'Email automatiche quando è il momento di ribilanciare il portafoglio',
   },
   {
-    icon: '\uD83D\uDEE1\uFE0F',
+    icon: '🛡️',
     title: 'Solo ETF',
     description: 'Nessun prodotto bancario costoso. Solo strumenti semplici, economici e trasparenti',
   },
 ]
 
 const PROFILES = [
-  { name: 'Essenziale', return: '6.5%', color: '#534AB7', desc: '2 ETF \u00b7 massima semplicit\u00e0' },
-  { name: 'Prudente', return: '5.5%', color: '#1D9E75', desc: '4 ETF, stabilit\u00e0 prima di tutto' },
+  { name: 'Essenziale', return: '6.5%', color: '#534AB7', desc: '2 ETF · massima semplicità' },
+  { name: 'Prudente', return: '5.5%', color: '#1D9E75', desc: '4 ETF, stabilità prima di tutto' },
   { name: 'Bilanciato', return: '7.5%', color: '#EF9F27', desc: '4 ETF, crescita + protezione' },
   { name: 'Crescita', return: '9.5%', color: '#E24B4A', desc: '4 ETF, massimizza il rendimento' },
 ]
@@ -70,7 +70,7 @@ function ChartTooltip({ active, payload, label }) {
       <p style={{ fontWeight: 600, color: '#111827', marginBottom: 4 }}>Anno {label}</p>
       {payload.map((entry, i) => (
         <p key={i} style={{ color: '#374151', margin: '2px 0' }}>
-          {labels[i]}: \u20ac {Math.round(entry.value).toLocaleString('it-IT')}
+          {labels[i]}: € {Math.round(entry.value).toLocaleString('it-IT')}
         </p>
       ))}
     </div>
@@ -102,7 +102,7 @@ export default function Landing() {
           className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-6"
           style={{ backgroundColor: '#EEF0FB', color: '#534AB7' }}
         >
-          Gratis per sempre \u2014 no carta di credito
+          Gratis per sempre — no carta di credito
         </div>
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
           Il tuo piano finanziario,<br />
@@ -119,14 +119,21 @@ export default function Landing() {
             className="px-8 py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90"
             style={{ backgroundColor: '#534AB7' }}
           >
-            Inizia gratis \u2192
+            Inizia gratis →
           </Link>
           <Link
             to="/login"
             className="px-8 py-4 rounded-xl text-gray-700 font-semibold text-lg border border-gray-200 hover:bg-gray-50 transition-colors"
           >
-            Ho gi\u00e0 un account
+            Ho già un account
           </Link>
+        </div>
+        <div className="flex flex-wrap justify-center gap-x-2 gap-y-1 mt-3" style={{ fontSize: '12px', color: '#9CA3AF' }}>
+          <span>✓ Nessuna carta di credito</span>
+          <span>·</span>
+          <span>✓ Nessun dato bancario</span>
+          <span>·</span>
+          <span>✓ Puoi smettere quando vuoi</span>
         </div>
       </div>
 
@@ -142,10 +149,10 @@ export default function Landing() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
             {[
-              { label: 'Capitale finale', value: '\u20ac387K', color: '#534AB7' },
-              { label: 'Totale versato', value: '\u20ac150K', color: '#1D9E75' },
-              { label: 'Interessi guadagnati', value: '\u20ac237K', color: '#1D9E75' },
-              { label: 'Rendita mensile', value: '\u20ac1.290', color: '#EF9F27' },
+              { label: 'Capitale finale', value: '€387K', color: '#534AB7' },
+              { label: 'Totale versato', value: '€150K', color: '#1D9E75' },
+              { label: 'Interessi guadagnati', value: '€237K', color: '#1D9E75' },
+              { label: 'Rendita mensile', value: '€1.290', color: '#EF9F27' },
             ].map((card) => (
               <div key={card.label} className="bg-gray-50 rounded-xl p-4">
                 <div className="text-xs text-gray-400 mb-1">{card.label}</div>
@@ -158,7 +165,7 @@ export default function Landing() {
             <ResponsiveContainer width="100%" height={180}>
               <LineChart data={PREVIEW_DATA} margin={{ top: 5, right: 10, bottom: 0, left: 10 }}>
                 <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={v => `${v}a`} tickLine={false} axisLine={false} interval={4} />
-                <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={v => v >= 1000 ? `\u20ac${v/1000}K` : `\u20ac${v}`} tickLine={false} axisLine={false} width={48} domain={[0, 500000]} />
+                <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={v => v >= 1000 ? `€${v/1000}K` : `€${v}`} tickLine={false} axisLine={false} width={48} domain={[0, 500000]} />
                 <Tooltip content={<ChartTooltip />} />
                 <Line type="monotone" dataKey="capitale" stroke="#1D9E75" strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: '#1D9E75' }} isAnimationActive={false} />
                 <Line type="monotone" dataKey="versati" stroke="#B5D4F4" strokeWidth={2} dot={false} activeDot={{ r: 4, fill: '#B5D4F4' }} isAnimationActive={false} />
@@ -177,7 +184,7 @@ export default function Landing() {
           </div>
 
           <div className="mt-3 text-center text-sm text-gray-400">
-            Esempio: 500\u20ac/mese per 25 anni con profilo Bilanciato (7.5%)
+            Esempio: 500€/mese per 25 anni con profilo Bilanciato (7.5%)
           </div>
         </div>
       </div>
@@ -185,7 +192,7 @@ export default function Landing() {
       {/* Features */}
       <div className="mb-12">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-12">
-          Smetti di rimandare. Inizia con \u20ac50 al mese.
+          Smetti di rimandare. Inizia con €50 al mese.
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {FEATURES.map((f) => (
@@ -204,7 +211,7 @@ export default function Landing() {
         style={{ paddingTop: '40px', paddingBottom: '40px' }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center font-bold text-gray-900 mb-10" style={{ fontSize: '22px' }}>Perch\u00e9 puoi fidarti</h2>
+          <h2 className="text-center font-bold text-gray-900 mb-10" style={{ fontSize: '22px' }}>Perché puoi fidarti</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             <div className="flex flex-col items-center text-center gap-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -236,10 +243,38 @@ export default function Landing() {
         </div>
       </div>
 
+      {/* Chi c'è dietro */}
+      <div className="text-center mb-20" style={{ paddingTop: '48px', paddingBottom: '48px' }}>
+        <p className="uppercase tracking-widest text-gray-400 mb-5" style={{ fontSize: '12px', letterSpacing: '0.1em' }}>Chi c'è dietro PianoFinanziario</p>
+        <p className="mx-auto text-gray-900 mb-8" style={{ fontSize: '16px', maxWidth: '580px', lineHeight: '1.75' }}>
+          PianoFinanziario nasce dall'esperienza di chi ha lavorato per anni come COO in aziende del settore finanziario e immobiliare, con un team di consulenti finanziari indipendenti. Niente conflitti di interesse, niente prodotti da vendere — solo strumenti chiari per aiutarti a prendere decisioni migliori con i tuoi risparmi.
+        </p>
+        <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex items-center gap-2 px-4 py-2" style={{ backgroundColor: '#EEEDFE', color: '#3C3489', borderRadius: '20px' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+            <span style={{ fontSize: '14px', fontWeight: 500 }}>Esperienza COO in finanza</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2" style={{ backgroundColor: '#EEEDFE', color: '#3C3489', borderRadius: '20px' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>
+            </svg>
+            <span style={{ fontSize: '14px', fontWeight: 500 }}>Consulenti indipendenti</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2" style={{ backgroundColor: '#EEEDFE', color: '#3C3489', borderRadius: '20px' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+            </svg>
+            <span style={{ fontSize: '14px', fontWeight: 500 }}>Zero conflitti di interesse</span>
+          </div>
+        </div>
+      </div>
+
       {/* Profili */}
       <div className="mb-20">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-4">4 profili, uno per te</h2>
-        <p className="text-gray-500 text-center mb-12">Rispondi a 6 domande e ti assegniamo il portafoglio pi\u00f9 adatto ai tuoi obiettivi</p>
+        <p className="text-gray-500 text-center mb-12">Rispondi a 6 domande e ti assegniamo il portafoglio più adatto ai tuoi obiettivi</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {PROFILES.map((p) => (
             <div key={p.name} className="bg-white border border-gray-200 rounded-xl p-5 text-center">
@@ -259,14 +294,15 @@ export default function Landing() {
           Rispondi alle 6 domande, scopri il tuo profilo e vedi subito quanto puoi accumulare nel tempo.
         </p>
         <Link to="/registrazione" className="inline-block px-8 py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90" style={{ backgroundColor: '#ffffff', color: '#3730A3' }}>
-          Crea il tuo piano \u2192
+          Crea il tuo piano →
         </Link>
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 py-8 text-center text-sm text-gray-400">
-        <p>PianoFinanziario \u2014 Strumento educativo, non consulenza finanziaria.</p>
-        <p className="mt-1">I rendimenti passati non garantiscono quelli futuri.</p>
+      <footer className="border-t border-gray-200 py-8 text-center text-gray-400" style={{ fontSize: '12px' }}>
+        <p className="max-w-2xl mx-auto leading-relaxed">
+          PianoFinanziario è uno strumento educativo gratuito. Ti mostriamo come funziona il mondo degli ETF e ti aiutiamo a costruire un piano personalizzato. Non gestiamo i tuoi soldi, non abbiamo accesso ai tuoi conti bancari e non siamo una società di gestione del risparmio. Le decisioni di investimento sono sempre e solo tue. I rendimenti mostrati sono basati su dati storici e non garantiscono risultati futuri.
+        </p>
       </footer>
     </div>
   )
