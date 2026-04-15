@@ -34,30 +34,30 @@ const PREVIEW_DATA = [
 
 const FEATURES = [
   {
-    icon: '🎯',
+    icon: '\uD83C\uDFAF',
     title: 'Profilo su misura',
     description: '6 domande per capire il tuo profilo e assegnarti il portafoglio giusto',
   },
   {
-    icon: '📈',
+    icon: '\uD83D\uDCC8',
     title: 'Simulatore reale',
     description: 'Vedi crescere il tuo patrimonio anno per anno con grafici interattivi',
   },
   {
-    icon: '🔔',
+    icon: '\uD83D\uDD14',
     title: 'Promemoria intelligenti',
-    description: 'Email automatiche quando è il momento di ribilanciare il portafoglio',
+    description: 'Email automatiche quando \u00e8 il momento di ribilanciare il portafoglio',
   },
   {
-    icon: '🛡️',
+    icon: '\uD83D\uDEE1\uFE0F',
     title: 'Solo ETF',
     description: 'Nessun prodotto bancario costoso. Solo strumenti semplici, economici e trasparenti',
   },
 ]
 
 const PROFILES = [
-  { name: 'Dormiglione', return: '6.5%', color: '#534AB7', desc: '2 ETF, massima semplicità' },
-  { name: 'Prudente', return: '5.5%', color: '#1D9E75', desc: '4 ETF, stabilità prima di tutto' },
+  { name: 'Essenziale', return: '6.5%', color: '#534AB7', desc: '2 ETF \u00b7 massima semplicit\u00e0' },
+  { name: 'Prudente', return: '5.5%', color: '#1D9E75', desc: '4 ETF, stabilit\u00e0 prima di tutto' },
   { name: 'Bilanciato', return: '7.5%', color: '#EF9F27', desc: '4 ETF, crescita + protezione' },
   { name: 'Crescita', return: '9.5%', color: '#E24B4A', desc: '4 ETF, massimizza il rendimento' },
 ]
@@ -70,7 +70,7 @@ function ChartTooltip({ active, payload, label }) {
       <p style={{ fontWeight: 600, color: '#111827', marginBottom: 4 }}>Anno {label}</p>
       {payload.map((entry, i) => (
         <p key={i} style={{ color: '#374151', margin: '2px 0' }}>
-          {labels[i]}: € {Math.round(entry.value).toLocaleString('it-IT')}
+          {labels[i]}: \u20ac {Math.round(entry.value).toLocaleString('it-IT')}
         </p>
       ))}
     </div>
@@ -102,7 +102,7 @@ export default function Landing() {
           className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-6"
           style={{ backgroundColor: '#EEF0FB', color: '#534AB7' }}
         >
-          Gratis per sempre — no carta di credito
+          Gratis per sempre \u2014 no carta di credito
         </div>
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
           Il tuo piano finanziario,<br />
@@ -119,13 +119,13 @@ export default function Landing() {
             className="px-8 py-4 rounded-xl text-white font-semibold text-lg transition-opacity hover:opacity-90"
             style={{ backgroundColor: '#534AB7' }}
           >
-            Inizia gratis →
+            Inizia gratis \u2192
           </Link>
           <Link
             to="/login"
             className="px-8 py-4 rounded-xl text-gray-700 font-semibold text-lg border border-gray-200 hover:bg-gray-50 transition-colors"
           >
-            Ho già un account
+            Ho gi\u00e0 un account
           </Link>
         </div>
       </div>
@@ -142,10 +142,10 @@ export default function Landing() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
             {[
-              { label: 'Capitale finale', value: '€387K', color: '#534AB7' },
-              { label: 'Totale versato', value: '€150K', color: '#1D9E75' },
-              { label: 'Interessi guadagnati', value: '€237K', color: '#1D9E75' },
-              { label: 'Rendita mensile', value: '€1.290', color: '#EF9F27' },
+              { label: 'Capitale finale', value: '\u20ac387K', color: '#534AB7' },
+              { label: 'Totale versato', value: '\u20ac150K', color: '#1D9E75' },
+              { label: 'Interessi guadagnati', value: '\u20ac237K', color: '#1D9E75' },
+              { label: 'Rendita mensile', value: '\u20ac1.290', color: '#EF9F27' },
             ].map((card) => (
               <div key={card.label} className="bg-gray-50 rounded-xl p-4">
                 <div className="text-xs text-gray-400 mb-1">{card.label}</div>
@@ -154,12 +154,11 @@ export default function Landing() {
             ))}
           </div>
 
-          {/* Grafico preview */}
           <div>
             <ResponsiveContainer width="100%" height={180}>
               <LineChart data={PREVIEW_DATA} margin={{ top: 5, right: 10, bottom: 0, left: 10 }}>
                 <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={v => `${v}a`} tickLine={false} axisLine={false} interval={4} />
-                <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={v => v >= 1000 ? `€${v/1000}K` : `€${v}`} tickLine={false} axisLine={false} width={48} domain={[0, 500000]} />
+                <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={v => v >= 1000 ? `\u20ac${v/1000}K` : `\u20ac${v}`} tickLine={false} axisLine={false} width={48} domain={[0, 500000]} />
                 <Tooltip content={<ChartTooltip />} />
                 <Line type="monotone" dataKey="capitale" stroke="#1D9E75" strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: '#1D9E75' }} isAnimationActive={false} />
                 <Line type="monotone" dataKey="versati" stroke="#B5D4F4" strokeWidth={2} dot={false} activeDot={{ r: 4, fill: '#B5D4F4' }} isAnimationActive={false} />
@@ -178,7 +177,7 @@ export default function Landing() {
           </div>
 
           <div className="mt-3 text-center text-sm text-gray-400">
-            Esempio: 500€/mese per 25 anni con profilo Bilanciato (7.5%)
+            Esempio: 500\u20ac/mese per 25 anni con profilo Bilanciato (7.5%)
           </div>
         </div>
       </div>
@@ -186,7 +185,7 @@ export default function Landing() {
       {/* Features */}
       <div className="mb-12">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-12">
-          Smetti di rimandare. Inizia con €50 al mese.
+          Smetti di rimandare. Inizia con \u20ac50 al mese.
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {FEATURES.map((f) => (
@@ -205,12 +204,7 @@ export default function Landing() {
         style={{ paddingTop: '40px', paddingBottom: '40px' }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2
-            className="text-center font-bold text-gray-900 mb-10"
-            style={{ fontSize: '22px' }}
-          >
-            Perché puoi fidarti
-          </h2>
+          <h2 className="text-center font-bold text-gray-900 mb-10" style={{ fontSize: '22px' }}>Perch\u00e9 puoi fidarti</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             <div className="flex flex-col items-center text-center gap-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -218,9 +212,7 @@ export default function Landing() {
                 <polyline points="9 12 11 14 15 10"/>
               </svg>
               <h3 className="font-bold text-gray-900" style={{ fontSize: '15px' }}>Zero accesso bancario</h3>
-              <p style={{ fontSize: '13px', color: '#6B7280' }}>
-                Non colleghiamo nessun conto. Non vediamo i tuoi movimenti. Mai.
-              </p>
+              <p style={{ fontSize: '13px', color: '#6B7280' }}>Non colleghiamo nessun conto. Non vediamo i tuoi movimenti. Mai.</p>
             </div>
             <div className="flex flex-col items-center text-center gap-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -228,9 +220,7 @@ export default function Landing() {
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
               <h3 className="font-bold text-gray-900" style={{ fontSize: '15px' }}>Solo calcoli matematici</h3>
-              <p style={{ fontSize: '13px', color: '#6B7280' }}>
-                Inserisci solo quello che vuoi tu. Il resto lo calcoliamo noi.
-              </p>
+              <p style={{ fontSize: '13px', color: '#6B7280' }}>Inserisci solo quello che vuoi tu. Il resto lo calcoliamo noi.</p>
             </div>
             <div className="flex flex-col items-center text-center gap-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -240,9 +230,7 @@ export default function Landing() {
                 <line x1="15" y1="13" x2="9" y2="19"/>
               </svg>
               <h3 className="font-bold text-gray-900" style={{ fontSize: '15px' }}>Nessuna consulenza</h3>
-              <p style={{ fontSize: '13px', color: '#6B7280' }}>
-                Siamo uno strumento educativo, non un consulente finanziario.
-              </p>
+              <p style={{ fontSize: '13px', color: '#6B7280' }}>Siamo uno strumento educativo, non un consulente finanziario.</p>
             </div>
           </div>
         </div>
@@ -250,28 +238,14 @@ export default function Landing() {
 
       {/* Profili */}
       <div className="mb-20">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-4">
-          4 profili, uno per te
-        </h2>
-        <p className="text-gray-500 text-center mb-12">
-          Rispondi a 6 domande e ti assegniamo il portafoglio più adatto ai tuoi obiettivi
-        </p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-4">4 profili, uno per te</h2>
+        <p className="text-gray-500 text-center mb-12">Rispondi a 6 domande e ti assegniamo il portafoglio pi\u00f9 adatto ai tuoi obiettivi</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {PROFILES.map((p) => (
-            <div
-              key={p.name}
-              className="bg-white border border-gray-200 rounded-xl p-5 text-center"
-            >
-              <div
-                className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-bold text-lg"
-                style={{ backgroundColor: p.color }}
-              >
-                {p.name[0]}
-              </div>
+            <div key={p.name} className="bg-white border border-gray-200 rounded-xl p-5 text-center">
+              <div className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-bold text-lg" style={{ backgroundColor: p.color }}>{p.name[0]}</div>
               <div className="font-semibold text-gray-900 mb-1">{p.name}</div>
-              <div className="text-2xl font-bold mb-1" style={{ color: p.color }}>
-                {p.return}
-              </div>
+              <div className="text-2xl font-bold mb-1" style={{ color: p.color }}>{p.return}</div>
               <div className="text-xs text-gray-400">{p.desc}</div>
             </div>
           ))}
@@ -279,29 +253,19 @@ export default function Landing() {
       </div>
 
       {/* CTA */}
-      <div
-        className="text-center py-16 rounded-2xl mb-20"
-        style={{ backgroundColor: '#3730A3' }}
-      >
-        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-          Inizia in 3 minuti, gratis
-        </h2>
+      <div className="text-center py-16 rounded-2xl mb-20" style={{ backgroundColor: '#3730A3' }}>
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Inizia in 3 minuti, gratis</h2>
         <p className="mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.75)' }}>
-          Rispondi alle 6 domande, scopri il tuo profilo e vedi subito
-          quanto puoi accumulare nel tempo.
+          Rispondi alle 6 domande, scopri il tuo profilo e vedi subito quanto puoi accumulare nel tempo.
         </p>
-        <Link
-          to="/registrazione"
-          className="inline-block px-8 py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90"
-          style={{ backgroundColor: '#ffffff', color: '#3730A3' }}
-        >
-          Crea il tuo piano →
+        <Link to="/registrazione" className="inline-block px-8 py-4 rounded-xl font-semibold text-lg transition-opacity hover:opacity-90" style={{ backgroundColor: '#ffffff', color: '#3730A3' }}>
+          Crea il tuo piano \u2192
         </Link>
       </div>
 
       {/* Footer */}
       <footer className="border-t border-gray-200 py-8 text-center text-sm text-gray-400">
-        <p>PianoFinanziario — Strumento educativo, non consulenza finanziaria.</p>
+        <p>PianoFinanziario \u2014 Strumento educativo, non consulenza finanziaria.</p>
         <p className="mt-1">I rendimenti passati non garantiscono quelli futuri.</p>
       </footer>
     </div>
