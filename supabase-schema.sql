@@ -10,7 +10,7 @@ create table if not exists public.user_profiles (
   email text not null,
 
   -- Profilo assegnato
-  profile text not null check (profile in ('dormiglione', 'prudente', 'bilanciato', 'crescita')),
+  profile text not null check (profile in ('essenziale', 'prudente', 'bilanciato', 'crescita')),
 
   -- Parametri finanziari
   initial_capital numeric(12, 2) default 0,
