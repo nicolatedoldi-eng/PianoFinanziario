@@ -117,6 +117,13 @@ export default function Pricing() {
           >
             {loading ? 'Reindirizzamento...' : 'Passa a Pro → €7,99/mese'}
           </button>
+          <div className="flex flex-wrap justify-center gap-x-2 gap-y-1 mt-2" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+            <span>✓ Disdici quando vuoi</span>
+            <span>·</span>
+            <span>✓ Annulla in qualsiasi momento</span>
+            <span>·</span>
+            <span>✓ Passa al piano gratuito in un click</span>
+          </div>
         </div>
       </div>
 
