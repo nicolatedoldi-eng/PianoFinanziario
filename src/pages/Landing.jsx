@@ -128,6 +128,13 @@ export default function Landing() {
             Ho già un account
           </Link>
         </div>
+        <div className="flex flex-wrap justify-center gap-x-2 gap-y-1 mt-3" style={{ fontSize: '12px', color: '#9CA3AF' }}>
+          <span>✓ Nessuna carta di credito</span>
+          <span>·</span>
+          <span>✓ Nessun dato bancario</span>
+          <span>·</span>
+          <span>✓ Puoi smettere quando vuoi</span>
+        </div>
       </div>
 
       {/* Preview simulatore (statica) */}
@@ -236,6 +243,34 @@ export default function Landing() {
         </div>
       </div>
 
+      {/* Chi c'è dietro */}
+      <div className="text-center mb-20" style={{ paddingTop: '48px', paddingBottom: '48px' }}>
+        <p className="uppercase tracking-widest text-gray-400 mb-5" style={{ fontSize: '12px', letterSpacing: '0.1em' }}>Chi c'è dietro PianoFinanziario</p>
+        <p className="mx-auto text-gray-900 mb-8" style={{ fontSize: '16px', maxWidth: '580px', lineHeight: '1.75' }}>
+          PianoFinanziario nasce dall'esperienza di chi ha lavorato per anni come COO in aziende del settore finanziario e immobiliare, con un team di consulenti finanziari indipendenti. Niente conflitti di interesse, niente prodotti da vendere — solo strumenti chiari per aiutarti a prendere decisioni migliori con i tuoi risparmi.
+        </p>
+        <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex items-center gap-2 px-4 py-2" style={{ backgroundColor: '#EEEDFE', color: '#3C3489', borderRadius: '20px' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+            <span style={{ fontSize: '14px', fontWeight: 500 }}>Esperienza COO in finanza</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2" style={{ backgroundColor: '#EEEDFE', color: '#3C3489', borderRadius: '20px' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>
+            </svg>
+            <span style={{ fontSize: '14px', fontWeight: 500 }}>Consulenti indipendenti</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2" style={{ backgroundColor: '#EEEDFE', color: '#3C3489', borderRadius: '20px' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#534AB7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+            </svg>
+            <span style={{ fontSize: '14px', fontWeight: 500 }}>Zero conflitti di interesse</span>
+          </div>
+        </div>
+      </div>
+
       {/* Profili */}
       <div className="mb-20">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-4">4 profili, uno per te</h2>
@@ -264,9 +299,10 @@ export default function Landing() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 py-8 text-center text-sm text-gray-400">
-        <p>PianoFinanziario — Strumento educativo, non consulenza finanziaria.</p>
-        <p className="mt-1">I rendimenti passati non garantiscono quelli futuri.</p>
+      <footer className="border-t border-gray-200 py-8 text-center text-gray-400" style={{ fontSize: '12px' }}>
+        <p className="max-w-2xl mx-auto leading-relaxed">
+          PianoFinanziario è uno strumento educativo gratuito. Ti mostriamo come funziona il mondo degli ETF e ti aiutiamo a costruire un piano personalizzato. Non gestiamo i tuoi soldi, non abbiamo accesso ai tuoi conti bancari e non siamo una società di gestione del risparmio. Le decisioni di investimento sono sempre e solo tue. I rendimenti mostrati sono basati su dati storici e non garantiscono risultati futuri.
+        </p>
       </footer>
     </div>
   )
