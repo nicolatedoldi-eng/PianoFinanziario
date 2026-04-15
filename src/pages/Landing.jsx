@@ -245,7 +245,7 @@ export default function Landing() {
 
       {/* Chi c'è dietro */}
       <div className="text-center mb-20" style={{ paddingTop: '48px', paddingBottom: '48px' }}>
-        <p className="uppercase tracking-widest text-gray-400 mb-5" style={{ fontSize: '12px', letterSpacing: '0.1em' }}>Chi c'è dietro PianoFinanziario</p>
+        <p className="uppercase tracking-widest text-gray-400 mb-5 font-bold" style={{ fontSize: '12px', letterSpacing: '0.1em' }}>Chi c'è dietro PianoFinanziario</p>
         <p className="mx-auto text-gray-900 mb-8" style={{ fontSize: '16px', maxWidth: '580px', lineHeight: '1.75' }}>
           PianoFinanziario nasce dall'esperienza di chi ha lavorato per anni come COO in aziende del settore finanziario e immobiliare, con un team di consulenti finanziari indipendenti. Niente conflitti di interesse, niente prodotti da vendere — solo strumenti chiari per aiutarti a prendere decisioni migliori con i tuoi risparmi.
         </p>
