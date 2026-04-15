@@ -172,8 +172,12 @@ export default function Onboarding() {
             <input type="range" min="0" max="100000" step="500" value={answers.initialCapital}
               onChange={(e) => setAnswers(prev => ({ ...prev, initialCapital: Number(e.target.value) }))}
               className="w-full mb-4 accent-[#534AB7]" />
-            <div className="flex justify-between text-xs text-gray-400 mb-8">
-              <span>€0</span><span>€10K</span><span>€25K</span><span>€50K</span><span>€100K</span>
+            <div className="relative mb-8" style={{ height: '16px' }}>
+              <span className="absolute text-xs text-gray-400" style={{ left: '0%' }}>€0</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '10%', transform: 'translateX(-50%)' }}>€10K</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '25%', transform: 'translateX(-50%)' }}>€25K</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '50%', transform: 'translateX(-50%)' }}>€50K</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '100%', transform: 'translateX(-100%)' }}>€100K</span>
             </div>
             <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua →</button>
           </div>
@@ -205,8 +209,12 @@ export default function Onboarding() {
             <input type="range" min="50" max="2000" step="50" value={answers.monthlyPayment}
               onChange={(e) => setAnswers(prev => ({ ...prev, monthlyPayment: Number(e.target.value) }))}
               className="w-full mb-4 accent-[#534AB7]" />
-            <div className="flex justify-between text-xs text-gray-400 mb-8">
-              <span>€50</span><span>€500</span><span>€1.000</span><span>€1.500</span><span>€2.000</span>
+            <div className="relative mb-8" style={{ height: '16px' }}>
+              <span className="absolute text-xs text-gray-400" style={{ left: '0%' }}>€50</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '23.1%', transform: 'translateX(-50%)' }}>€500</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '48.7%', transform: 'translateX(-50%)' }}>€1.000</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '74.4%', transform: 'translateX(-50%)' }}>€1.500</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '100%', transform: 'translateX(-100%)' }}>€2.000</span>
             </div>
             <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Continua →</button>
           </div>
@@ -240,8 +248,12 @@ export default function Onboarding() {
             <input type="range" min="1" max="35" step="1" value={answers.horizon}
               onChange={(e) => setAnswers(prev => ({ ...prev, horizon: Number(e.target.value) }))}
               className="w-full mb-4 accent-[#534AB7]" />
-            <div className="flex justify-between text-xs text-gray-400 mb-8">
-              <span>1 anno</span><span>10</span><span>20</span><span>30</span><span>35</span>
+            <div className="relative mb-8" style={{ height: '16px' }}>
+              <span className="absolute text-xs text-gray-400" style={{ left: '0%' }}>1 anno</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '26.5%', transform: 'translateX(-50%)' }}>10</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '55.9%', transform: 'translateX(-50%)' }}>20</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '85.3%', transform: 'translateX(-50%)' }}>30</span>
+              <span className="absolute text-xs text-gray-400" style={{ left: '100%', transform: 'translateX(-100%)' }}>35</span>
             </div>
             <button onClick={handleSliderNext} className="w-full py-3 rounded-xl text-white font-semibold transition-opacity hover:opacity-90" style={{ backgroundColor: '#534AB7' }}>Scopri il tuo profilo →</button>
           </div>
