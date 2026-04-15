@@ -58,6 +58,29 @@ function GlobalSliders({ params, onChange, isPro }) {
   )
 }
 
+function MetricTooltip({ text }) {
+  const [show, setShow] = useState(false)
+  return (
+    <span className="relative inline-flex items-center">
+      <button
+        className="w-4 h-4 rounded-full flex items-center justify-center border border-gray-300 text-gray-400 hover:text-gray-600 hover:border-gray-400 transition-colors"
+        style={{ fontSize: '10px', flexShrink: 0, lineHeight: 1 }}
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+        onClick={e => e.preventDefault()}
+      >?</button>
+      {show && (
+        <span
+          className="absolute bottom-full left-1/2 mb-2 w-64 rounded-lg p-2.5 shadow-lg z-10 leading-relaxed pointer-events-none"
+          style={{ fontSize: '11px', backgroundColor: '#1F2937', color: '#F9FAFB', transform: 'translateX(-50%)', whiteSpace: 'normal' }}
+        >
+          {text}
+        </span>
+      )}
+    </span>
+  )
+}
+
 function TabRisparmio({ params, profile }) {
   const result = useMemo(() =>
     calculateProjection(params.initialCapital, params.monthlyPayment, profile.expectedReturn, params.horizon, params.annualGrowth),
@@ -77,14 +100,22 @@ function TabRisparmio({ params, profile }) {
 
   return (
     <div>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-3">
         {cards.map(c => (
           <div key={c.label} className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-            <div className="text-sm text-gray-500 mb-1">{c.label}</div>
+            <div className="flex items-center gap-1.5 text-sm text-gray-500 mb-1">
+              <span>{c.label}</span>
+              {c.label === 'Capitale finale' && (
+                <MetricTooltip text={`Calcolato con rendimento annuo del ${profile.expectedReturn}% (scenario base del tuo profilo), capitalizzazione mensile, crescita PAC del ${params.annualGrowth}% annuo.`} />
+              )}
+            </div>
             <div className="text-2xl font-bold" style={{ color: c.color }}>{c.value}</div>
           </div>
         ))}
       </div>
+      <p className="text-center text-gray-400 mb-6" style={{ fontSize: '11px' }}>
+        Rendimento basato sulla performance storica media degli indici azionari globali. I mercati possono salire e scendere nel breve periodo — su orizzonti lunghi la tendenza storica è sempre stata positiva.
+      </p>
 
       <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6 shadow-sm">
         <div className="flex items-start gap-3">
