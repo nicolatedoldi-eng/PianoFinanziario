@@ -66,7 +66,7 @@ Aggiornalo ogni volta che cambiano struttura, tabelle o logica.
 
 ### Route pubbliche
 | Path | Componente |
-|------|-----------|
+|------|----------|
 | `/` | Landing |
 | `/login` | Auth (login) |
 | `/registrazione` | Auth (register) |
@@ -131,6 +131,13 @@ SITE_URL=https://piano-finanziario.vercel.app
 STRIPE_SECRET_KEY=sk_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 VITE_STRIPE_PUBLISHABLE_KEY=pk_...
+```
+
+### Resend / App (Vercel env vars)
+```
+APP_URL=https://piano-finanziario.vercel.app
+RESEND_FROM_EMAIL=PianoFinanziario <noreply@pianofinanziario.app>
+RESEND_REPLY_TO=support@pianofinanziario.app
 ```
 
 ---
@@ -240,6 +247,23 @@ Punteggio basato su 4 risposte:
   - Outlook prossimo anno
   - CTA → dashboard
 - **Calcolo capitale**: `estimateCapital(initialCapital, monthlyPayment, annualReturn, years, annualPaymentGrowth)` con capitalizzazione mensile e crescita PAC annuale
+
+---
+
+## Piano Free vs Pro
+
+| Funzionalità | Free | Pro |
+|---|---|---|
+| Dashboard con proiezione base | ✓ | ✓ |
+| Profilo portafoglio + ETF | ✓ | ✓ |
+| Email automatiche (welcome, rebalance, annual) | ✓ | ✓ |
+| Sezione Impara (articoli educativi) | ✓ | ✓ |
+| 3 scenari (pessimistico / base / ottimistico) | — | ✓ |
+| Confronto portafogli | — | ✓ |
+| Simulazione crescita PAC | — | ✓ |
+| Export PDF del piano finanziario | — | ✓ |
+
+L'upgrade Pro avviene tramite Stripe. Il campo `is_pro` in `user_profiles` viene impostato a `true` dal webhook Stripe (`STRIPE_WEBHOOK_SECRET`).
 
 ---
 
