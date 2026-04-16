@@ -123,6 +123,8 @@ export default function Onboarding() {
           email: user.email,
           profile: profileId,
           dashboardUrl: `${window.location.origin}/dashboard`,
+          initialCapital: answers.initialCapital,
+          monthlyPayment: answers.monthlyPayment,
         },
       }).catch(console.error)
 
