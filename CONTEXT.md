@@ -133,6 +133,13 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 VITE_STRIPE_PUBLISHABLE_KEY=pk_...
 ```
 
+### Resend / App (Vercel env vars)
+```
+APP_URL=https://piano-finanziario.vercel.app
+RESEND_FROM_EMAIL=PianoFinanziario <noreply@pianofinanziario.app>
+RESEND_REPLY_TO=support@pianofinanziario.app
+```
+
 ---
 
 ## I 4 profili e i loro ETF
@@ -192,7 +199,7 @@ Punteggio basato su 4 risposte:
 - **Horizon**: ≥20 anni=+2, ≥10 anni=+1
 
 | Punteggio totale | Profilo |
-|-----------------|---------|
+|-----------------|--------|
 | 0–2 | Essenziale |
 | 3–4 | Prudente |
 | 5–6 | Bilanciato |
@@ -243,10 +250,27 @@ Punteggio basato su 4 risposte:
 
 ---
 
+## Piano Free vs Pro
+
+| Funzionalità | Free | Pro |
+|---|---|---|
+| Dashboard con proiezione base | ✓ | ✓ |
+| Profilo portafoglio + ETF | ✓ | ✓ |
+| Email automatiche (welcome, rebalance, annual) | ✓ | ✓ |
+| Sezione Impara (articoli educativi) | ✓ | ✓ |
+| 3 scenari (pessimistico / base / ottimistico) | — | ✓ |
+| Confronto portafogli | — | ✓ |
+| Simulazione crescita PAC | — | ✓ |
+| Export PDF del piano finanziario | — | ✓ |
+
+L'upgrade Pro avviene tramite Stripe. Il campo `is_pro` in `user_profiles` viene impostato a `true` dal webhook Stripe (`STRIPE_WEBHOOK_SECRET`).
+
+---
+
 ## Branch Git
 
 | Branch | Scopo |
-|--------|-------|
+|--------|------|
 | `main` | Produzione (Vercel deploya da qui) |
 | `claude/pianofinanziario-app-8lsDU` | Branch di sviluppo Claude |
 
