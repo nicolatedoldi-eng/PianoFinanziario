@@ -50,6 +50,7 @@ export default function ImparaIndex() {
         )}
       </div>
 
+      {/* CTA */}
       <div
         className="text-center mt-16 py-16 rounded-2xl"
         style={{ backgroundColor: '#3730A3' }}
