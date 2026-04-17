@@ -57,3 +57,19 @@ create index if not exists user_profiles_user_id_idx on public.user_profiles(use
 -- Supabase Edge Functions o da un server separato.
 -- Le funzioni Edge sono nella cartella /supabase/functions/
 -- ============================================================
+
+-- Waitlist Tracker PAC
+create table if not exists public.tracker_waitlist (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  created_at timestamp with time zone default now()
+);
+
+-- Nessuna RLS necessaria: insert pubblico (anche utenti non loggati)
+-- Policy: chiunque può iscriversi, nessuno può leggere la lista
+alter table public.tracker_waitlist enable row level security;
+
+create policy "Anyone can join tracker waitlist"
+  on public.tracker_waitlist
+  for insert
+  with check (true);
