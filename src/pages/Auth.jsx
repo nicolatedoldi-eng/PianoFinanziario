@@ -10,14 +10,12 @@ export default function Auth({ mode = 'login' }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState('')
 
   const isLogin = mode === 'login'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    setSuccess('')
     setLoading(true)
 
     try {
@@ -31,12 +29,11 @@ export default function Auth({ mode = 'login' }) {
         }
         const { error } = await signUp(email, password)
         if (error) throw error
-        setSuccess('Account creato! Controlla la tua email per confermare l\'iscrizione, poi accedi.')
+        navigate('/onboarding')
       }
     } catch (err) {
       const messages = {
         'Invalid login credentials': 'Email o password non corretti',
-        'Email not confirmed': 'Devi confermare la tua email prima di accedere',
         'User already registered': 'Esiste già un account con questa email',
       }
       setError(messages[err.message] || err.message)
@@ -69,11 +66,6 @@ export default function Auth({ mode = 'login' }) {
           {error && (
             <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#FEF2F2', color: '#E24B4A' }}>
               {error}
-            </div>
-          )}
-          {success && (
-            <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#ECFDF5', color: '#1D9E75' }}>
-              {success}
             </div>
           )}
 
