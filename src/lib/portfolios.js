@@ -26,7 +26,7 @@ export const PORTFOLIOS = {
     rebalanceRule: 'Controlla ogni mese se gli ETF si sono allontanati di oltre il 5% dai target. Imposta una volta, funziona sempre: se VWCE supera 85% o scende sotto 75%, ribilancia.',
     alerts: [
       { when: 'VWCE > 85% o < 75%', action: 'Ribilancia vendendo/comprando per tornare a 80/20' },
-      { when: 'Mercato cala > 20%', action: 'Nessuna azione. Continua il PAC, massima semplicità' },
+      { when: 'Mercato cala > 20%', action: 'Nessuna azione. Continua il PAC, massima semplicit\u00e0' },
     ],
     steps: [
       'Apri un conto su un broker come Directa, Fineco o DEGIRO',
@@ -68,7 +68,7 @@ export const PORTFOLIOS = {
         ticker: 'XEON',
         name: 'Xtrackers EUR Overnight Rate Swap UCITS ETF',
         isin: 'LU0290358497',
-        description: 'Liquidità remunerata al tasso BCE, zero rischio',
+        description: 'Liquidit\u00e0 remunerata al tasso BCE, zero rischio',
         percentage: 10,
       },
     ],
@@ -87,7 +87,7 @@ export const PORTFOLIOS = {
   bilanciato: {
     id: 'bilanciato',
     name: 'Bilanciato',
-    description: 'Mix equilibrato tra crescita e stabilità. Il portafoglio più popolare per obiettivi a lungo termine.',
+    description: 'Mix equilibrato tra crescita e stabilit\u00e0. Il portafoglio pi\u00f9 popolare per obiettivi a lungo termine.',
     expectedReturn: 7.5,
     rebalanceFrequency: 'semestrale',
     color: '#EF9F27',
@@ -152,7 +152,7 @@ export const PORTFOLIOS = {
         ticker: 'EIMI',
         name: 'iShares Core MSCI Emerging Markets IMI UCITS ETF',
         isin: 'IE00B4L5YC18',
-        description: 'Overweight sui mercati emergenti per più crescita',
+        description: 'Overweight sui mercati emergenti per pi\u00f9 crescita',
         percentage: 15,
       },
       {
@@ -170,9 +170,9 @@ export const PORTFOLIOS = {
         percentage: 10,
       },
     ],
-    rebalanceRule: 'Controlla ogni mese. Con questo profilo il mercato può oscillare molto: ribilancia solo se qualcuno supera ±7% dal target.',
+    rebalanceRule: 'Controlla ogni mese. Con questo profilo il mercato pu\u00f2 oscillare molto: ribilancia solo se qualcuno supera \u00b17% dal target.',
     alerts: [
-      { when: 'Calo di mercato > 30%', action: 'Questo è normale per il tuo profilo. Compra di più se puoi.' },
+      { when: 'Calo di mercato > 30%', action: 'Questo \u00e8 normale per il tuo profilo. Compra di pi\u00f9 se puoi.' },
       { when: 'VWCE > 67% o < 53%', action: 'Ribilancia verso il 60% target' },
       { when: 'ZPRV > 22%', action: 'Le small cap hanno corso: riduci e riequilibra' },
     ],
@@ -180,7 +180,7 @@ export const PORTFOLIOS = {
       'Apri un conto su un broker (Directa, Fineco o DEGIRO)',
       'Suddividi il capitale: 60% VWCE, 15% EIMI, 15% ZPRV, 10% SGLE',
       'Configura il PAC mensile con le stesse proporzioni',
-      'Controlla mensilmente — la volatilità è alta, serve disciplina',
+      'Controlla mensilmente \u2014 la volatilit\u00e0 \u00e8 alta, serve disciplina',
     ],
   },
 }
