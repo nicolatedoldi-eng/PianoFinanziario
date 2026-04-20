@@ -92,7 +92,12 @@ export default function Landing() {
     }
   }, [user, loading, navigate])
 
-  if (checking) return null
+  if (checking) return (
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="text-gray-400 text-sm">Caricamento...</div>
+  </div>
+)
+
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
