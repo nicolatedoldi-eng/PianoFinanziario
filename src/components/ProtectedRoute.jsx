@@ -31,6 +31,7 @@ export function OnboardingGuard({ children }) {
 
   if (!user) return <Navigate to="/login" replace />
 
+  // Se l'onboarding non è completato, manda all'onboarding
   if (!profile || !profile.onboarding_completed) {
     return <Navigate to="/onboarding" replace />
   }

@@ -10,14 +10,12 @@ export default function Auth({ mode = 'login' }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState('')
 
   const isLogin = mode === 'login'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    setSuccess('')
     setLoading(true)
 
     try {
@@ -69,11 +67,6 @@ export default function Auth({ mode = 'login' }) {
           {error && (
             <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#FEF2F2', color: '#E24B4A' }}>
               {error}
-            </div>
-          )}
-          {success && (
-            <div className="mb-4 p-3 rounded-lg text-sm" style={{ backgroundColor: '#ECFDF5', color: '#1D9E75' }}>
-              {success}
             </div>
           )}
 

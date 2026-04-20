@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
@@ -483,6 +483,7 @@ export default function Dashboard() {
     { id: 'risparmio', label: 'Risparmio' },
     { id: 'investimento', label: 'Investimento' },
     { id: 'ribilanciamento', label: 'Ribilanciamento' },
+    { id: 'tracker', label: 'Tracker' },
   ]
 
   if (loading) {
@@ -565,6 +566,7 @@ export default function Dashboard() {
         />
       )}
       {activeTab === 'ribilanciamento' && <TabRibilanciamento profile={currentProfile} />}
+      {activeTab === 'tracker' && <TabTracker user={user} />}
     </div>
   )
 }
