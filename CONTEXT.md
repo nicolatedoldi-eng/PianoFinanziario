@@ -66,7 +66,7 @@ Aggiornalo ogni volta che cambiano struttura, tabelle o logica.
 
 ### Route pubbliche
 | Path | Componente |
-|------|-----------|
+|------|----------|
 | `/` | Landing |
 | `/login` | Auth (login) |
 | `/registrazione` | Auth (register) |
@@ -199,7 +199,7 @@ Punteggio basato su 4 risposte:
 - **Horizon**: ≥20 anni=+2, ≥10 anni=+1
 
 | Punteggio totale | Profilo |
-|-----------------|--------|
+|-----------------|---------|
 | 0–2 | Essenziale |
 | 3–4 | Prudente |
 | 5–6 | Bilanciato |
@@ -270,7 +270,7 @@ L'upgrade Pro avviene tramite Stripe. Il campo `is_pro` in `user_profiles` viene
 ## Branch Git
 
 | Branch | Scopo |
-|--------|------|
+|--------|-------|
 | `main` | Produzione (Vercel deploya da qui) |
 | `claude/pianofinanziario-app-8lsDU` | Branch di sviluppo Claude |
 

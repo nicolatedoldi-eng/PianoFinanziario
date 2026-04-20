@@ -1,5 +1,5 @@
 export const etfVsObbligazioniContent = [
-  { type: 'p', text: "La domanda più comune di chi inizia a investire è: \"meglio azioni o obbligazioni?\" La risposta è quasi sempre: entrambe, nella proporzione giusta per te. Ma per capire perché, bisogna prima capire la differenza." },
+  { type: 'p', text: "La domanda pi\u00f9 comune di chi inizia a investire \u00e8: \"meglio azioni o obbligazioni?\" La risposta \u00e8 quasi sempre: entrambe, nella proporzione giusta per te. Ma per capire perch\u00e9, bisogna prima capire la differenza." },
   { type: 'h2', text: 'Il confronto diretto' },
   {
     type: 'table',

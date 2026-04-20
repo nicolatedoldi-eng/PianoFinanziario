@@ -29,11 +29,12 @@ export default function Auth({ mode = 'login' }) {
         }
         const { error } = await signUp(email, password)
         if (error) throw error
-        navigate('/onboarding')
+        setSuccess('Account creato! Controlla la tua email per confermare l\'iscrizione, poi accedi.')
       }
     } catch (err) {
       const messages = {
         'Invalid login credentials': 'Email o password non corretti',
+        'Email not confirmed': 'Devi confermare la tua email prima di accedere',
         'User already registered': 'Esiste già un account con questa email',
       }
       setError(messages[err.message] || err.message)

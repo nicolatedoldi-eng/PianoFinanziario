@@ -7,18 +7,22 @@ const S = {
 export const ICONS = {
   'cosa-sono-gli-etf': (
     <svg {...S}>
+      {/* Contenitore/paniere — rettangolo arrotondato con linee lista */}
       <rect x="2" y="5" width="15" height="15" rx="3"/>
       <line x1="5" y1="9.5" x2="14" y2="9.5"/>
       <line x1="5" y1="12.5" x2="14" y2="12.5"/>
       <line x1="5" y1="15.5" x2="11" y2="15.5"/>
+      {/* Freccia su-destra (performance) separata dal contenitore */}
       <line x1="18" y1="8" x2="22" y2="3"/>
       <polyline points="19,3 22,3 22,6"/>
     </svg>
   ),
   'cosa-sono-le-obbligazioni': (
     <svg {...S}>
+      {/* Documento con angolo piegato */}
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
       <polyline points="14,2 14,8 20,8"/>
+      {/* Simbolo % grande e leggibile al centro */}
       <circle cx="9" cy="11" r="2"/>
       <circle cx="15" cy="17" r="2"/>
       <line x1="7" y1="19" x2="17" y2="9"/>

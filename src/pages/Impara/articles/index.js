@@ -24,7 +24,7 @@ export const ARTICLES = [
   {
     slug: 'cosa-sono-le-obbligazioni',
     title: 'Cosa sono le obbligazioni',
-    description: 'Come funziona il lato “sicuro” di un portafoglio: rendimento stabile, rischio basso, ruolo essenziale.',
+    description: 'Come funziona il lato "sicuro" di un portafoglio: rendimento stabile, rischio basso, ruolo essenziale.',
     readTime: '4 min',
     icon: '🏦',
     category: 'Fondamentali',
@@ -50,7 +50,7 @@ export const ARTICLES = [
   {
     slug: 'cosa-e-il-pac',
     title: "Cos'è il PAC (Piano di Accumulo del Capitale)",
-    description: 'Investire una cifra fissa ogni mese, automaticamente. Perché funziona meglio del “aspetto il momento giusto”.',
+    description: 'Investire una cifra fissa ogni mese, automaticamente. Perché funziona meglio del "aspetto il momento giusto".',
     readTime: '5 min',
     icon: '📅',
     category: 'Strategie',
