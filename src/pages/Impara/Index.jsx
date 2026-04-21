@@ -8,12 +8,12 @@ export default function ImparaIndex() {
   const { user } = useAuth()
 
   useEffect(() => {
-    document.title = 'Come investire? Guida pratica agli ETF | PianoFinanziario'
+    document.title = 'Come investire? Guida pratica agli ETF | EasiVest'
     const meta = document.querySelector('meta[name="description"]')
     const prevMeta = meta?.getAttribute('content') ?? ''
     if (meta) meta.setAttribute('content', 'Scopri come investire in ETF partendo da zero. Guide pratiche su ETF, PAC, obbligazioni e ribilanciamento. Senza gergo finanziario.')
     return () => {
-      document.title = 'PianoFinanziario'
+      document.title = 'EasiVest'
       if (meta) meta.setAttribute('content', prevMeta)
     }
   }, [])
