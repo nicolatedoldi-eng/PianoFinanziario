@@ -51,7 +51,7 @@ export default function Auth({ mode = 'login' }) {
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#534AB7' }}>
               <span className="text-white font-bold text-lg">P</span>
             </div>
-            <span className="font-semibold text-gray-900 text-xl">PianoFinanziario</span>
+            <span className="font-semibold text-gray-900 text-xl">EasiVest</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             {isLogin ? 'Bentornato' : 'Crea il tuo account'}
