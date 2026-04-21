@@ -1,6 +1,6 @@
 {
-  "name": "PianoFinanziario",
-  "short_name": "PianoFin",
+  "name": "EasiVest",
+  "short_name": "EasiVest",
   "description": "Il tuo piano finanziario, spiegato semplice",
   "start_url": "/",
   "display": "standalone",
@@ -8,6 +8,12 @@
   "theme_color": "#534AB7",
   "orientation": "portrait",
   "icons": [
+    {
+      "src": "/easivest-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
