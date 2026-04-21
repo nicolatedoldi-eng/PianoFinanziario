@@ -334,7 +334,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(7.5)
   doc.setTextColor(...C.purple)
-  doc.text('EasiVest.it', W - MARGIN, PAGE_H - FOOTER_H + 7.5, { align: 'right' })
+  doc.text('EasiVest.com', W - MARGIN, PAGE_H - FOOTER_H + 7.5, { align: 'right' })
 
   return doc
 }
