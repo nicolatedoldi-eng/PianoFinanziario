@@ -17,11 +17,12 @@ export default function Layout({ children }) {
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link to={user ? '/dashboard' : '/'} className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#534AB7' }}>
-                <span className="text-white text-sm font-bold">P</span>
-              </div>
-              <span className="font-semibold text-gray-900 text-lg hidden sm:inline">PianoFinanziario</span>
+            <Link to={user ? '/dashboard' : '/'} className="flex items-center">
+              <img
+                src="/easivest-logo.svg"
+                alt="EasiVest"
+                className="h-6 sm:h-7 block"
+              />
             </Link>
 
             <div className="flex items-center gap-2 sm:gap-4">
