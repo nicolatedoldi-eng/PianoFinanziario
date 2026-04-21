@@ -19,10 +19,10 @@ export default function Layout({ children }) {
           <div className="flex justify-between items-center h-16">
             <Link to={user ? '/dashboard' : '/'} className="flex items-center">
               <img
-                src="/easivest-logo.svg"
-                alt="EasiVest"
-                style={{ height: '40px', width: 'auto', display: 'block' }}
-              />
+  src="/easivest-logo.svg"
+  alt="EasiVest"
+  style={{ height: '40px', width: 'auto', display: 'block' }}
+/>
             </Link>
 
             <div className="flex items-center gap-2 sm:gap-4">
