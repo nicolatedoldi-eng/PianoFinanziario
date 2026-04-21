@@ -96,8 +96,15 @@ export default function Profilo() {
       }
 const doc = generatePianoPDF(portfolio, profile, params)
 const filename = `easivest-piano-${portfolio.name.toLowerCase()}.pdf`
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-if (isMobile) {
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+const isAndroid = /Android/i.test(navigator.userAgent)
+if (isIOS) {
+  // iOS ignora <a download> — apre blob URL in nuova tab (viewer nativo → share sheet)
+  const blob = doc.output('blob')
+  const url = URL.createObjectURL(blob)
+  window.open(url, '_blank')
+  setTimeout(() => URL.revokeObjectURL(url), 10000)
+} else if (isAndroid) {
   const blob = doc.output('blob')
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
