@@ -109,7 +109,7 @@ serve(async () => {
     <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 24px;">€50/mese in più per 14 anni ancora significano circa €15.000 in più al traguardo — solo grazie all’interesse composto.</p>
 
     <div style="text-align:center;margin-bottom:32px;">
-      <a href="${Deno.env.get('SITE_URL') || 'https://piano-finanziario.vercel.app'}/profilo" style="display:inline-block;background:#1D9E75;color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Aggiorna il tuo PAC mensile →</a>
+      <a href="${Deno.env.get('SITE_URL') || 'https://easivest.com.app'}/profilo" style="display:inline-block;background:#1D9E75;color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Aggiorna il tuo PAC mensile →</a>
     </div>
 
     <hr style="border:none;border-top:1px solid #E5E7EB;margin:0 0 28px;">
@@ -119,7 +119,7 @@ serve(async () => {
     <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 24px;">Continua a versare regolarmente. Non guardare il portafoglio ogni giorno. Controlla solo quando te lo diciamo noi.</p>
 
     <div style="text-align:center;margin-bottom:32px;">
-      <a href="${Deno.env.get('SITE_URL') || 'https://piano-finanziario.vercel.app'}/dashboard" style="display:inline-block;background:#1D9E75;color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Vai alla tua dashboard →</a>
+      <a href="${Deno.env.get('SITE_URL') || 'https://easivest.com'}/dashboard" style="display:inline-block;background:#1D9E75;color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Vai alla tua dashboard →</a>
     </div>
 
     <hr style="border:none;border-top:1px solid #E5E7EB;margin:0 0 20px;">
