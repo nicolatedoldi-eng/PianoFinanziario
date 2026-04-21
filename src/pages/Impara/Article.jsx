@@ -116,8 +116,8 @@ export default function ImparaArticle() {
 
   useEffect(() => {
     if (article) {
-      document.title = `${article.title} — PianoFinanziario`
-      return () => { document.title = 'PianoFinanziario' }
+      document.title = `${article.title} — EasiVest`
+      return () => { document.title = 'EasiVest' }
     }
   }, [article])
 
