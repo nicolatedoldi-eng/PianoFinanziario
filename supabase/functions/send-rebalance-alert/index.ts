@@ -106,7 +106,7 @@ serve(async () => {
     </div>
 
     <div style="text-align:center;margin-bottom:32px;">
-      <a href="${Deno.env.get('SITE_URL') || 'https://piano-finanziario.vercel.app'}/dashboard" style="display:inline-block;background:#EF9F27;color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Apri la dashboard per i dettagli →</a>
+      <a href="${Deno.env.get('SITE_URL') || 'https://easivest.com'}/dashboard" style="display:inline-block;background:#EF9F27;color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Apri la dashboard per i dettagli →</a>
     </div>
 
     <hr style="border:none;border-top:1px solid #E5E7EB;margin:0 0 24px;">
