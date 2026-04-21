@@ -47,11 +47,12 @@ export default function Auth({ mode = 'login' }) {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
-  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#534AB7' }}>
-    <span className="text-white font-bold text-lg">P</span>
-  </div>
-  <span className="font-semibold text-gray-900 text-xl">EasiVest</span>
+          <Link to="/" className="inline-flex items-center justify-center mb-6">
+  <img
+    src="/easivest-logo.svg"
+    alt="EasiVest"
+    style={{ height: '40px', width: 'auto', display: 'block' }}
+  />
 </Link>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             {isLogin ? 'Bentornato' : 'Crea il tuo account'}
