@@ -472,9 +472,28 @@ export default function Dashboard() {
     }
     setGeneratingPdf(true)
     try {
-      const doc = generatePianoPDF(currentProfile, userProfile, params)
-      const filename = `piano-finanziario-${currentProfile.name.toLowerCase()}.pdf`
-      doc.output('dataurlnewwindow', { filename })
+const doc = generatePianoPDF(currentProfile, userProfile, params)
+const filename = `easivest-piano-${currentProfile.name.toLowerCase()}.pdf`
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+const isAndroid = /Android/i.test(navigator.userAgent)
+if (isIOS) {
+  const blob = doc.output('blob')
+  const url = URL.createObjectURL(blob)
+  window.open(url, '_blank')
+  setTimeout(() => URL.revokeObjectURL(url), 10000)
+} else if (isAndroid) {
+  const blob = doc.output('blob')
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+} else {
+  doc.output('dataurlnewwindow', { filename })
+}
     } finally {
       setGeneratingPdf(false)
     }
