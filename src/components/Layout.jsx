@@ -21,7 +21,7 @@ export default function Layout({ children }) {
               <img
                 src="/easivest-logo.svg"
                 alt="EasiVest"
-                className="h-6 sm:h-7 block"
+                style={{ height: '40px', width: 'auto', display: 'block' }}
               />
             </Link>
 
