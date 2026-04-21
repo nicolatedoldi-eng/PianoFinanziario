@@ -50,7 +50,7 @@ export default function InstallBanner() {
         P
       </div>
       <p className="flex-1 text-sm text-gray-700 leading-snug">
-        Aggiungi <strong>PianoFinanziario</strong> alla schermata home
+        Aggiungi <strong>EasiVest</strong> alla schermata home
       </p>
       <button
         onClick={handleInstall}
