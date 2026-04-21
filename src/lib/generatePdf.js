@@ -60,7 +60,7 @@ export function generatePianoPDF(profile, dbProfile, params) {
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(13)
   doc.setTextColor(...C.white)
-  doc.text('PianoFinanziario', MARGIN + 12, HEADER_H / 2 - 1)
+  doc.text('EasiVest', MARGIN + 12, HEADER_H / 2 - 1)
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(7.5)
   doc.setTextColor(200, 200, 240)
