@@ -94,8 +94,22 @@ export default function Profilo() {
         horizon: profile.horizon_years ?? 15,
         annualGrowth: profile.annual_payment_growth ?? 3,
       }
-      const doc = generatePianoPDF(portfolio, profile, params)
-      doc.output('dataurlnewwindow', { filename: `easivest-${portfolio.name.toLowerCase()}.pdf` })
+const doc = generatePianoPDF(portfolio, profile, params)
+const filename = `easivest-piano-${portfolio.name.toLowerCase()}.pdf`
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+if (isMobile) {
+  const blob = doc.output('blob')
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+} else {
+  doc.output('dataurlnewwindow', { filename })
+}
     } finally {
       setGeneratingPdf(false)
     }
