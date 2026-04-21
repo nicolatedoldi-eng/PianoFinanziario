@@ -95,7 +95,7 @@ export default function Profilo() {
         annualGrowth: profile.annual_payment_growth ?? 3,
       }
       const doc = generatePianoPDF(portfolio, profile, params)
-      doc.output('dataurlnewwindow', { filename: `piano-finanziario-${portfolio.name.toLowerCase()}.pdf` })
+      doc.output('dataurlnewwindow', { filename: `easivest-${portfolio.name.toLowerCase()}.pdf` })
     } finally {
       setGeneratingPdf(false)
     }
