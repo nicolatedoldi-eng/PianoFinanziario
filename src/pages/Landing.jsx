@@ -93,11 +93,10 @@ export default function Landing() {
   }, [user, loading, navigate])
 
   if (checking) return (
-  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-    <div className="text-gray-400 text-sm">Caricamento...</div>
-  </div>
-)
-
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: '#534AB7' }}></div>
+    </div>
+  )
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -149,7 +148,7 @@ export default function Landing() {
             <div className="w-3 h-3 rounded-full bg-red-400"></div>
             <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
             <div className="w-3 h-3 rounded-full bg-green-400"></div>
-            <span className="ml-2 text-sm text-gray-400">Dashboard PianoFinanziario</span>
+            <span className="ml-2 text-sm text-gray-400">Dashboard EasiVest</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
@@ -250,9 +249,9 @@ export default function Landing() {
 
       {/* Chi c'è dietro */}
       <div className="text-center mb-20" style={{ paddingTop: '48px', paddingBottom: '48px' }}>
-        <p className="uppercase tracking-widest text-gray-400 mb-5 font-bold" style={{ fontSize: '12px', letterSpacing: '0.1em' }}>Chi c'è dietro PianoFinanziario</p>
+        <p className="uppercase tracking-widest text-gray-400 mb-5 font-bold" style={{ fontSize: '12px', letterSpacing: '0.1em' }}>Chi c'è dietro EasiVest</p>
         <p className="mx-auto text-gray-900 mb-8" style={{ fontSize: '16px', maxWidth: '580px', lineHeight: '1.75' }}>
-          PianoFinanziario nasce dall'esperienza di chi ha lavorato per anni come COO in aziende del settore finanziario e immobiliare, con un team di consulenti finanziari indipendenti. Niente conflitti di interesse, niente prodotti da vendere — solo strumenti chiari per aiutarti a prendere decisioni migliori con i tuoi risparmi.
+          EasiVest nasce dall'esperienza di chi ha lavorato per anni come COO in aziende del settore finanziario e immobiliare, con un team di consulenti finanziari indipendenti. Niente conflitti di interesse, niente prodotti da vendere — solo strumenti chiari per aiutarti a prendere decisioni migliori con i tuoi risparmi.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <div className="flex items-center gap-2 px-4 py-2" style={{ backgroundColor: '#EEEDFE', color: '#3C3489', borderRadius: '20px' }}>
@@ -306,7 +305,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="border-t border-gray-200 py-8 text-center text-gray-400" style={{ fontSize: '12px' }}>
         <p className="max-w-2xl mx-auto leading-relaxed">
-          PianoFinanziario è uno strumento educativo gratuito. Ti mostriamo come funziona il mondo degli ETF e ti aiutiamo a costruire un piano personalizzato. Non gestiamo i tuoi soldi, non abbiamo accesso ai tuoi conti bancari e non siamo una società di gestione del risparmio. Le decisioni di investimento sono sempre e solo tue. I rendimenti mostrati sono basati su dati storici e non garantiscono risultati futuri.
+          EasiVest è uno strumento educativo gratuito. Ti mostriamo come funziona il mondo degli ETF e ti aiutiamo a costruire un piano personalizzato. Non gestiamo i tuoi soldi, non abbiamo accesso ai tuoi conti bancari e non siamo una società di gestione del risparmio. Le decisioni di investimento sono sempre e solo tue. I rendimenti mostrati sono basati su dati storici e non garantiscono risultati futuri.
         </p>
       </footer>
     </div>
