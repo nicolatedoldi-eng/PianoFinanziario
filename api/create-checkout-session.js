@@ -39,17 +39,11 @@ export default async function handler(req, res) {
   // Initialize Stripe inside handler so STRIPE_SECRET_KEY is guaranteed available
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-  // VERCEL_PROJECT_PRODUCTION_URL is set automatically by Vercel to the stable
-  // canonical production domain (e.g. myproject.vercel.app) — never changes per deployment
-  const appUrl = process.env.APP_URL ||
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : 'http://localhost:5173')
+  // APP_URL set in Vercel env vars → https://easivest.com
+const appUrl = process.env.APP_URL || 'https://easivest.com'
 
-  const priceId = process.env.STRIPE_PRICE_ID || 'price_1TKfFmJyUH2vL85IAslzZj8m'
-  console.log('priceId:', priceId, '| appUrl:', appUrl)
-  console.log('VERCEL_PROJECT_PRODUCTION_URL:', process.env.VERCEL_PROJECT_PRODUCTION_URL)
-
+const priceId = process.env.STRIPE_PRICE_ID || 'price_1TKfFmJyUH2vL85IAslzZj8m'
+console.log('priceId:', priceId, '| appUrl:', appUrl)
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
