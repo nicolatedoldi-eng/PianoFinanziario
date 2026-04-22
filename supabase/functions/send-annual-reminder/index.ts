@@ -4,7 +4,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-const FROM_EMAIL = 'PianoFinanziario <noreply@pianofinanziario.app>'
+const FROM_EMAIL = 'EasiVest <info@easivest.com>'
+const REPLY_TO = 'info@easivest.com'
 
 function estimateCapital(initialCapital: number, monthlyPayment: number, annualReturn: number, years: number, annualGrowth = 3): number {
   const monthlyRate = annualReturn / 100 / 12
@@ -66,7 +67,7 @@ serve(async () => {
 <div style="max-width:600px;margin:0 auto;background:white;border-radius:16px;border:1px solid #E5E7EB;overflow:hidden;">
 
   <div style="background:#1D9E75;padding:28px 32px;">
-    <h1 style="color:white;margin:0;font-size:22px;font-weight:700;">PianoFinanziario</h1>
+    <h1 style="color:white;margin:0;font-size:22px;font-weight:700;">EasiVest</h1>
   </div>
 
   <div style="padding:32px;">
@@ -124,8 +125,8 @@ serve(async () => {
 
     <hr style="border:none;border-top:1px solid #E5E7EB;margin:0 0 20px;">
 
-    <p style="color:#9CA3AF;font-size:12px;line-height:1.6;margin:0 0 16px;">PianoFinanziario è uno strumento educativo. I rendimenti mostrati sono stime basate sui dati storici e non garantiscono risultati futuri. Non gestiamo i tuoi soldi e non siamo consulenti finanziari.</p>
-    <p style="color:#374151;font-size:14px;margin:0;">Il team di PianoFinanziario</p>
+    <p style="color:#9CA3AF;font-size:12px;line-height:1.6;margin:0 0 16px;">EasiVest è uno strumento educativo. I rendimenti mostrati sono stime basate sui dati storici e non garantiscono risultati futuri. Non gestiamo i tuoi soldi e non siamo consulenti finanziari.</p>
+    <p style="color:#374151;font-size:14px;margin:0;">Il team di EasiVest<br><span style="color:#9CA3AF;">info@easivest.com | easivest.com</span></p>
   </div>
 
 </div>
@@ -135,7 +136,7 @@ serve(async () => {
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: FROM_EMAIL, to: profile.email, subject, html }),
+        body: JSON.stringify({ from: FROM_EMAIL, reply_to: REPLY_TO, to: profile.email, subject, html }),
       })
       sent++
     }
