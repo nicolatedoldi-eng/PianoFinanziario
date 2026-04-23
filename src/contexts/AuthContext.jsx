@@ -31,14 +31,15 @@ export function AuthProvider({ children }) {
       if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
         if (currentUser) {
           setLoading(true)
-          const { data } = await supabase
-            .from('user_profiles')
-            .select('*')
-            .eq('user_id', currentUser.id)
-            .single()
-          if (mounted) {
-            setProfile(data)
-            setLoading(false)
+          try {
+            const { data } = await supabase
+              .from('user_profiles')
+              .select('*')
+              .eq('user_id', currentUser.id)
+              .single()
+            if (mounted) setProfile(data)
+          } finally {
+            if (mounted) setLoading(false)
           }
         } else {
           setProfile(null)
@@ -55,6 +56,21 @@ export function AuthProvider({ children }) {
       mounted = false
       subscription.unsubscribe()
     }
+  }, [])
+
+  // Quando la tab torna in foreground, verifica che la sessione sia ancora valida
+  useEffect(() => {
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState !== 'visible') return
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setUser(null)
+        setProfile(null)
+        setLoading(false)
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
   }, [])
 
   const signUp = async (email, password) => {
