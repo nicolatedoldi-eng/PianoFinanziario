@@ -67,7 +67,7 @@ function getProfileReasons(profileId, answers) {
 }
 
 export default function Onboarding() {
-  const { user } = useAuth()
+  const { user, refreshProfile } = useAuth()
   const navigate = useNavigate()
 
   const [step, setStep] = useState(0)
@@ -132,6 +132,7 @@ export default function Onboarding() {
         console.error('Welcome email error:', e)
       }
 
+      await refreshProfile()
       navigate('/dashboard')
     } catch (err) {
       setError('Errore nel salvataggio. Riprova.')
