@@ -35,7 +35,7 @@ Aggiornalo ogni volta che cambiano struttura, tabelle o logica.
 │   ├── contexts/
 │   │   └── AuthContext.jsx      # Context Supabase Auth
 │   ├── components/
-│   │   ├── Layout.jsx           # Navbar + wrapper pagina
+│   │   ├── Layout.jsx           # Navbar + footer + wrapper pagina
 │   │   ├── ProtectedRoute.jsx   # Guard auth + onboarding
 │   │   ├── ProModal.jsx         # Modal upgrade Pro
 │   │   └── InstallBanner.jsx    # PWA install prompt
@@ -46,6 +46,8 @@ Aggiornalo ogni volta che cambiano struttura, tabelle o logica.
 │   │   ├── Dashboard.jsx        # App principale (3 tab)
 │   │   ├── Profilo.jsx          # Impostazioni utente
 │   │   ├── Pricing.jsx          # Pagina prezzi / upgrade Pro
+│   │   ├── Contatti.jsx         # Form contatti → send-contact-email
+│   │   ├── Termini.jsx          # Termini di Servizio
 │   │   └── Impara/
 │   │       ├── Index.jsx        # Lista articoli educativi
 │   │       ├── Article.jsx      # Articolo singolo
@@ -61,7 +63,8 @@ Aggiornalo ogni volta che cambiano struttura, tabelle o logica.
 │   └── functions/
 │       ├── send-welcome-email/  # Email post-onboarding
 │       ├── send-rebalance-alert/ # Email ribilanciamento (cron)
-│       └── send-annual-reminder/ # Email report annuale (cron)
+│       ├── send-annual-reminder/ # Email report annuale (cron)
+│       └── send-contact-email/  # Email form contatti → info@easivest.com
 ├── supabase-schema.sql          # Schema Postgres completo
 ├── vercel.json                  # Config Vercel (SPA rewrites)
 └── CONTEXT.md                   # Questo file
@@ -76,6 +79,8 @@ Aggiornalo ogni volta che cambiano struttura, tabelle o logica.
 | `/prezzi` | Pricing |
 | `/impara` | ImparaIndex |
 | `/impara/:slug` | ImparaArticle |
+| `/contatti` | Contatti |
+| `/termini` | Termini |
 
 ### Route protette
 | Path | Guard |
@@ -266,6 +271,13 @@ Tutte e tre le email automatiche sono **funzionanti** in produzione.
   - Outlook prossimo anno
   - CTA → dashboard
 - **Calcolo capitale**: `estimateCapital(initialCapital, monthlyPayment, annualReturn, years, annualPaymentGrowth)` con capitalizzazione mensile e crescita PAC annuale
+
+### 4. `send-contact-email` — Email form contatti
+- **Trigger**: invocata da `Contatti.jsx` all'invio del form
+- **Input**: `{ name, email, subject, message }`
+- **Destinatario**: `info@easivest.com`
+- **reply_to**: email del mittente (per rispondere direttamente)
+- **Subject**: `[Contatto EasiVest] {subject} — {name}`
 
 ---
 
