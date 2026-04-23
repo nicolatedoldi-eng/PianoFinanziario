@@ -1,10 +1,15 @@
 import { useMemo } from 'react'
-import { calculateScenarios, formatEuro, formatEuroFull } from '../lib/finance'
+import { calculateProjection, calculateScenarios, formatEuro, formatEuroFull } from '../lib/finance'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 export default function TabInvestimento({ params, profile, onProfileChange, allProfiles, isPro, onProClick, userAssignedProfileId }) {
   const scenarios = useMemo(() =>
     calculateScenarios(params.initialCapital, params.monthlyPayment, profile.expectedReturn, params.horizon, params.annualGrowth),
+    [params, profile]
+  )
+
+  const baseResult = useMemo(() =>
+    calculateProjection(params.initialCapital, params.monthlyPayment, profile.expectedReturn, params.horizon, params.annualGrowth),
     [params, profile]
   )
 
@@ -54,6 +59,27 @@ export default function TabInvestimento({ params, profile, onProfileChange, allP
             </button>
           )
         })}
+      </div>
+
+      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+        <h3 className="font-semibold text-gray-900 mb-4">Come iniziare con il profilo {profile.name}</h3>
+        <div className="space-y-4">
+          {profile.steps.map((step, i) => (
+            <div key={i} className="flex gap-4">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>{i + 1}</div>
+              {i === 0 ? (
+                <p className="text-gray-700 text-sm pt-1">
+                  Apri un conto su un broker (
+                  <a href="https://www.directatrading.com" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Directa</a>,{' '}
+                  <a href="https://it.scalable.capital" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Scalable Capital</a> o{' '}
+                  <a href="https://traderepublic.com/it-it" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Trade Republic</a>)
+                </p>
+              ) : (
+                <p className="text-gray-700 text-sm pt-1">{step}</p>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm overflow-x-auto">
@@ -117,11 +143,8 @@ export default function TabInvestimento({ params, profile, onProfileChange, allP
         })}
       </div>
 
-      <div className="relative mb-6">
-        <div
-          className={`bg-white border border-gray-200 rounded-xl p-6 shadow-sm${!isPro ? ' select-none pointer-events-none' : ''}`}
-          style={!isPro ? { filter: 'blur(4px)' } : {}}
-        >
+      {isPro ? (
+        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
           <h3 className="font-semibold text-gray-900 mb-4">I 3 scenari nel tempo</h3>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={scenarioData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
@@ -136,29 +159,39 @@ export default function TabInvestimento({ params, profile, onProfileChange, allP
             </LineChart>
           </ResponsiveContainer>
         </div>
-        {!isPro && (
+      ) : (
+        <>
+          <div className="bg-white border border-gray-200 rounded-xl p-6 mb-4 shadow-sm">
+            <h3 className="font-semibold text-gray-900 mb-4">Crescita nel tempo</h3>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={baseResult.dataPoints} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
+                <XAxis dataKey="year" tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => `${v}a`} />
+                <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} tickFormatter={v => formatEuro(v)} width={60} />
+                <Tooltip
+                  formatter={(value, name) => [formatEuroFull(value), name === 'capital' ? 'Capitale totale' : 'Versato']}
+                  labelFormatter={l => `Anno ${l}`}
+                  contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '12px' }}
+                />
+                <Legend formatter={v => v === 'capital' ? 'Capitale totale' : 'Versato'} />
+                <Line type="monotone" dataKey="capital" stroke="#534AB7" strokeWidth={2.5} dot={false} name="capital" />
+                <Line type="monotone" dataKey="deposited" stroke="#1D9E75" strokeWidth={2} dot={false} strokeDasharray="5 5" name="deposited" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
           <div
-            className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl cursor-pointer"
-            style={{ backgroundColor: 'rgba(255,255,255,0.65)' }}
+            className="flex items-center justify-between gap-3 p-4 rounded-xl cursor-pointer"
+            style={{ backgroundColor: '#F5F4FD', border: '1px solid #C7C3EA' }}
             onClick={onProClick}
           >
-            <span className="text-3xl">🔒</span>
-            <span className="text-sm font-semibold text-gray-700">Disponibile nel piano Pro</span>
-          </div>
-        )}
-      </div>
-
-      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-        <h3 className="font-semibold text-gray-900 mb-4">Come iniziare con il profilo {profile.name}</h3>
-        <div className="space-y-4">
-          {profile.steps.map((step, i) => (
-            <div key={i} className="flex gap-4">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>{i + 1}</div>
-              <p className="text-gray-700 text-sm pt-1">{step}</p>
+            <div className="flex items-center gap-2">
+              <span className="text-lg">🔒</span>
+              <span className="text-sm text-gray-700">Gli scenari <strong>ottimista</strong> e <strong>ribassista</strong> sono disponibili nel piano Pro</span>
             </div>
-          ))}
-        </div>
-      </div>
+            <span className="text-xs font-semibold shrink-0" style={{ color: '#534AB7' }}>Scopri Pro →</span>
+          </div>
+        </>
+      )}
     </div>
   )
 }
