@@ -4,6 +4,11 @@ const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
 const FROM_EMAIL = 'EasiVest <noreply@easivest.com>'
 const REPLY_TO = 'info@easivest.com'
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
 const PORTFOLIO_DATA: Record<string, { expectedReturn: number; etfs: { ticker: string; percentage: number }[] }> = {
   essenziale: {
     expectedReturn: 6.5,
@@ -48,12 +53,16 @@ function formatEuro(n: number): string {
 }
 
 serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
   try {
     const { email, profile, dashboardUrl, initialCapital, monthlyPayment } = await req.json()
     const portfolioKey = (profile || '').toLowerCase()
     const portfolioInfo = PORTFOLIO_DATA[portfolioKey]
     if (!portfolioInfo) {
-      return new Response(JSON.stringify({ error: 'Invalid profile' }), { status: 400 })
+      return new Response(JSON.stringify({ error: 'Invalid profile' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
 
     const profileName = portfolioKey.charAt(0).toUpperCase() + portfolioKey.slice(1)
@@ -139,8 +148,8 @@ serve(async (req) => {
     })
 
     const data = await res.json()
-    return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } })
+    return new Response(JSON.stringify(data), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { 'Content-Type': 'application/json' } })
+    return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   }
 })
