@@ -64,21 +64,41 @@ export default function TabInvestimento({ params, profile, onProfileChange, allP
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 mb-4">Come iniziare con il profilo {profile.name}</h3>
         <div className="space-y-4">
-          {profile.steps.map((step, i) => (
-            <div key={i} className="flex gap-4">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>{i + 1}</div>
-              {i === 0 ? (
-                <p className="text-gray-700 text-sm pt-1">
-                  Apri un conto su un broker (
-                  <a href="https://www.directatrading.com" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Directa</a>,{' '}
-                  <a href="https://it.scalable.capital" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Scalable Capital</a> o{' '}
-                  <a href="https://traderepublic.com/it-it" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Trade Republic</a>)
-                </p>
-              ) : (
-                <p className="text-gray-700 text-sm pt-1">{step}</p>
-              )}
-            </div>
-          ))}
+          <div className="flex gap-4">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>1</div>
+            <p className="text-gray-700 text-sm pt-1">
+              Apri un conto su un broker (
+              <a href="https://www.directatrading.com" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Directa</a>,{' '}
+              <a href="https://it.scalable.capital" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Scalable Capital</a> o{' '}
+              <a href="https://traderepublic.com/it-it" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Trade Republic</a>
+              ){' '}
+              <a href="/impara/come-scegliere-un-broker" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7', fontSize: '12px' }}>Scopri di più →</a>
+            </p>
+          </div>
+          <div className="flex gap-4">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>2</div>
+            <p className="text-gray-700 text-sm pt-1">
+              Suddividi il capitale iniziale (vedi portafoglio):{' '}
+              {profile.etfs.map((e, i) => (
+                <span key={e.ticker}>{i > 0 ? ', ' : ''}{e.percentage}% {e.ticker}</span>
+              ))}{' '}
+              <a href="/impara/cosa-sono-gli-etf" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7', fontSize: '12px' }}>Scopri di più →</a>
+            </p>
+          </div>
+          <div className="flex gap-4">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>3</div>
+            <p className="text-gray-700 text-sm pt-1">
+              Configura il PAC mensile con le stesse proporzioni{' '}
+              <a href="/impara/cosa-e-il-pac" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7', fontSize: '12px' }}>Scopri di più →</a>
+            </p>
+          </div>
+          <div className="flex gap-4">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>4</div>
+            <p className="text-gray-700 text-sm pt-1">
+              Controlla mensilmente il conto sul broker — la volatilità è alta, serve disciplina{' '}
+              <a href="/impara/come-ribilanciare" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7', fontSize: '12px' }}>Scopri di più →</a>
+            </p>
+          </div>
         </div>
       </div>
 
