@@ -154,7 +154,7 @@ export default function TabInvestimento({ params, profile, onProfileChange, allP
           {profile.steps.map((step, i) => (
             <div key={i} className="flex gap-4">
               <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>{i + 1}</div>
-              <p className="text-gray-700 text-sm pt-1">{step}</p>
+              <p className="text-gray-700 text-sm pt-1" dangerouslySetInnerHTML={{ __html: step }} />
             </div>
           ))}
         </div>
