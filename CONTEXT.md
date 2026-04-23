@@ -1,4 +1,4 @@
-# CONTEXT — PianoFinanziario
+# CONTEXT — EasiVest
 
 Documento di riferimento per sessioni Claude Code.
 Aggiornalo ogni volta che cambiano struttura, tabelle o logica.
@@ -18,7 +18,10 @@ Aggiornalo ogni volta che cambiano struttura, tabelle o logica.
 | Email | Resend (via Supabase Edge Functions in Deno) |
 | Pagamenti | Stripe |
 | Deploy | Vercel (branch `main` → produzione) |
-| URL produzione | https://piano-finanziario.vercel.app |
+| URL produzione | https://easivest.com |
+| Dominio | easivest.com (Cloudflare) |
+| PWA | Configurata |
+| Logo | `/public/easivest-logo.svg` |
 
 ---
 
@@ -123,7 +126,7 @@ VITE_SUPABASE_ANON_KEY=eyJ...
 RESEND_API_KEY=re_...
 SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
-SITE_URL=https://piano-finanziario.vercel.app
+SITE_URL=https://easivest.com
 ```
 
 ### Stripe (Vercel env vars)
@@ -135,9 +138,9 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_...
 
 ### Resend / App (Vercel env vars)
 ```
-APP_URL=https://piano-finanziario.vercel.app
-RESEND_FROM_EMAIL=PianoFinanziario <noreply@pianofinanziario.app>
-RESEND_REPLY_TO=support@pianofinanziario.app
+APP_URL=https://easivest.com
+RESEND_FROM_EMAIL=EasiVest <noreply@easivest.com>
+RESEND_REPLY_TO=info@easivest.com
 ```
 
 ---
@@ -207,7 +210,23 @@ Punteggio basato su 4 risposte:
 
 ---
 
+## Infrastruttura e servizi
+
+| Servizio | Dettaglio |
+|----------|-----------|
+| Dominio | easivest.com — gestito su **Cloudflare** |
+| Email invio transazionale | **Resend** — mittente `noreply@easivest.com` |
+| Email supporto | **Zoho Mail** — `info@easivest.com` |
+| Stripe | Configurato con dominio `easivest.com` |
+| Supabase — verifica email | **Disattivata** (nessuna email di conferma all'iscrizione) |
+| PWA | Configurata (manifest + service worker) |
+| Logo | `/public/easivest-logo.svg` |
+
+---
+
 ## Email automatiche (Resend via Edge Functions)
+
+Tutte e tre le email automatiche sono **funzionanti** in produzione.
 
 ### 1. `send-welcome-email` — Email di benvenuto
 - **Trigger**: invocata da `Onboarding.jsx` subito dopo il salvataggio del profilo
@@ -272,6 +291,6 @@ L'upgrade Pro avviene tramite Stripe. Il campo `is_pro` in `user_profiles` viene
 | Branch | Scopo |
 |--------|-------|
 | `main` | Produzione (Vercel deploya da qui) |
-| `claude/pianofinanziario-app-8lsDU` | Branch di sviluppo Claude |
+| `claude/update-context-md-6TzYs` | Branch di sviluppo Claude attivo |
 
 I push a `main` avvengono tramite GitHub MCP (`create_or_update_file`) quando il proxy git locale restituisce 503.
