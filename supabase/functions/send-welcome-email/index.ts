@@ -58,7 +58,14 @@ serve(async (req) => {
   }
 
   try {
+    if (!RESEND_API_KEY) {
+      console.error('RESEND_API_KEY is not set')
+      return new Response(JSON.stringify({ error: 'RESEND_API_KEY not configured' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    }
+
     const { email, profile, dashboardUrl, initialCapital, monthlyPayment } = await req.json()
+    console.log('Invoked for:', email, 'profile:', profile)
+
     const portfolioKey = (profile || '').toLowerCase()
     const portfolioInfo = PORTFOLIO_DATA[portfolioKey]
     if (!portfolioInfo) {
@@ -151,6 +158,7 @@ serve(async (req) => {
     console.log('Resend response:', res.status, JSON.stringify(data))
     return new Response(JSON.stringify(data), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   } catch (error) {
+    console.error('Function error:', error.message)
     return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   }
 })
