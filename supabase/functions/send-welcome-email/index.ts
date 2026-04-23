@@ -1,7 +1,8 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const FROM_EMAIL = 'PianoFinanziario <noreply@pianofinanziario.app>'
+const FROM_EMAIL = 'EasiVest <noreply@easivest.com>'
+const REPLY_TO = 'info@easivest.com'
 
 const PORTFOLIO_DATA: Record<string, { expectedReturn: number; etfs: { ticker: string; percentage: number }[] }> = {
   essenziale: {
@@ -77,7 +78,7 @@ serve(async (req) => {
 <div style="max-width:600px;margin:0 auto;background:white;border-radius:16px;border:1px solid #E5E7EB;overflow:hidden;">
 
   <div style="background:#534AB7;padding:28px 32px;">
-    <h1 style="color:white;margin:0;font-size:22px;font-weight:700;">PianoFinanziario</h1>
+    <h1 style="color:white;margin:0;font-size:22px;font-weight:700;">EasiVest</h1>
   </div>
 
   <div style="padding:32px;">
@@ -122,9 +123,9 @@ serve(async (req) => {
 
     <p style="color:#111827;font-size:14px;font-weight:600;margin:0 0 8px;">Una cosa importante prima di iniziare:</p>
     <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 12px;">I mercati salgono e scendono. Vedrai mesi in rosso — è normale e fa parte del gioco. La strategia funziona solo se la mantieni anche nei momenti difficili.</p>
-    <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 24px;">PianoFinanziario è uno strumento educativo. Non gestiamo i tuoi soldi e non siamo consulenti finanziari. Le decisioni sono sempre tue.</p>
+    <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 24px;">EasiVest è uno strumento educativo. Non gestiamo i tuoi soldi e non siamo consulenti finanziari. Le decisioni sono sempre tue.</p>
 
-    <p style="color:#374151;font-size:14px;margin:0;">Il team di PianoFinanziario</p>
+    <p style="color:#374151;font-size:14px;margin:0;">Il team di EasiVest<br><span style="color:#9CA3AF;">info@easivest.com | easivest.com</span></p>
   </div>
 
 </div>
@@ -134,7 +135,7 @@ serve(async (req) => {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: FROM_EMAIL, to: email, subject, html }),
+      body: JSON.stringify({ from: FROM_EMAIL, reply_to: REPLY_TO, to: email, subject, html }),
     })
 
     const data = await res.json()
