@@ -1,25 +1,60 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
+  const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  const refreshProfile = useCallback(async (userId) => {
+    const uid = userId || user?.id
+    if (!uid) return
+    const { data } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('user_id', uid)
+      .single()
+    setProfile(data)
+  }, [user])
+
   useEffect(() => {
-    // Recupera la sessione attuale
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-      setLoading(false)
+    let mounted = true
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return
+
+      const currentUser = session?.user ?? null
+      setUser(currentUser)
+
+      if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
+        if (currentUser) {
+          setLoading(true)
+          const { data } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .single()
+          if (mounted) {
+            setProfile(data)
+            setLoading(false)
+          }
+        } else {
+          setProfile(null)
+          setLoading(false)
+        }
+      } else if (event === 'SIGNED_OUT') {
+        setProfile(null)
+        setLoading(false)
+      }
+      // TOKEN_REFRESHED: aggiorna solo user, non toccare profile né loading
     })
 
-    // Ascolta i cambiamenti di autenticazione
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
   }, [])
 
   const signUp = async (email, password) => {
@@ -38,7 +73,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, profile, loading, signUp, signIn, signOut, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   )
