@@ -29,7 +29,7 @@ export default function Auth({ mode = 'login' }) {
         }
         const { error } = await signUp(email, password)
         if (error) throw error
-        setSuccess('Account creato! Controlla la tua email per confermare l\'iscrizione, poi accedi.')
+        navigate('/onboarding')
       }
     } catch (err) {
       const messages = {
