@@ -154,7 +154,16 @@ export default function TabInvestimento({ params, profile, onProfileChange, allP
           {profile.steps.map((step, i) => (
             <div key={i} className="flex gap-4">
               <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: profile.color }}>{i + 1}</div>
-              <p className="text-gray-700 text-sm pt-1" dangerouslySetInnerHTML={{ __html: step }} />
+              {i === 0 ? (
+                <p className="text-gray-700 text-sm pt-1">
+                  Apri un conto su un broker (
+                  <a href="https://www.directatrading.com" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Directa</a>,{' '}
+                  <a href="https://it.scalable.capital" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Scalable Capital</a> o{' '}
+                  <a href="https://traderepublic.com/it-it" target="_blank" rel="noopener noreferrer" style={{ color: '#534AB7' }} className="hover:underline">Trade Republic</a>)
+                </p>
+              ) : (
+                <p className="text-gray-700 text-sm pt-1">{step}</p>
+              )}
             </div>
           ))}
         </div>

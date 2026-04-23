@@ -29,7 +29,7 @@ export const PORTFOLIOS = {
       { when: 'Mercato cala > 20%', action: 'Nessuna azione. Continua il PAC, massima semplicità' },
     ],
     steps: [
-      'Apri un conto su un broker (<a href="https://www.directatrading.com" target="_blank" rel="noopener noreferrer" class="broker-link">Directa</a>, <a href="https://it.scalable.capital" target="_blank" rel="noopener noreferrer" class="broker-link">Scalable Capital</a> o <a href="https://traderepublic.com/it-it" target="_blank" rel="noopener noreferrer" class="broker-link">Trade Republic</a>)',
+      'Apri un conto su un broker (Directa, Scalable Capital o Trade Republic)',
       "Acquista VWCE con l'80% del tuo capitale iniziale",
       'Acquista AGGH con il restante 20%',
       'Imposta un ordine ricorrente mensile con la stessa proporzione 80/20',
@@ -78,7 +78,7 @@ export const PORTFOLIOS = {
       { when: 'Crisi di mercato', action: "L'oro e le obbligazioni proteggono. Non intervenire." },
     ],
     steps: [
-      'Apri un conto su un broker (<a href="https://www.directatrading.com" target="_blank" rel="noopener noreferrer" class="broker-link">Directa</a>, <a href="https://it.scalable.capital" target="_blank" rel="noopener noreferrer" class="broker-link">Scalable Capital</a> o <a href="https://traderepublic.com/it-it" target="_blank" rel="noopener noreferrer" class="broker-link">Trade Republic</a>)',
+      'Apri un conto su un broker (Directa, Scalable Capital o Trade Republic)',
       'Suddividi il capitale: 40% SWRD, 35% IBTM, 15% SGLE, 10% XEON',
       'Configura il PAC mensile con le stesse proporzioni',
       'Agenda un promemoria a gennaio e luglio per il controllo semestrale',
@@ -127,7 +127,7 @@ export const PORTFOLIOS = {
       { when: 'EIMI > 15%', action: 'Riduci gli emergenti, hanno corso troppo' },
     ],
     steps: [
-      'Apri un conto su un broker (<a href="https://www.directatrading.com" target="_blank" rel="noopener noreferrer" class="broker-link">Directa</a>, <a href="https://it.scalable.capital" target="_blank" rel="noopener noreferrer" class="broker-link">Scalable Capital</a> o <a href="https://traderepublic.com/it-it" target="_blank" rel="noopener noreferrer" class="broker-link">Trade Republic</a>)',
+      'Apri un conto su un broker (Directa, Scalable Capital o Trade Republic)',
       'Suddividi il capitale: 55% VWCE, 10% EIMI, 25% AGGH, 10% SGLE',
       'Configura il PAC mensile con le stesse proporzioni',
       'Imposta promemoria a gennaio e luglio per il ribilanciamento',
@@ -177,7 +177,7 @@ export const PORTFOLIOS = {
       { when: 'ZPRV > 22%', action: 'Le small cap hanno corso: riduci e riequilibra' },
     ],
     steps: [
-      'Apri un conto su un broker (<a href="https://www.directatrading.com" target="_blank" rel="noopener noreferrer" class="broker-link">Directa</a>, <a href="https://it.scalable.capital" target="_blank" rel="noopener noreferrer" class="broker-link">Scalable Capital</a> o <a href="https://traderepublic.com/it-it" target="_blank" rel="noopener noreferrer" class="broker-link">Trade Republic</a>)',
+      'Apri un conto su un broker (Directa, Scalable Capital o Trade Republic)',
       'Suddividi il capitale: 60% VWCE, 15% EIMI, 15% ZPRV, 10% SGLE',
       'Configura il PAC mensile con le stesse proporzioni',
       'Controlla mensilmente — la volatilità è alta, serve disciplina',
