@@ -118,15 +118,19 @@ export default function Onboarding() {
       }, { onConflict: 'user_id' })
       if (error) throw error
 
-      supabase.functions.invoke('send-welcome-email', {
-        body: {
-          email: user.email,
-          profile: profileId,
-          dashboardUrl: `${window.location.origin}/dashboard`,
-          initialCapital: answers.initialCapital,
-          monthlyPayment: answers.monthlyPayment,
-        },
-      }).catch(console.error)
+      try {
+        await supabase.functions.invoke('send-welcome-email', {
+          body: {
+            email: user.email,
+            profile: profileId,
+            dashboardUrl: `${window.location.origin}/dashboard`,
+            initialCapital: answers.initialCapital,
+            monthlyPayment: answers.monthlyPayment,
+          },
+        })
+      } catch (e) {
+        console.error('Welcome email error:', e)
+      }
 
       navigate('/dashboard')
     } catch (err) {
