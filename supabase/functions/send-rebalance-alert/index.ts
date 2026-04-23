@@ -47,8 +47,11 @@ const REBALANCE_CONTENT: Record<string, { checks: string[]; label: string; nextD
   },
 }
 
-serve(async () => {
+serve(async (req) => {
   try {
+    const body = await req.json().catch(() => ({}))
+    const forceEmail = body.force_email as string | undefined
+
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
     const now = new Date()
     const { data: profiles } = await supabase.from('user_profiles').select('*').eq('onboarding_completed', true)
@@ -56,10 +59,12 @@ serve(async () => {
 
     let sent = 0
     for (const profile of profiles) {
+      if (forceEmail && profile.email !== forceEmail) continue
+
       const isMonthly = ['essenziale', 'crescita'].includes(profile.profile)
       const lastCheck = profile.last_rebalance_at ? new Date(profile.last_rebalance_at) : new Date(profile.created_at)
       const daysSince = Math.floor((now.getTime() - lastCheck.getTime()) / (1000 * 60 * 60 * 24))
-      if (isMonthly ? daysSince < 30 : daysSince < 180) continue
+      if (!forceEmail && (isMonthly ? daysSince < 30 : daysSince < 180)) continue
 
       const content = REBALANCE_CONTENT[profile.profile]
       if (!content) continue
@@ -70,7 +75,7 @@ serve(async () => {
         `<li style="margin-bottom:10px;color:#1F2937;">&#10003; ${c}</li>`
       ).join('')
 
-      const subject = `Controllo ${content.label} del tuo portafoglio \u2014 ci vogliono 5 minuti`
+      const subject = `Controllo ${content.label} del tuo portafoglio — ci vogliono 5 minuti`
 
       const html = `<!DOCTYPE html>
 <html lang="it">

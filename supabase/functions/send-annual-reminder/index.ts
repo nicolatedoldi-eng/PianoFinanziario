@@ -34,8 +34,11 @@ function formatEuro(n: number): string {
   return `€${n.toLocaleString('it-IT')}`
 }
 
-serve(async () => {
+serve(async (req) => {
   try {
+    const body = await req.json().catch(() => ({}))
+    const forceEmail = body.force_email as string | undefined
+
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
     const now = new Date()
     const { data: profiles } = await supabase.from('user_profiles').select('*').eq('onboarding_completed', true)
@@ -43,9 +46,11 @@ serve(async () => {
 
     let sent = 0
     for (const profile of profiles) {
+      if (forceEmail && profile.email !== forceEmail) continue
+
       const createdAt = new Date(profile.created_at)
       const monthsSince = Math.round((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24 * 365 / 12))
-      if (monthsSince !== 12) continue
+      if (!forceEmail && monthsSince !== 12) continue
 
       const initial = profile.initial_capital ?? 0
       const monthly = profile.monthly_payment ?? 0
@@ -58,7 +63,7 @@ serve(async () => {
 
       const profileName = profile.profile.charAt(0).toUpperCase() + profile.profile.slice(1)
 
-      const subject = 'Un anno fa hai fatto la cosa giusta \u2014 ecco dove sei adesso'
+      const subject = 'Un anno fa hai fatto la cosa giusta — ecco dove sei adesso'
 
       const html = `<!DOCTYPE html>
 <html lang="it">
@@ -73,7 +78,7 @@ serve(async () => {
   <div style="padding:32px;">
     <p style="color:#374151;font-size:16px;line-height:1.6;margin:0 0 16px;">Ciao,</p>
     <p style="color:#374151;font-size:16px;line-height:1.6;margin:0 0 16px;">un anno fa hai creato il tuo piano con profilo <strong>${profileName}</strong>.</p>
-    <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 32px;">Non è poco. La maggior parte delle persone che “ci pensa” non arriva mai al primo passo. Tu l’hai fatto.</p>
+    <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 32px;">Non è poco. La maggior parte delle persone che "ci pensa" non arriva mai al primo passo. Tu l'hai fatto.</p>
 
     <hr style="border:none;border-top:1px solid #E5E7EB;margin:0 0 28px;">
 
@@ -106,11 +111,11 @@ serve(async () => {
     <hr style="border:none;border-top:1px solid #E5E7EB;margin:0 0 28px;">
 
     <h2 style="color:#111827;font-size:17px;font-weight:700;margin:0 0 12px;">Una cosa da fare adesso</h2>
-    <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 12px;">Il tuo reddito è cambiato nell’ultimo anno? Anche aumentare il PAC di €50 al mese fa una differenza enorme nel lungo periodo.</p>
-    <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 24px;">€50/mese in più per 14 anni ancora significano circa €15.000 in più al traguardo — solo grazie all’interesse composto.</p>
+    <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 12px;">Il tuo reddito è cambiato nell'ultimo anno? Anche aumentare il PAC di €50 al mese fa una differenza enorme nel lungo periodo.</p>
+    <p style="color:#4B5563;font-size:14px;line-height:1.7;margin:0 0 24px;">€50/mese in più per 14 anni ancora significano circa €15.000 in più al traguardo — solo grazie all'interesse composto.</p>
 
     <div style="text-align:center;margin-bottom:32px;">
-      <a href="${Deno.env.get('SITE_URL') || 'https://easivest.com.app'}/profilo" style="display:inline-block;background:#1D9E75;color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Aggiorna il tuo PAC mensile →</a>
+      <a href="${Deno.env.get('SITE_URL') || 'https://easivest.com'}/profilo" style="display:inline-block;background:#1D9E75;color:white;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;">Aggiorna il tuo PAC mensile →</a>
     </div>
 
     <hr style="border:none;border-top:1px solid #E5E7EB;margin:0 0 28px;">
