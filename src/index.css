@@ -35,3 +35,11 @@ body {
 #root {
   min-height: 100vh;
 }
+
+.broker-link {
+  color: #534AB7;
+  text-decoration: none;
+}
+.broker-link:hover {
+  text-decoration: underline;
+}
