@@ -1,34 +1,42 @@
-import { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
 const AuthContext = createContext(null)
+
+const cacheKey = (uid) => `_ep_${uid}`
+
+function loadCache(uid) {
+  try {
+    const raw = localStorage.getItem(cacheKey(uid))
+    return raw ? JSON.parse(raw) : null
+  } catch { return null }
+}
+
+function saveCache(uid, data) {
+  try { localStorage.setItem(cacheKey(uid), JSON.stringify(data)) } catch {}
+}
+
+function clearCache(uid) {
+  try { localStorage.removeItem(cacheKey(uid)) } catch {}
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
-  const loadingRef = useRef(true)
-  const loadingSinceRef = useRef(Date.now())
-
-  useEffect(() => {
-    loadingRef.current = loading
-    if (loading) loadingSinceRef.current = Date.now()
-  }, [loading])
 
   const refreshProfile = useCallback(async (userId) => {
     const uid = userId || user?.id
     if (!uid) return
-    const { data } = await supabase
-      .from('user_profiles')
-      .select('*')
-      .eq('user_id', uid)
-      .single()
-    setProfile(data)
+    const { data } = await supabase.from('user_profiles').select('*').eq('user_id', uid).single()
+    if (data) {
+      saveCache(uid, data)
+      setProfile(data)
+    }
   }, [user])
 
   useEffect(() => {
     let mounted = true
-    let reloadTimer = null
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return
@@ -38,33 +46,30 @@ export function AuthProvider({ children }) {
 
       if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
         if (currentUser) {
-          setLoading(true)
-          // Se il fetch si blocca (promise che non settla mai), ricarica la pagina
-          // Limita a 2 reload consecutivi per evitare loop su connessioni rotte
-          reloadTimer = setTimeout(() => {
-            if (!mounted) return
-            const count = parseInt(sessionStorage.getItem('_authReload') || '0')
-            if (count < 2) {
-              sessionStorage.setItem('_authReload', String(count + 1))
-              window.location.reload()
-            } else {
-              sessionStorage.removeItem('_authReload')
-              setLoading(false)
+          const cached = loadCache(currentUser.id)
+          if (cached) {
+            // Instant load from cache — no spinner on return visits
+            if (mounted) { setProfile(cached); setLoading(false) }
+            // Background refresh
+            supabase.from('user_profiles').select('*').eq('user_id', currentUser.id).single()
+              .then(({ data }) => {
+                if (mounted && data) { saveCache(currentUser.id, data); setProfile(data) }
+              })
+              .catch(() => {})
+          } else {
+            // First visit after login — fetch with 10s hard timeout
+            setLoading(true)
+            const fetch = supabase.from('user_profiles').select('*').eq('user_id', currentUser.id).single()
+            const timeout = new Promise(resolve => setTimeout(() => resolve({ data: null }), 10000))
+            try {
+              const { data } = await Promise.race([fetch, timeout])
+              if (mounted) {
+                if (data) { saveCache(currentUser.id, data); setProfile(data) }
+                setLoading(false)
+              }
+            } catch {
+              if (mounted) setLoading(false)
             }
-          }, 8000)
-          try {
-            const { data } = await supabase
-              .from('user_profiles')
-              .select('*')
-              .eq('user_id', currentUser.id)
-              .single()
-            if (mounted) setProfile(data)
-          } catch {
-            // error handled by finally
-          } finally {
-            clearTimeout(reloadTimer)
-            sessionStorage.removeItem('_authReload')
-            if (mounted) setLoading(false)
           }
         } else {
           setProfile(null)
@@ -74,33 +79,20 @@ export function AuthProvider({ children }) {
         setProfile(null)
         setLoading(false)
       }
-      // TOKEN_REFRESHED: aggiorna solo user, non toccare profile né loading
     })
 
-    return () => {
-      mounted = false
-      clearTimeout(reloadTimer)
-      subscription.unsubscribe()
-    }
+    return () => { mounted = false; subscription.unsubscribe() }
   }, [])
 
-  // Quando la tab torna in foreground: se loading è bloccato da > 3s, ricarica
+  // On tab focus: verify session is still valid
   useEffect(() => {
-    const handleVisibilityChange = async () => {
+    const handle = async () => {
       if (document.visibilityState !== 'visible') return
-      if (loadingRef.current && Date.now() - loadingSinceRef.current > 3000) {
-        window.location.reload()
-        return
-      }
       const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        setUser(null)
-        setProfile(null)
-        setLoading(false)
-      }
+      if (!session) { setUser(null); setProfile(null); setLoading(false) }
     }
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+    document.addEventListener('visibilitychange', handle)
+    return () => document.removeEventListener('visibilitychange', handle)
   }, [])
 
   const signUp = async (email, password) => {
@@ -114,6 +106,7 @@ export function AuthProvider({ children }) {
   }
 
   const signOut = async () => {
+    if (user?.id) clearCache(user.id)
     const { error } = await supabase.auth.signOut()
     return { error }
   }
