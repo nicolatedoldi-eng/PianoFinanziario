@@ -8,14 +8,14 @@ import { generatePianoPDF } from '../lib/generatePdf'
 import ProModal from '../components/ProModal'
 
 export default function Profilo() {
-  const { user } = useAuth()
+  const { user, profile, refreshProfile } = useAuth()
   const navigate = useNavigate()
-  const [profile, setProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [generatingPdf, setGeneratingPdf] = useState(false)
+  const [showProModal, setShowProModal] = useState(false)
 
   const [editParams, setEditParams] = useState({
     initialCapital: 0,
@@ -25,26 +25,14 @@ export default function Profilo() {
   })
 
   useEffect(() => {
-    async function fetchProfile() {
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single()
-
-      if (data && !error) {
-        setProfile(data)
-        setEditParams({
-          initialCapital: data.initial_capital ?? 0,
-          monthlyPayment: data.monthly_payment ?? 0,
-          horizon: data.horizon_years ?? 15,
-          annualGrowth: data.annual_payment_growth ?? 3,
-        })
-      }
-      setLoading(false)
-    }
-    fetchProfile()
-  }, [user.id])
+    if (!profile) return
+    setEditParams({
+      initialCapital: profile.initial_capital ?? 0,
+      monthlyPayment: profile.monthly_payment ?? 0,
+      horizon: profile.horizon_years ?? 15,
+      annualGrowth: profile.annual_payment_growth ?? 3,
+    })
+  }, [profile])
 
   const handleSaveParams = async () => {
     setSaving(true)
@@ -62,24 +50,15 @@ export default function Profilo() {
         .eq('user_id', user.id)
 
       if (error) throw error
-      setProfile(prev => ({
-        ...prev,
-        initial_capital: editParams.initialCapital,
-        monthly_payment: editParams.monthlyPayment,
-        horizon_years: editParams.horizon,
-        annual_payment_growth: editParams.annualGrowth,
-      }))
+      await refreshProfile()
       setSuccess('Parametri aggiornati!')
       setEditing(false)
-    } catch (err) {
+    } catch {
       setError('Errore nel salvataggio. Riprova.')
     } finally {
       setSaving(false)
     }
   }
-
-  const [generatingPdf, setGeneratingPdf] = useState(false)
-  const [showProModal, setShowProModal] = useState(false)
 
   const handleDownloadPdf = () => {
     if (!profile?.is_pro) {
@@ -94,29 +73,29 @@ export default function Profilo() {
         horizon: profile.horizon_years ?? 15,
         annualGrowth: profile.annual_payment_growth ?? 3,
       }
-const doc = generatePianoPDF(portfolio, profile, params)
-const filename = `easivest-piano-${portfolio.name.toLowerCase()}.pdf`
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-const isAndroid = /Android/i.test(navigator.userAgent)
-if (isIOS) {
-  // iOS ignora <a download> — apre blob URL in nuova tab (viewer nativo → share sheet)
-  const blob = doc.output('blob')
-  const url = URL.createObjectURL(blob)
-  window.open(url, '_blank')
-  setTimeout(() => URL.revokeObjectURL(url), 10000)
-} else if (isAndroid) {
-  const blob = doc.output('blob')
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = filename
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
-} else {
-  doc.output('dataurlnewwindow', { filename })
-}
+      const portfolio = PORTFOLIOS[profile.profile]
+      const doc = generatePianoPDF(portfolio, profile, params)
+      const filename = `easivest-piano-${portfolio.name.toLowerCase()}.pdf`
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+      const isAndroid = /Android/i.test(navigator.userAgent)
+      if (isIOS) {
+        const blob = doc.output('blob')
+        const url = URL.createObjectURL(blob)
+        window.open(url, '_blank')
+        setTimeout(() => URL.revokeObjectURL(url), 10000)
+      } else if (isAndroid) {
+        const blob = doc.output('blob')
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = filename
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+      } else {
+        doc.output('dataurlnewwindow', { filename })
+      }
     } finally {
       setGeneratingPdf(false)
     }
@@ -129,14 +108,6 @@ if (isIOS) {
       .eq('user_id', user.id)
 
     if (!error) navigate('/onboarding')
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-400 text-sm">Caricamento...</div>
-      </div>
-    )
   }
 
   if (!profile) {
