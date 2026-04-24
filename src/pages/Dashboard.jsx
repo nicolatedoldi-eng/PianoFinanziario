@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import ProModal from '../components/ProModal'
 import TabTracker from '../components/TabTracker'
 import TabResoconto from '../components/TabResoconto'
@@ -59,12 +58,11 @@ function GlobalSliders({ params, onChange, isPro }) {
 }
 
 export default function Dashboard() {
-  const { user } = useAuth()
+  const { user, profile: authProfile } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('investimento')
   const [userProfile, setUserProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
   const [selectedProfileId, setSelectedProfileId] = useState(null)
   const [generatingPdf, setGeneratingPdf] = useState(false)
   const [showProModal, setShowProModal] = useState(false)
@@ -78,27 +76,16 @@ export default function Dashboard() {
   })
 
   useEffect(() => {
-    async function fetchProfile() {
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single()
-
-      if (data && !error) {
-        setUserProfile(data)
-        setSelectedProfileId(data.profile)
-        setParams({
-          initialCapital: data.initial_capital ?? 5000,
-          monthlyPayment: data.monthly_payment ?? 300,
-          horizon: data.horizon_years ?? 15,
-          annualGrowth: data.annual_payment_growth ?? 3,
-        })
-      }
-      setLoading(false)
-    }
-    fetchProfile()
-  }, [user.id])
+    if (!authProfile) return
+    setUserProfile(authProfile)
+    setSelectedProfileId(authProfile.profile)
+    setParams({
+      initialCapital: authProfile.initial_capital ?? 5000,
+      monthlyPayment: authProfile.monthly_payment ?? 300,
+      horizon: authProfile.horizon_years ?? 15,
+      annualGrowth: authProfile.annual_payment_growth ?? 3,
+    })
+  }, [authProfile])
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
@@ -157,14 +144,6 @@ export default function Dashboard() {
     { id: 'ribilanciamento', label: 'Ribilanciamento' },
     { id: 'tracker', label: 'Tracker' },
   ]
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-400 text-sm">Caricamento...</div>
-      </div>
-    )
-  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
