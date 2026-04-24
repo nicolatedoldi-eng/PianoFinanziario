@@ -1,11 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { useProfile } from '../hooks/useProfile'
 
 export default function Layout({ children }) {
-  const { user, signOut } = useAuth()
-  const { profile } = useProfile()
+  const { user, profile, signOut } = useAuth()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const navRef = useRef(null)
