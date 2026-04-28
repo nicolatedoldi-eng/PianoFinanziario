@@ -205,11 +205,13 @@ export default function Layout({ children }) {
                     Come investire?
                   </Link>
                 </li>
-                <li>
-                  <Link to="/prezzi" className="text-xs text-gray-500 transition-colors hover:text-[#534AB7]">
-                    Prezzi
-                  </Link>
-                </li>
+                {!profile?.is_pro && (
+                  <li>
+                    <Link to="/prezzi" className="text-xs text-gray-500 transition-colors hover:text-[#534AB7]">
+                      Prezzi
+                    </Link>
+                  </li>
+                )}
                 {user && (
                   <li>
                     <Link to="/dashboard" className="text-xs text-gray-500 transition-colors hover:text-[#534AB7]">
