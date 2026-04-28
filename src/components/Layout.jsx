@@ -1,11 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { useProfile } from '../hooks/useProfile'
 
 export default function Layout({ children }) {
-  const { user, signOut } = useAuth()
-  const { profile } = useProfile()
+  const { user, profile, signOut } = useAuth()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const navRef = useRef(null)
@@ -28,7 +26,7 @@ export default function Layout({ children }) {
   }, [menuOpen])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <nav className="bg-white border-b border-gray-200 relative" ref={navRef}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -185,7 +183,88 @@ export default function Layout({ children }) {
         )}
       </nav>
 
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
+
+      <footer className="bg-white border-t border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+
+            {/* Brand */}
+            <div>
+              <img src="/easivest-logo.svg" alt="EasiVest" className="h-6 w-auto mb-3" />
+              <p className="text-xs text-gray-500 mb-1">Investi in modo semplice</p>
+              <p className="text-xs text-gray-400">© 2026 EasiVest</p>
+            </div>
+
+            {/* Link utili */}
+            <div>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Link utili</p>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/impara" className="text-xs text-gray-500 transition-colors hover:text-[#534AB7]">
+                    Come investire?
+                  </Link>
+                </li>
+                {!profile?.is_pro && (
+                  <li>
+                    <Link to="/prezzi" className="text-xs text-gray-500 transition-colors hover:text-[#534AB7]">
+                      Prezzi
+                    </Link>
+                  </li>
+                )}
+                {user && (
+                  <li>
+                    <Link to="/dashboard" className="text-xs text-gray-500 transition-colors hover:text-[#534AB7]">
+                      Dashboard
+                    </Link>
+                  </li>
+                )}
+              </ul>
+            </div>
+
+            {/* Legale e contatti */}
+            <div>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Legale e contatti</p>
+              <ul className="space-y-2">
+                <li>
+                  <a
+                    href="https://www.iubenda.com/privacy-policy/86629006"
+                    className="iubenda-white iubenda-noiframe iubenda-embed text-xs text-gray-500 transition-colors hover:text-[#534AB7]"
+                    title="Privacy Policy"
+                  >
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.iubenda.com/privacy-policy/86629006/cookie-policy"
+                    className="iubenda-white iubenda-noiframe iubenda-embed text-xs text-gray-500 transition-colors hover:text-[#534AB7]"
+                    title="Cookie Policy"
+                  >
+                    Cookie Policy
+                  </a>
+                </li>
+                <li>
+                  <Link to="/termini" className="text-xs text-gray-500 transition-colors hover:text-[#534AB7]">
+                    Termini di Servizio
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contatti" className="text-xs text-gray-500 transition-colors hover:text-[#534AB7]">
+                    Contatti
+                  </Link>
+                </li>
+                <li>
+                  <a href="mailto:info@easivest.com" className="text-xs text-gray-500 transition-colors hover:text-[#534AB7]">
+                    info@easivest.com
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
