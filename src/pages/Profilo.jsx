@@ -16,6 +16,8 @@ export default function Profilo() {
   const [success, setSuccess] = useState('')
   const [generatingPdf, setGeneratingPdf] = useState(false)
   const [showProModal, setShowProModal] = useState(false)
+  const [showCancelModal, setShowCancelModal] = useState(false)
+  const [cancelling, setCancelling] = useState(false)
 
   const [editParams, setEditParams] = useState({
     initialCapital: 0,
@@ -101,6 +103,28 @@ export default function Profilo() {
     }
   }
 
+  const handleCancelSubscription = async () => {
+    setCancelling(true)
+    try {
+      const res = await fetch('/api/cancel-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, userEmail: user.email }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Errore durante la disdetta')
+      setShowCancelModal(false)
+      setSuccess('Abbonamento disdetto. Grazie per aver usato EasiVest Pro.')
+      await refreshProfile()
+      navigate('/dashboard')
+    } catch (err) {
+      setShowCancelModal(false)
+      setError(err.message)
+    } finally {
+      setCancelling(false)
+    }
+  }
+
   const handleRedoOnboarding = async () => {
     const { error } = await supabase
       .from('user_profiles')
@@ -131,6 +155,35 @@ export default function Profilo() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {showProModal && <ProModal onClose={() => setShowProModal(false)} />}
+
+      {/* Modal conferma disdetta */}
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Vuoi davvero disdire?</h3>
+            <p className="text-sm text-gray-500 mb-6">
+              Il tuo piano Pro resterà attivo fino alla fine del periodo già pagato. Dopo tornerai al piano gratuito.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={handleCancelSubscription}
+                disabled={cancelling}
+                className="flex-1 py-2.5 rounded-xl text-white text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-60"
+                style={{ backgroundColor: '#DC2626' }}
+              >
+                {cancelling ? 'Disdetta...' : 'Sì, disdici'}
+              </button>
+              <button
+                onClick={() => setShowCancelModal(false)}
+                disabled={cancelling}
+                className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition-colors"
+              >
+                Annulla
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex items-center gap-3 mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Il mio profilo</h1>
@@ -188,6 +241,21 @@ export default function Profilo() {
             </div>
           </div>
         </div>
+
+        {profile.is_pro && (
+          <div className="border-t border-gray-100 pt-4 mt-4 flex items-center justify-between">
+            <div>
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Abbonamento Pro attivo</div>
+              <div className="text-xs text-gray-400">Rinnovo automatico mensile</div>
+            </div>
+            <button
+              onClick={() => setShowCancelModal(true)}
+              className="text-xs text-gray-400 hover:text-red-500 transition-colors underline underline-offset-2"
+            >
+              Disdici abbonamento
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
