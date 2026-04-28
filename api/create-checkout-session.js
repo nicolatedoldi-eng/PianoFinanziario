@@ -7,6 +7,8 @@ export default async function handler(req, res) {
 
   // Debug: verify env vars are available at runtime
   console.log('STRIPE_SECRET_KEY set:', !!process.env.STRIPE_SECRET_KEY)
+  console.log('Secret key starts with:', process.env.STRIPE_SECRET_KEY?.substring(0, 7))
+  console.log('Price ID:', process.env.STRIPE_PRICE_ID)
   console.log('x-forwarded-host:', req.headers['x-forwarded-host'])
 
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -58,7 +60,7 @@ console.log('priceId:', priceId, '| appUrl:', appUrl)
     console.log('Stripe session created:', session.id)
     res.status(200).json({ url: session.url })
   } catch (err) {
-    console.error('Stripe error:', err.message)
+    console.error('Stripe error:', err)
     res.status(500).json({ error: err.message })
   }
 }
